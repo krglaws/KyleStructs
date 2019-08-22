@@ -1,19 +1,22 @@
 
-#ifndef _HASHMAP_
-#define _HASHMAP_
+#include "treeset.h"
 
-#define BUCKETS 100
+#ifndef _HASHSET_H_
+#define _HASHSET_H_
 
-typedef struct hashmap_t {
-  treenode* buckets[BUCKETS];
-} hashmap;
+typedef struct {
+  unsigned int num_buckets;
+  treeset** buckets;
+} hashset;
 
 unsigned long hash(unsigned char *str);
 
-int add_to_map(hashmap* map, char* word);
+int hashset_add(hashset* hs, char* word);
 
-int map_contains(hashmap* map, char* word);
+int hashset_remove(hahset* hs, char* word);
 
-hashmap* new_hashmap(int num_words, char** words);
+int hashset_contains(hashset* hs, char* word);
+
+hashset* hashset_new(int num_words, char** words);
 
 #endif

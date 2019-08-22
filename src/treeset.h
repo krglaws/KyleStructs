@@ -1,21 +1,32 @@
 #ifndef _TREEH_
 #define _TREEH_
 
-typedef struct treenode_t {
+
+typedef struct {
   char* word;
-  struct treenode_t* right;
-  struct treenode_t* left;
-} treenode;
+  treesetnode* right;
+  treesetnode* left;
+} treesetnode;
 
-treenode* new_node(char* word);
+treesetnode* treesetnode_new(char* word, treesetnode* left, treesetnode* right);
 
-int insert_node(treenode* root, char* word);
+int treesetnode_height(treesetnode* root);
 
-treenode* build_binary_tree(int num_vals, char** words);
 
-int tree_height(treenode* root);
+typedef struct {
+	int num_nodes;
+	treesetnode* root;
+} treeset;
 
-int in_tree(treenode* root, char* word);
+treeset* treeset_new(int num_words, char** words);
+
+int treeset_add(treeset* ts, chaddr* word);
+
+int treeset_remove(treeset* ts, char* word);
+
+int treeset_contains(treeset* ts, char* word);
+
+int treeset_height(treeset* ts);
 
 void generate_dotfile(treenode* root);
 

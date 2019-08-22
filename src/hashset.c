@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
-#include "tree.h"
-#include "hashmap.h"
+#include "treeset.h"
+#include "hashset.h"
 
 
 unsigned long hash(unsigned char *str)
@@ -10,42 +10,62 @@ unsigned long hash(unsigned char *str)
     int c;
 
     while (c = *str++)
-        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+        hash = ((hash << 5) + hash) + c;
 
     return hash;
 }
 
 
-int add_to_map(hashmap* map, char* word)
+int hashset_add(hashset* hs, char* word)
 {
   unsigned int hashval = hash(word);
-  if (map->buckets[hashval % BUCKETS] == NULL)
+
+  if (hs->buckets[hashval % hs->num_buckets] == NULL)
   {
-    map->buckets[hashval % BUCKETS] = build_binary_tree(1, &word);
+    hs->buckets[hashval % hs->num_buckets] = treeset_new(1, word);
     return 0;
   }
-  else insert_node(map->buckets[hashval % BUCKETS], word);
-  return 1; // collision
+
+  return treeset_add(hs->buckets[hashval % hs->num_buckets], word);
 }
 
 
-int map_contains(hashmap* map, char* word)
+int hashset_remove(hashset* hs, char* word)
 {
-  if (!map || !word) return 0;
   unsigned int hashval = hash(word);
-  if (map->buckets[hashval % BUCKETS] == NULL)
-    return 0;
-  else if (in_tree(map->buckets[hashval % BUCKETS], word))
+
+  if (hs->buckets[hashval % hs->num_buckets] == NULL)
     return 1;
-  return 0;
+
+  return treeset_remove(hs->buckets[hashval % hs->num_buckets], word);
 }
 
 
-hashmap* new_hashmap(int num_words, char** words)
+int hashset_contains(hashset* hs, char* word)
 {
-  hashmap* map = (hashmap*)calloc(1, sizeof(hashmap));
-  if (!words || !num_words) return map;
-  for (int i = 0; i < num_words; i++)
-    add_to_map(map, words[i]);
-  return map;
+  if (!hs || !word)
+    return 0;
+
+  unsigned int hashval = hash(word);
+
+  if (hs->buckets[hashval % hs->num_buckets] == NULL)
+    return 0;
+
+  return treeset_contains(hs->buckets[hashval % hs->num_buckets], word)
 }
+
+
+hashset* hashset_new(int num_words, char** words)
+{
+  hashset* hs = (hashset*)calloc(1, sizeof(hashset));
+
+  if (!words || !num_words) 
+    return map;
+
+  for (int i = 0; i < num_words; i++)
+    hashset_add(hs, words[i]);
+
+  return hs;
+}
+
+

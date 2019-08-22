@@ -5,12 +5,12 @@
 #include "tree.h"
 
 
-treenode* new_node(char* word)
+treesetnode* treesetnode_new(char* word)
 {
-  treenode* node = (treenode*) malloc(sizeof(treenode));
-  node->word = word;
-  node->left = node->right = NULL;
-  return node;
+  treesetnode* tn = (treesetnode*) malloc(sizeof(treesetnode));
+  tn->word = word;
+  tn->left = tn->right = NULL;
+  return tn;
 }
 
 
