@@ -5,7 +5,7 @@
 #include "treeset.h"
 
 
-treesetnode* treesetnode_new(const char* word, const treesetnode* left, const treesetnode* right)
+treesetnode* treesetnode_new(const char* word, treesetnode* left, treesetnode* right)
 {
   treesetnode* tn = (treesetnode*) malloc(sizeof(treesetnode));
   tn->word = word;
@@ -15,7 +15,7 @@ treesetnode* treesetnode_new(const char* word, const treesetnode* left, const tr
 }
 
 
-int treesetnode_add(const treesetnode* tn, const char* word)
+int treesetnode_add(treesetnode* tn, const char* word)
 {
   if (tn == NULL) return -1;
   int compare = strcmp(tn->word, word);
@@ -35,7 +35,7 @@ int treesetnode_add(const treesetnode* tn, const char* word)
 }
 
 
-int treesetnode_remove(treesetnode* tn, char* word)
+int treesetnode_remove(treesetnode* tn, const char* word)
 {
   // this is gon' be tricky
   return 0;
@@ -89,7 +89,7 @@ treeset* treeset_new(const int num_words, const char** words)
 }
 
 
-int treeset_add(const treeset* ts, const char* word)
+int treeset_add(treeset* ts, const char* word)
 {
   if (!ts || !word) return -1;
   int retval = treesetnode_add(ts->root, word);
@@ -98,14 +98,14 @@ int treeset_add(const treeset* ts, const char* word)
 }
 
 
-int treeset_remove(const treeset* ts, const char* word)
+int treeset_remove(treeset* ts, const char* word)
 {
   if (ts == NULL || word == NULL) return 1;
   return treesetnode_remove(ts->root, word);
 }
 
 
-int treeset_contains(const treeset* ts, char* word)
+int treeset_contains(const treeset* ts, const char* word)
 {
   if (ts == NULL || word == NULL) return 0;
   return treesetnode_contains(ts->root, word);
@@ -152,3 +152,4 @@ void generate_dotfile(const treesetnode* tn)
   }
   else printf("NULL;\n");
 }
+

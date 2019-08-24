@@ -1,12 +1,13 @@
+
 #include <stdlib.h>
 
 #include "treeset.h"
 #include "hashset.h"
 
 
-unsigned long hash(unsigned char *str)
+const unsigned int hash(const char *str)
 {
-    unsigned long hash = 5381;
+    unsigned int hash = 5381;
     int c;
 
     while (c = *str++)
@@ -16,13 +17,13 @@ unsigned long hash(unsigned char *str)
 }
 
 
-int hashset_add(hashset* hs, char* word)
+int hashset_add(hashset* hs, const char* word)
 {
-  unsigned int hashval = hash(word);
+  const unsigned int hashval = hash(word);
 
   if (hs->buckets[hashval % hs->num_buckets] == NULL)
   {
-    hs->buckets[hashval % hs->num_buckets] = treeset_new(1, word);
+    hs->buckets[hashval % hs->num_buckets] = treeset_new(1, &word);
     return 0;
   }
 
@@ -30,9 +31,9 @@ int hashset_add(hashset* hs, char* word)
 }
 
 
-int hashset_remove(hashset* hs, char* word)
+int hashset_remove(hashset* hs, const char* word)
 {
-  unsigned int hashval = hash(word);
+  const unsigned int hashval = hash(word);
 
   if (hs->buckets[hashval % hs->num_buckets] == NULL)
     return 1;
@@ -41,9 +42,9 @@ int hashset_remove(hashset* hs, char* word)
 }
 
 
-int hashset_contains(hashset* hs, char* word)
+int hashset_contains(const hashset* hs, const char* word)
 {
-  if (!hs || !word)
+  if (hs == NULL || word == NULL)
     return 0;
 
   unsigned int hashval = hash(word);
@@ -51,16 +52,16 @@ int hashset_contains(hashset* hs, char* word)
   if (hs->buckets[hashval % hs->num_buckets] == NULL)
     return 0;
 
-  return treeset_contains(hs->buckets[hashval % hs->num_buckets], word)
+  return treeset_contains(hs->buckets[hashval % hs->num_buckets], word);
 }
 
 
-hashset* hashset_new(int num_words, char** words)
+hashset* hashset_new(const unsigned int num_words, const char** words)
 {
   hashset* hs = (hashset*)calloc(1, sizeof(hashset));
 
-  if (!words || !num_words) 
-    return map;
+  if (words == NULL || num_words == 0) 
+    return hs;
 
   for (int i = 0; i < num_words; i++)
     hashset_add(hs, words[i]);
