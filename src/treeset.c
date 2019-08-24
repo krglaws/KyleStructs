@@ -2,96 +2,153 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "tree.h"
+#include "treeset.h"
 
 
-treesetnode* treesetnode_new(char* word)
+treesetnode* treesetnode_new(const char* word, const treesetnode* left, const treesetnode* right)
 {
   treesetnode* tn = (treesetnode*) malloc(sizeof(treesetnode));
   tn->word = word;
-  tn->left = tn->right = NULL;
+  tn->left = left;
+  tn->right = right;
   return tn;
 }
 
 
-int insert_node(treenode* root, char* word)
+int treesetnode_add(const treesetnode* tn, const char* word)
 {
-  if (!root || !word) return -1;
-  int compare = strcmp(root->word, word);
+  if (tn == NULL) return -1;
+  int compare = strcmp(tn->word, word);
   if (compare == 0) return 1;
+
   else if (compare > 0)
   {
-    if (root->left) insert_node(root->left, word);
-    else root->left = new_node(word);
+    if (tn->left) return treesetnode_add(tn->left, word);
+    else tn->left = treesetnode_new(word, NULL, NULL);
   }
   else
   {
-    if (root->right) insert_node(root->right, word);
-    else root->right = new_node(word);
+    if (tn->right) return treesetnode_add(tn->right, word);
+    else tn->right = treesetnode_new(word, NULL, NULL);
   }
   return 0;
 }
 
 
-treenode* build_binary_tree(int num_vals, char** words)
+int treesetnode_remove(treesetnode* tn, char* word)
 {
-  if (!words || num_vals < 1) return NULL;
-  treenode* root = new_node(words[0]);
-  for (int i = 1; i < num_vals; i++)
-    insert_node(root, words[i]);
-  return root;
+  // this is gon' be tricky
+  return 0;
 }
 
 
-int tree_height(treenode* root)
+static int _treesetnode_height(const treesetnode* tn, unsigned int accum)
 {
-  if (!root) return 0;
-  int left = tree_height(root->left);
-  int right = tree_height(root->right);
-  printf("node #%d = %s\n", 1 + (left > right ? left : right), root->word);
-  return 1 + (left > right ? left : right);
-}
-
-
-int in_tree(treenode* root, char* word)
-{
-  if (!root) return 0;
-  if (!strcmp(root->word, word)) return 1;
-  return in_tree(root->right, word) || in_tree(root->left, word);
-}
-
-
-void _generate_dotfile(treenode* root)
-{
-  if (root->right)
+  if (tn != NULL)
   {
-    printf("%s->%s[color=red];\n", root->word, root->right->word);
-    _generate_dotfile(root->right);
+    accum++;
+    int left_height = _treesetnode_height(tn->left, accum);
+    int right_height = _treesetnode_height(tn->right, accum);
+    return left_height > right_height ? left_height : right_height;
   }
-  if (root->left)
+  return accum;
+}
+
+
+int treesetnode_contains(const treesetnode* tn, const char* word)
+{
+  if (tn == NULL || word == NULL) return 0;
+  int compare = strcmp(word, tn->word);
+  if (compare == 0) return 1;
+  if (compare > 0) return treesetnode_contains(tn->right, word);
+  return treesetnode_contains(tn->left, word);
+}
+
+
+int treesetnode_height(const treesetnode* tn)
+{
+  return _treesetnode_height(tn, 0);
+}
+
+
+treeset* treeset_new(const int num_words, const char** words)
+{
+  treeset* ts = (treeset*) malloc(sizeof(treesetnode));
+  
+  int find = 0;
+  while (find < num_words && !words[find]) find++;
+  if (find == num_words) return NULL;
+
+  ts->root = treesetnode_new(words[find], NULL, NULL);
+  ts->num_nodes = 1;
+
+  for (int i = 0; i < num_words; i++)
+    if (treeset_add(ts, words[i]) == 0) ts->num_nodes++;
+  
+  return ts;
+}
+
+
+int treeset_add(const treeset* ts, const char* word)
+{
+  if (!ts || !word) return -1;
+  int retval = treesetnode_add(ts->root, word);
+  if (retval == 0) ts->num_nodes++;
+  return retval;
+}
+
+
+int treeset_remove(const treeset* ts, const char* word)
+{
+  if (ts == NULL || word == NULL) return 1;
+  return treesetnode_remove(ts->root, word);
+}
+
+
+int treeset_contains(const treeset* ts, char* word)
+{
+  if (ts == NULL || word == NULL) return 0;
+  return treesetnode_contains(ts->root, word);
+}
+
+
+int treeset_height(const treeset* ts)
+{
+  if (ts == NULL) return 0;
+  return treesetnode_height(ts->root);
+}
+
+
+static void _generate_dotfile(const treesetnode* tn)
+{
+  if (tn->right)
   {
-    printf("%s->%s[color=blue];\n", root->word, root->left->word);
-    _generate_dotfile(root->left);
+    printf("%s->%s[color=red];\n", tn->word, tn->right->word);
+    _generate_dotfile(tn->right);
+  }
+  if (tn->left)
+  {
+    printf("%s->%s[color=blue];\n", tn->word, tn->left->word);
+    _generate_dotfile(tn->left);
   }
 }
 
 
-void generate_dotfile(treenode* root)
+void generate_dotfile(const treesetnode* tn)
 {
-  if (root)
+  if (tn)
   {
-    printf("%s;\n", root->word);
-    if (root->right)
+    printf("%s;\n", tn->word);
+    if (tn->right)
     {
-      printf("%s->%s[color=red];\n", root->word, root->right->word);
-      _generate_dotfile(root->right);
+      printf("%s->%s[color=red];\n", tn->word, tn->right->word);
+      _generate_dotfile(tn->right);
     }
-    if (root->left)
+    if (tn->left)
     {
-      printf("%s->%s[color=blue];\n", root->word, root->left->word);
-      _generate_dotfile(root->left);
+      printf("%s->%s[color=blue];\n", tn->word, tn->left->word);
+      _generate_dotfile(tn->left);
     }
   }
-  if (!root) printf("NULL;\n");
-
+  else printf("NULL;\n");
 }
