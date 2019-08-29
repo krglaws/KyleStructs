@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "datacont.h"
-#include "treenode.h"
-#include "treeset.h"
+#include "include/datacont.h"
+#include "include/treenode.h"
+#include "include/treeset.h"
 
 
 treeset* treeset_new()
@@ -23,7 +23,7 @@ int treeset_add(treeset* ts, const datacont* dc)
   if (ts->root == NULL)
   {
     ts->root = treenode_new(dc, NULL, NULL);
-    retval = treenode_add(ts->root, dc);
+    retval = 0;
   }
   else
   {

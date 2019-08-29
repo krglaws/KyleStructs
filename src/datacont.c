@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "include/hash.h"
 #include "include/datacont.h"
 
 
@@ -241,57 +242,48 @@ void datacont_delete(datacont* dc)
 {
   if (dc == NULL) return;
   if (dc->type < CHARP)
-    return free(dc);
-  free(dc->cp);
-  free(dc);
+    free(dc);
+  else
+  {
+    free(dc->cp);
+    free(dc);
+  }
 }
+
 
 unsigned long long datacont_hash(unsigned long long seed, const datacont* dc)
 {
-  unsigned long long hashval;
   switch(dc->type)
   {
     case CHAR:
     case UCHAR:
-      hashval = hash(seed, &dc->c, sizeof(char));
-      break;
+      return hash(seed, &dc->c, sizeof(char));
     case SHORT:
     case USHORT:
-      hashval = hash(seed, &dc->s, sizeof(short));
-      break;
+      return hash(seed, &dc->s, sizeof(short));
     case INT:
     case UINT:
-      hashval = hash(seed, &dc->i, sizeof(int));
-      break;
+      return hash(seed, &dc->i, sizeof(int));
     case LL:
     case ULL:
-      hashval = hash(seed, &dc->ll, sizeof(long long));
-      break;
+      return hash(seed, &dc->ll, sizeof(long long));
     case FLOAT:
-      hashval = hash(seed, &dc->f, sizeof(float));
-      break;
+      return hash(seed, &dc->f, sizeof(float));
     case DOUBLE:
-      hashval = hash(seed, &dc->d, sizeof(double));
-      break;
+      return hash(seed, &dc->d, sizeof(double));
     case CHARP:
-      hashval = hash(seed, dc->cp, sizeof(char) * dc->count);
-      break;
+      return hash(seed, dc->cp, sizeof(char) * dc->count);
     case SHORTP:
-      hashval = hash(seed, dc->sp, sizeof(short) * dc->count);
-      break;
+      return hash(seed, dc->sp, sizeof(short) * dc->count);
     case INTP:
-      hashval = hash(seed, dc->ip, sizeof(int) * dc->count);
-      break;
+      return hash(seed, dc->ip, sizeof(int) * dc->count);
     case LLP:
-      hashval = hash(seed, dc->llp, sizeof(long long) * dc->count);
-      break;
+      return hash(seed, dc->llp, sizeof(long long) * dc->count);
     case FLOATP:
-      hashval = hash(seed, dc->fp, sizeof(float) * dc->count);
-      break;
+      return hash(seed, dc->fp, sizeof(float) * dc->count);
     case DOUBLEP:
-      hashval = hash(seed, dc->dp, sizeof(double) * dc->count);
-      break;
+      return hash(seed, dc->dp, sizeof(double) * dc->count);
   }
-  return hashval;
+  /* should figure out some way to report error */
 }
 

@@ -11,7 +11,7 @@ struct hashset
   unsigned long long seed;
 };
 
-hashset* hashset_new(unsigned int size);
+hashset* hashset_new(const unsigned int size, const unsigned long long seed);
 
 void hashset_delete(hashset* hs);
 

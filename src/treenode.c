@@ -20,7 +20,7 @@ treenode* treenode_new(const datacont* dc, treenode* left, treenode* right)
 int treenode_add(treenode* tn, const datacont* dc)
 {
   if (tn == NULL || dc == NULL) return -1;
-    
+ 
   enum datacontcomp result = datacont_compare(dc, tn->dc);
   if (result == EQUAL) return 1;
 
@@ -48,7 +48,7 @@ int treenode_remove(treenode* tn, const datacont* dc)
 void treenode_delete(treenode* tn)
 {
   if (tn == NULL) return;
-  datacont_delete(tn->dc);
+  datacont_delete((datacont*) tn->dc);
   free(tn);
 }
 
@@ -66,7 +66,7 @@ static int _treenode_height(const treenode* tn, unsigned int accum)
 }
 
 
-int treenode_height(const treenode* tn)
+unsigned int treenode_height(const treenode* tn)
 {
   return _treenode_height(tn, 0);
 }

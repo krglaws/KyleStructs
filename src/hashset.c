@@ -1,10 +1,10 @@
 
 #include <stdlib.h>
 
+#include "include/hash.h"
 #include "include/datacont.h"
 #include "include/treenode.h"
 #include "include/treeset.h"
-#include "include/hash.h"
 
 #include "include/hashset.h"
 
@@ -37,16 +37,10 @@ void hashset_delete(hashset* hs)
 
 int hashset_add(hashset* hs, const datacont* dc)
 {
-  const unsigned long long hashval datacont_hash(hs->seed, dc);
+  const unsigned long long hashval = datacont_hash(hs->seed, dc);
 
   if (hs->buckets[hashval % hs->num_buckets] == NULL)
-  {
-    treeset* ts = treeset_new();
-    ts->
     hs->buckets[hashval % hs->num_buckets] = treeset_new();
-    hs
-    return 0;
-  }
 
   return treeset_add(hs->buckets[hashval % hs->num_buckets], dc);
 }
@@ -54,7 +48,7 @@ int hashset_add(hashset* hs, const datacont* dc)
 
 int hashset_remove(hashset* hs, const datacont* dc)
 {
-  const unsigned int hashval = hash(dc);
+  const unsigned long long hashval = datacont_hash(hs->seed, dc);
 
   if (hs->buckets[hashval % hs->num_buckets] == NULL)
     return 1;
@@ -68,13 +62,12 @@ int hashset_contains(const hashset* hs, const datacont* dc)
   if (hs == NULL || dc == NULL)
     return 0;
 
-  unsigned int hashval = hash(dc);
+  unsigned int hashval = datacont_hash(hs->seed, dc);
 
   if (hs->buckets[hashval % hs->num_buckets] == NULL)
     return 0;
 
   return treeset_contains(hs->buckets[hashval % hs->num_buckets], dc);
 }
-
 
 
