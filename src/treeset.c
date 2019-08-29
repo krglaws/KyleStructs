@@ -1,6 +1,5 @@
-#include <string.h>
+
 #include <stdlib.h>
-#include <stdio.h>
 
 #include "include/datacont.h"
 #include "include/treenode.h"
@@ -13,6 +12,23 @@ treeset* treeset_new()
   ts->num_nodes = 0;
   ts->root = NULL;
   return ts;
+}
+
+
+static void _treeset_delete(treenode* tn)
+{
+  if (tn == NULL) return;
+  if (tn->left != NULL) _treeset_delete(tn->left);
+  if (tn->right != NULL) _treeset_delete(tn->right);
+  treenode_delete(tn);
+}
+
+
+void treeset_delete(treeset* ts)
+{
+  if (ts == NULL) return;
+  _treeset_delete(ts->root);
+  free(ts);
 }
 
 
@@ -53,4 +69,3 @@ unsigned int treeset_height(const treeset* ts)
   if (ts == NULL) return 0;
   return treenode_height(ts->root);
 }
-

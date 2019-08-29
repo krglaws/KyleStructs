@@ -1,21 +1,19 @@
 
 #include <stdlib.h>
 
-#include "include/hash.h"
 #include "include/datacont.h"
 #include "include/treenode.h"
 #include "include/treeset.h"
-
 #include "include/hashset.h"
 
 
 hashset* hashset_new(const unsigned int size, const unsigned long long seed)
 {
   hashset* hs = (hashset*) calloc(1, sizeof(hashset));
-  
-  if (size > 0) 
+
+  if (size > 0)
     hs->buckets = (treeset**) calloc(size, sizeof(treeset*));
-  else 
+  else
     hs->buckets = NULL;
 
   hs->num_buckets = size;
@@ -27,7 +25,7 @@ hashset* hashset_new(const unsigned int size, const unsigned long long seed)
 void hashset_delete(hashset* hs)
 {
   if (hs == NULL) return;
-  
+
   for (int i = 0; i < hs->num_buckets; i++)
     treeset_delete(hs->buckets[i]);
 
@@ -62,12 +60,10 @@ int hashset_contains(const hashset* hs, const datacont* dc)
   if (hs == NULL || dc == NULL)
     return 0;
 
-  unsigned int hashval = datacont_hash(hs->seed, dc);
+  const unsigned long long hashval = datacont_hash(hs->seed, dc);
 
   if (hs->buckets[hashval % hs->num_buckets] == NULL)
     return 0;
 
   return treeset_contains(hs->buckets[hashval % hs->num_buckets], dc);
 }
-
-

@@ -22,4 +22,3 @@ int hashset_remove(hashset* hs, const datacont* dc);
 int hashset_contains(const hashset* hs, const datacont* dc);
 
 #endif
-

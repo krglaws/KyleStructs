@@ -1,28 +1,36 @@
-#include <string.h>
+
 #include <stdlib.h>
-#include <stdio.h>
 
 #include "include/datacont.h"
 #include "include/treenode.h"
 
 
-treenode* treenode_new(const datacont* dc, treenode* left, treenode* right)
+treenode* treenode_new(const datacont* dc, const treenode* left, const treenode* right)
 {
   if (dc == NULL) return NULL;
   treenode* tn = (treenode*) malloc(sizeof(treenode));
-  tn->dc = dc;
-  tn->left = left;
-  tn->right = right;
+  tn->dc = (datacont*) dc;
+  tn->left = (treenode*) left;
+  tn->right = (treenode*) right;
   return tn;
+}
+
+
+void treenode_delete(treenode* tn)
+{
+  if (tn == NULL) return;
+  datacont_delete((datacont*) tn->dc);
+  free(tn);
 }
 
 
 int treenode_add(treenode* tn, const datacont* dc)
 {
   if (tn == NULL || dc == NULL) return -1;
- 
+
   enum datacontcomp result = datacont_compare(dc, tn->dc);
   if (result == EQUAL) return 1;
+  if (result == CANTCOMPARE) return -1;
 
   else if (result == GREATERTHAN)
   {
@@ -45,11 +53,13 @@ int treenode_remove(treenode* tn, const datacont* dc)
 }
 
 
-void treenode_delete(treenode* tn)
+int treenode_contains(const treenode* tn, const datacont* dc)
 {
-  if (tn == NULL) return;
-  datacont_delete((datacont*) tn->dc);
-  free(tn);
+  if (tn == NULL || dc == NULL) return 0;
+  enum datacontcomp result = datacont_compare(dc, tn->dc);
+  if (result == EQUAL) return 1;
+  if (result == GREATERTHAN) return treenode_contains(tn->right, dc);
+  return treenode_contains(tn->left, dc);
 }
 
 
@@ -70,51 +80,3 @@ unsigned int treenode_height(const treenode* tn)
 {
   return _treenode_height(tn, 0);
 }
-
-
-int treenode_contains(const treenode* tn, const datacont* dc)
-{
-  if (tn == NULL || dc == NULL) return 0;
-  enum datacontcomp result = datacont_compare(dc, tn->dc);
-  if (result == EQUAL) return 1;
-  if (result == GREATERTHAN) return treenode_contains(tn->right, dc);
-  return treenode_contains(tn->left, dc);
-}
-
-/* these will have to be re-written */
-
-/*
-static void _generate_dotfile(const treenode* tn)
-{
-  if (tn->right)
-  {
-    printf("%s->%s[color=red];\n", tn->dc, tn->right->word);
-    _generate_dotfile(tn->right);
-  }
-  if (tn->left)
-  {
-    printf("%s->%s[color=blue];\n", tn->dc, tn->left->word);
-    _generate_dotfile(tn->left);
-  }
-}
-
-
-void generate_dotfile(const treenode* tn)
-{
-  if (tn)
-  {
-    printf("%s;\n", tn->dc);
-    if (tn->right)
-    {
-      printf("%s->%s[color=red];\n", tn->dc, tn->right->word);
-      _generate_dotfile(tn->right);
-    }
-    if (tn->left)
-    {
-      printf("%s->%s[color=blue];\n", tn->dc, tn->left->word);
-      _generate_dotfile(tn->left);
-    }
-  }
-  else printf("NULL;\n");
-}
-*/

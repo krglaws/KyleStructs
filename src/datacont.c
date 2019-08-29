@@ -48,7 +48,7 @@ datacont* datacont_new(const void* data, const enum dataconttype dct, const unsi
       memcpy(dc->cp, data, sizeof(char) * count);
       break;
     case SHORTP:
-      dc->sp = malloc(sizeof(short) * count); 
+      dc->sp = malloc(sizeof(short) * count);
       memcpy(dc->sp, data, sizeof(short) * count);
       break;
     case INTP:
@@ -85,6 +85,19 @@ datacont* datacont_new(const void* data, const enum dataconttype dct, const unsi
       break;
   }
   return dc;
+}
+
+
+void datacont_delete(datacont* dc)
+{
+  if (dc == NULL) return;
+  if (dc->type < CHARP)
+    free(dc);
+  else
+  {
+    free(dc->cp);
+    free(dc);
+  }
 }
 
 
@@ -231,23 +244,10 @@ enum datacontcomp datacont_compare(const datacont* dca, const datacont* dcb)
 {
   if (dca->type != dcb->type)
     return CANTCOMPARE;
-  
+
   if (dca->type < CHARP)
     return _compare_single_items(dca, dcb);
   else return _compare_multi_items(dca, dcb);
-}
-
-
-void datacont_delete(datacont* dc)
-{
-  if (dc == NULL) return;
-  if (dc->type < CHARP)
-    free(dc);
-  else
-  {
-    free(dc->cp);
-    free(dc);
-  }
 }
 
 
@@ -286,4 +286,3 @@ unsigned long long datacont_hash(unsigned long long seed, const datacont* dc)
   }
   /* should figure out some way to report error */
 }
-
