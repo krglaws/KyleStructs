@@ -4,10 +4,10 @@
 
 enum datacontcomp
 {
-  LESSER,
+  LESSTHAN,
   EQUAL,
-  GREATER,
-  NOCOMP
+  GREATERTHAN,
+  CANTCOMPARE
 };
 
 enum dataconttype
@@ -41,7 +41,7 @@ typedef struct datacont datacont;
 
 struct datacont
 {
-  enum dataconttype;
+  enum dataconttype type;
   unsigned int count;
   union
   {
@@ -71,11 +71,17 @@ struct datacont
   };
 };
 
-datacont* datacont_new(void* data, const unsigned int num_items);
+datacont* datacont_new(const void* data, const enum dataconttype dct, const unsigned int num_items);
 
-int datacont_compare(const datacont* dca, const datacont* dcb);
+static enum datacontcomp _compare_single_items(const datacont* dca, const datacont* dcb);
 
-int datacont_delete(datacont* dc);
+static enum datacontcomp _compare_multi_items(const datacont* dca, const datacont* dcb);
+
+enum datacontcomp datacont_compare(const datacont* dca, const datacont* dcb);
+
+void datacont_delete(datacont* dc);
+
+unsigned long long datacont_hash(unsigned long long seed, const datacont* dc);
 
 #endif
 

@@ -1,72 +1,80 @@
 
 #include <stdlib.h>
 
-#include "treeset.h"
-#include "hashset.h"
+#include "include/datacont.h"
+#include "include/treenode.h"
+#include "include/treeset.h"
+#include "include/hash.h"
+
+#include "include/hashset.h"
 
 
-const unsigned int hash(const char *str)
+hashset* hashset_new(const unsigned int size, const unsigned long long seed)
 {
-    unsigned int hash = 5381;
-    int c;
+  hashset* hs = (hashset*) calloc(1, sizeof(hashset));
+  
+  if (size > 0) 
+    hs->buckets = (treeset**) calloc(size, sizeof(treeset*));
+  else 
+    hs->buckets = NULL;
 
-    while (c = *str++)
-        hash = ((hash << 5) + hash) + c;
-
-    return hash;
+  hs->num_buckets = size;
+  hs->seed = seed;
+  return hs;
 }
 
 
-int hashset_add(hashset* hs, const char* word)
+void hashset_delete(hashset* hs)
 {
-  const unsigned int hashval = hash(word);
+  if (hs == NULL) return;
+  
+  for (int i = 0; i < hs->num_buckets; i++)
+    treeset_delete(hs->buckets[i]);
+
+  free(hs);
+}
+
+
+int hashset_add(hashset* hs, const datacont* dc)
+{
+  const unsigned long long hashval datacont_hash(hs->seed, dc);
 
   if (hs->buckets[hashval % hs->num_buckets] == NULL)
   {
-    hs->buckets[hashval % hs->num_buckets] = treeset_new(1, &word);
+    treeset* ts = treeset_new();
+    ts->
+    hs->buckets[hashval % hs->num_buckets] = treeset_new();
+    hs
     return 0;
   }
 
-  return treeset_add(hs->buckets[hashval % hs->num_buckets], word);
+  return treeset_add(hs->buckets[hashval % hs->num_buckets], dc);
 }
 
 
-int hashset_remove(hashset* hs, const char* word)
+int hashset_remove(hashset* hs, const datacont* dc)
 {
-  const unsigned int hashval = hash(word);
+  const unsigned int hashval = hash(dc);
 
   if (hs->buckets[hashval % hs->num_buckets] == NULL)
     return 1;
 
-  return treeset_remove(hs->buckets[hashval % hs->num_buckets], word);
+  return treeset_remove(hs->buckets[hashval % hs->num_buckets], dc);
 }
 
 
-int hashset_contains(const hashset* hs, const char* word)
+int hashset_contains(const hashset* hs, const datacont* dc)
 {
-  if (hs == NULL || word == NULL)
+  if (hs == NULL || dc == NULL)
     return 0;
 
-  unsigned int hashval = hash(word);
+  unsigned int hashval = hash(dc);
 
   if (hs->buckets[hashval % hs->num_buckets] == NULL)
     return 0;
 
-  return treeset_contains(hs->buckets[hashval % hs->num_buckets], word);
+  return treeset_contains(hs->buckets[hashval % hs->num_buckets], dc);
 }
 
-
-hashset* hashset_new(const unsigned int num_words, const char** words)
-{
-  hashset* hs = (hashset*)calloc(1, sizeof(hashset));
-
-  if (words == NULL || num_words == 0) 
-    return hs;
-
-  for (int i = 0; i < num_words; i++)
-    hashset_add(hs, words[i]);
-
-  return hs;
-}
 
 

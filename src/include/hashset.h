@@ -6,11 +6,14 @@ typedef struct hashset hashset;
 
 struct hashset
 {
-  const unsigned int num_buckets;
+  unsigned int num_buckets;
   treeset** buckets;
+  unsigned long long seed;
 };
 
-hashset* hashset_new(const unsigned int num_items, const datacont** dclist);
+hashset* hashset_new(unsigned int size);
+
+void hashset_delete(hashset* hs);
 
 int hashset_add(hashset* hs, const datacont* dc);
 
