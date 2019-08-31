@@ -32,7 +32,7 @@ int treenode_add(treenode* tn, const datacont* dc)
   if (result == EQUAL) return 1;
   if (result == CANTCOMPARE) return -1;
 
-  else if (result == GREATERTHAN)
+  else if (result == LESSTHAN)
   {
     if (tn->left) return treenode_add(tn->left, dc);
     else tn->left = treenode_new(dc, NULL, NULL);
