@@ -8,6 +8,8 @@
 static int treenode_new_tests()
 {
   int retval = 0;
+
+  /* TEST 1 */
   int num = 10;
   datacont* dc = datacont_new(&num, INT, 1);
   treenode* tn = treenode_new(dc, NULL, NULL);
@@ -111,6 +113,26 @@ static int treenode_contains_tests()
 }
 
 
+static int treenode_height_tests()
+{
+  int retval = 0;
+
+  /* Test 1 */
+  treenode* tn = treenode_new(datacont_new("A", CHAR, 1), NULL, NULL);
+  treenode_add(tn, datacont_new("B", CHAR, 1));
+  treenode_add(tn, datacont_new("C", CHAR, 1));
+
+  unsigned int height = treenode_height(tn);
+  if (height != 3)
+  {
+    printf("TEST 1: Unexpected treenode height: %d. Expected: %d\n", height, 3);
+    retval = -1;
+  }
+
+  return retval;
+}
+
+
 int main()
 {
   int retval = 0;
@@ -121,17 +143,23 @@ int main()
   printf("Running treenode_new_tests()...\n");
   if (treenode_new_tests()) retval = -1;
   printf("done.\n");
-  printf("==-----------------------------------==\n");
+  printf("==-----------------------------------==\n\n");
 
   printf("==-----------------------------------==\n");
   printf("Running treenode_add_tests()...\n");
   if (treenode_add_tests()) retval = -1;
   printf("done.\n");
-  printf("==-----------------------------------==\n");
+  printf("==-----------------------------------==\n\n");
 
   printf("==-----------------------------------==\n");
   printf("Running treenode_contains_tests()...\n");
   if (treenode_contains_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running treenode_height_tests()...\n");
+  if (treenode_height_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 
