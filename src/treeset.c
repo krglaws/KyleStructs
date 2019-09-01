@@ -38,7 +38,7 @@ int treeset_add(treeset* ts, const datacont* dc)
   int retval;
   if (ts->root == NULL)
   {
-    ts->root = treenode_new(dc, NULL, NULL);
+    ts->root = treenode_new(dc);
     retval = 0;
   }
   else

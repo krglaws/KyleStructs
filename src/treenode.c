@@ -5,13 +5,12 @@
 #include "include/treenode.h"
 
 
-treenode* treenode_new(const datacont* dc, const treenode* left, const treenode* right)
+treenode* treenode_new(const datacont* dc)
 {
   if (dc == NULL) return NULL;
   treenode* tn = (treenode*) malloc(sizeof(treenode));
   tn->dc = (datacont*) dc;
-  tn->left = (treenode*) left;
-  tn->right = (treenode*) right;
+  tn->left = tn->right = NULL;
   return tn;
 }
 
@@ -35,12 +34,12 @@ int treenode_add(treenode* tn, const datacont* dc)
   else if (result == LESSTHAN)
   {
     if (tn->left) return treenode_add(tn->left, dc);
-    else tn->left = treenode_new(dc, NULL, NULL);
+    else tn->left = treenode_new(dc);
   }
   else
   {
     if (tn->right) return treenode_add(tn->right, dc);
-    else tn->right = treenode_new(dc, NULL, NULL);
+    else tn->right = treenode_new(dc);
   }
   return 0;
 }

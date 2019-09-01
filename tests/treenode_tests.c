@@ -12,7 +12,7 @@ static int treenode_new_tests()
   /* TEST 1 */
   int num = 10;
   datacont* dc = datacont_new(&num, INT, 1);
-  treenode* tn = treenode_new(dc, NULL, NULL);
+  treenode* tn = treenode_new(dc);
   if (dc != tn->dc)
   {
     printf("TEST 1: treenode contains unexpected datacont* value.\n");
@@ -33,7 +33,7 @@ static int treenode_add_tests()
 {
   int retval = 0;
 
-  treenode* root = treenode_new(datacont_new("B\0", CHARP, 2), NULL, NULL);
+  treenode* root = treenode_new(datacont_new("B\0", CHARP, 2));
   datacont* left = datacont_new("A\0", CHARP, 2);
   datacont* right = datacont_new("C\0", CHARP, 2);
 
@@ -91,7 +91,7 @@ static int treenode_contains_tests()
   int retval = 0;
   
   /* Test 1 */
-  treenode* root = treenode_new(datacont_new("A", CHAR, 1), NULL, NULL);
+  treenode* root = treenode_new(datacont_new("A", CHAR, 1));
   datacont* dc = datacont_new("B", CHAR, 1);
   if (treenode_contains(root, dc) == 1)
   {
@@ -118,7 +118,7 @@ static int treenode_height_tests()
   int retval = 0;
 
   /* Test 1 */
-  treenode* tn = treenode_new(datacont_new("A", CHAR, 1), NULL, NULL);
+  treenode* tn = treenode_new(datacont_new("A", CHAR, 1));
   treenode_add(tn, datacont_new("B", CHAR, 1));
   treenode_add(tn, datacont_new("C", CHAR, 1));
 

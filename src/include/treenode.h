@@ -11,7 +11,7 @@ struct treenode
   treenode* left;
 };
 
-treenode* treenode_new(const datacont* dc, const treenode* left, const treenode* right);
+treenode* treenode_new(const datacont* dc);
 
 void treenode_delete(treenode* tn);
 
