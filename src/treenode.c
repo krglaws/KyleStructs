@@ -18,6 +18,8 @@ treenode* treenode_new(const datacont* dc)
 void treenode_delete(treenode* tn)
 {
   if (tn == NULL) return;
+  if (tn->right != NULL) treenode_delete(tn->right);
+  if (tn->left != NULL) treenode_delete(tn->left);
   datacont_delete((datacont*) tn->dc);
   free(tn);
 }

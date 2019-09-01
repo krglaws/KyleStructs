@@ -12,8 +12,6 @@ struct treeset
 
 treeset* treeset_new();
 
-static void _treeset_delete(treenode* tn);
-
 void treeset_delete(treeset* ts);
 
 int treeset_add(treeset* ts, const datacont* dc);

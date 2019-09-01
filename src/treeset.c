@@ -15,19 +15,10 @@ treeset* treeset_new()
 }
 
 
-static void _treeset_delete(treenode* tn)
-{
-  if (tn == NULL) return;
-  if (tn->left != NULL) _treeset_delete(tn->left);
-  if (tn->right != NULL) _treeset_delete(tn->right);
-  treenode_delete(tn);
-}
-
-
 void treeset_delete(treeset* ts)
 {
   if (ts == NULL) return;
-  _treeset_delete(ts->root);
+  treenode_delete(ts->root);
   free(ts);
 }
 
