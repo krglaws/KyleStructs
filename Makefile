@@ -82,15 +82,13 @@ $(HASHSETTESTTARG): $(TEST)/hashset_tests.c $(TESTDEPS)
 .PHONY: all
 all: run_tests
 	@echo "All tests passed. Building shared libs..."
-	@$(MAKE) static_lib
-	@$(MAKE) dynamic_lib
+	$(MAKE) static_lib
+	$(MAKE) dynamic_lib CFLAGS="$(CFLAGS) -fPIC"
 	@echo "Done."
 
 
 .PHONY: clean
 clean:
-	rm -f *.a
-	rm -f *.so
 	rm -f src/bin/*.o
 	rm -f tests/bin/*.out
 
@@ -109,11 +107,8 @@ tests: $(DATACONTTESTTARG) $(TREENODETESTTARG) $(TREESETTESTTARG) $(HASHSETTESTT
 static_lib: $(HASHTARG) $(DATACONTTARG) $(TREENODETARG) $(TREESETTARG) $(HASHSETTARG)
 	ar rcs libkylestructs.a $(SBIN)/*.o
 
-set_flags:
-	CFLAGS=-fPIC
 
 .PHONY: dynamic_lib
-dynamic_lib: clean set_flags $(HASHTARG) $(DATACONTTARG) $(TREENODETARG) $(TREESETTARG) $(HASHSETTARG)
+dynamic_lib: clean $(HASHTARG) $(DATACONTTARG) $(TREENODETARG) $(TREESETTARG) $(HASHSETTARG)
 	gcc -shared $(SBIN)/*.o -o libkylestructs.so
-
 
