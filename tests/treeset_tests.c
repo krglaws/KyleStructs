@@ -115,7 +115,7 @@ int main()
 {
   int retval = 0;
 
-  printf("\ndatacont tests:\n\n");
+  printf("\ntreeset tests:\n\n");
 
   printf("==-----------------------------------==\n");
   printf("Running treeset_new_tests()...\n");

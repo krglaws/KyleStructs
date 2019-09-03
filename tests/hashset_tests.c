@@ -85,7 +85,9 @@ static int hashset_contains_tests()
 
 int main()
 {
-  int retval = -1;
+  int retval = 0;
+
+  printf("\nhashset tests:\n\n");
 
   printf("==-----------------------------------==\n");
   printf("Running hashset_new_tests()...\n");

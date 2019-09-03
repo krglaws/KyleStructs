@@ -77,9 +77,6 @@ static int treenode_add_tests()
     printf("TEST 2: Unexpected NULL value in right node of root.\n");
     retval = -1;
   }
-
-  treenode_delete(root->left);
-  treenode_delete(root->right);
   treenode_delete(root);
 
   return retval;
@@ -105,7 +102,6 @@ static int treenode_contains_tests()
     printf("TEST 2: treenode should contain char value 'A'.\n");
     retval = -1;
   }
-
   datacont_delete(dc);
   treenode_delete(root);
 
