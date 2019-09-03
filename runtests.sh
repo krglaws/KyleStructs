@@ -4,6 +4,10 @@ FAILED=""
 
 TESTBIN="tests/bin"
 
+echo ==============================
+echo ----------------------------
+echo Running all test suites...
+
 for TESTFILE in $(ls $TESTBIN)
 do
 	./$TESTBIN/$TESTFILE
@@ -12,15 +16,19 @@ do
 		FAILED="${FAILED}${TESTFILE}\n"
 	fi
 done
+
+echo Done.
+echo ----------------------------
+echo ==============================
 	
 
 if [ "$FAILED" != "" ]
 then
 	echo $ERRTITLE
 	echo $FAILED
-	ERR=1	
+	exit 1
 fi
 
-ERR=0
+exit 0 
 
 

@@ -1,5 +1,6 @@
 
 CC := gcc
+CFLAGS := #default none 
 
 SRC := src
 INC := src/include
@@ -8,7 +9,8 @@ SBIN := src/bin
 TEST := tests
 TBIN := tests/bin
 
-ERR := 0
+default: all
+
 
 # compile sources
 
@@ -16,35 +18,35 @@ HASHDEPS := $(SRC)/hash.c $(INC)/hash.h
 HASHTARG := $(SBIN)/hash.o
 
 $(HASHTARG): $(HASHDEPS)
-	$(CC) -c $< -o $@
+	$(CC) -c $< -o $@ $(CFLAGS)
 
 
 DATACONTDEPS := $(SRC)/datacont.c $(INC)/datacont.h
 DATACONTTARG := $(SBIN)/datacont.o
 
 $(DATACONTTARG): $(DATACONTDEPS)
-	$(CC) -c $< -o $@
+	$(CC) -c $< -o $@ $(CFLAGS)
 
 
 TREENODEDEPS := $(SRC)/treenode.c $(INC)/treenode.h
 TREENODETARG := $(SBIN)/treenode.o
 
 $(TREENODETARG): $(TREENODEDEPS) 
-	$(CC) -c $< -o $@
+	$(CC) -c $< -o $@ $(CFLAGS)
 
 
 TREESETDEPS := $(SRC)/treeset.c $(INC)/treeset.h
 TREESETTARG := $(SBIN)/treeset.o
 
 $(TREESETTARG): $(TREESETDEPS) 
-	$(CC) -c $< -o $@
+	$(CC) -c $< -o $@ $(CFLAGS)
 
 
 HASHSETDEPS := $(SRC)/hashset.c $(INC)/hashset.h
 HASHSETTARG := $(SBIN)/hashset.o
 
 $(HASHSETTARG): $(HASHSETDEPS) 
-	$(CC) -c $< -o $@
+	$(CC) -c $< -o $@ $(CFLAGS)
 
 
 # compile tests
@@ -77,29 +79,41 @@ $(HASHSETTESTTARG): $(TEST)/hashset_tests.c $(TESTDEPS)
 	$(CC) $^ -o $@
 
 
-# make libs
-
-static_lib: $(HASHTARG) $(DATACONTTARG) $(TREENODETARG) $(TREESETTARG) $(HASHSETTARG)
-	ar rcs libkylestructs.a $(SBIN)/*.o
-
-
-dynamic_lib: $(HASHTARG) $(DATACONTTARG) $(TREENODETARG) $(TREESETTARG) $(HASHSETTARG)
-	gcc -shared $(SBIN)/*.o -o libkylestructs.so
+.PHONY: all
+all: run_tests
+	@echo "All tests passed. Building shared libs..."
+	@$(MAKE) static_lib
+	@$(MAKE) dynamic_lib
+	@echo "Done."
 
 
-tests: $(DATACONTTESTTARG) $(TREENODETESTTARG) $(TREESETTARG) $(HASHSETTARG)
-
-
-run_tests: $(tests)
-	./runtests.sh
-
-all: tests run_tests
-	@if [ "$ERR" = "0" ]; then echo "All tests pass. Building shared libs..."; $(MAKE) static_lib; $(MAKE) dynamic_lib; echo "done."; fi;
-
+.PHONY: clean
 clean:
 	rm -f *.a
 	rm -f *.so
 	rm -f src/bin/*.o
 	rm -f tests/bin/*.out
 
-.PHONY: static_lib dynamic_lib tests run_tests all clean
+
+.PHONY: run_tests
+run_tests: tests
+	@./runtests.sh
+
+
+.PHONY: tests
+tests: $(DATACONTTESTTARG) $(TREENODETESTTARG) $(TREESETTESTTARG) $(HASHSETTESTTARG)
+	@echo Finished building tests.
+
+
+.PHONY: static_lib
+static_lib: $(HASHTARG) $(DATACONTTARG) $(TREENODETARG) $(TREESETTARG) $(HASHSETTARG)
+	ar rcs libkylestructs.a $(SBIN)/*.o
+
+set_flags:
+	CFLAGS=-fPIC
+
+.PHONY: dynamic_lib
+dynamic_lib: clean set_flags $(HASHTARG) $(DATACONTTARG) $(TREENODETARG) $(TREESETTARG) $(HASHSETTARG)
+	gcc -shared $(SBIN)/*.o -o libkylestructs.so
+
+
