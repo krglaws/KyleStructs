@@ -1,6 +1,6 @@
 
 CC := gcc
-CFLAGS := #default none 
+CFLAGS := -fPIC  
 
 SRC := src
 INC := src/include
@@ -8,6 +8,9 @@ SBIN := src/bin
 
 TEST := tests
 TBIN := tests/bin
+
+INCLOC := /usr/include/kylestructs
+LIBLOC := /usr/lib/
 
 default: all
 
@@ -79,23 +82,17 @@ $(HASHSETTESTTARG): $(TEST)/hashset_tests.c $(TESTDEPS)
 	$(CC) $^ -o $@
 
 
-.PHONY: all
-all: run_tests
-	@echo "All tests passed. Building shared libs..."
-	$(MAKE) static_lib
-	$(MAKE) dynamic_lib CFLAGS="$(CFLAGS) -fPIC"
-	@echo "Done."
-
-
 .PHONY: clean
 clean:
+	rm *.so
+	rm *.a
 	rm -f src/bin/*.o
 	rm -f tests/bin/*.out
 
 
 .PHONY: run_tests
 run_tests: tests
-	@./runtests.sh
+	./runtests.sh
 
 
 .PHONY: tests
@@ -103,12 +100,39 @@ tests: $(DATACONTTESTTARG) $(TREENODETESTTARG) $(TREESETTESTTARG) $(HASHSETTESTT
 	@echo Finished building tests.
 
 
-.PHONY: static_lib
-static_lib: $(HASHTARG) $(DATACONTTARG) $(TREENODETARG) $(TREESETTARG) $(HASHSETTARG)
-	ar rcs libkylestructs.a $(SBIN)/*.o
+STATICLIB := libkylestructs.a
+$(STATICLIB): $(HASHTARG) $(DATACONTTARG) $(TREENODETARG) $(TREESETTARG) $(HASHSETTARG)
+	ar rcs $(STATICLIB) $(SBIN)/*.o
 
 
-.PHONY: dynamic_lib
-dynamic_lib: clean $(HASHTARG) $(DATACONTTARG) $(TREENODETARG) $(TREESETTARG) $(HASHSETTARG)
-	gcc -shared $(SBIN)/*.o -o libkylestructs.so
+DYNAMICLIB := libkylestructs.so
+$(DYNAMICLIB): $(HASHTARG) $(DATACONTTARG) $(TREENODETARG) $(TREESETTARG) $(HASHSETTARG)
+	gcc -shared $(SBIN)/*.o -o $(DYNAMICLIB)
+
+
+.PHONY: install
+install: $(STATICLIB) $(DYNAMICLIB)
+	mkdir $(INCLOC)
+	cp $(INC)/* $(INCLOC)
+	cp $(STATICLIB) $(LIBLOC)
+	cp $(DYNAMICLIB) $(LIBLOC)
+
+
+.PHONY: uninstall
+uninstall:
+	if [ -d "$(INCLOC)" ]; then rm -r $(INCLOC); fi;
+	if [ -f "$(LIBLOC)/$(STATICLIB)" ]; then rm $(LIBLOC)/$(STATICLIB); fi;
+	if [ -f "$(LIBLOC)/$(DYNAMICLIB)" ]; then rm $(LIBLOC)/$(DYNAMICLIB); fi;
+
+
+.PHONY: all
+all: run_tests
+	@echo "All tests passed."
+	@echo "Building static libs..."
+	$(MAKE) $(STATICLIB)
+	@echo "Done."
+	@echo "Building shared libs..."
+	$(MAKE) $(DYNAMICLIB)
+	@echo "Done."
+
 
