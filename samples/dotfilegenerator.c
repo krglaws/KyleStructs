@@ -1,78 +1,137 @@
+/*
+ * dot -Tpng -o <outfile> <infile>
+ */
 
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "../src/include/datacont.h"
-#include "../src/include/treenode.h"
+#include <kylestructs/hash.h>
+#include <kylestructs/datacont.h>
+#include <kylestructs/treenode.h>
+#include <kylestructs/treeset.h>
+#include <kylestructs/hashset.h>
 
+#define FLOOR(N) ((long long) N)
 
-unsigned int snum_len(signed long long num)
+unsigned int snum_len(signed long long num, unsigned char base)
 {
   unsigned int len = 1;
-  while(num /= 10) len++;
+  while(num /= base) len++;
   return len;
 }
 
-unsigned 
 
-
-char* sitoa(long long num, char* buffer)
+unsigned int unum_len(unsigned long long num, unsigned char base)
 {
-  int len = num_len(num);
-  
-  int i = len-1;
-  while(num && i >= 0)
-  {
-    str[i--] = (num % 10) + 0x30;
-    num /= 10;
-  }
-  
-  return str;
+  unsigned int len = 1;
+  while(num /= base) len++;
+  return len;
 }
 
 
-int main(int argc, char** argv)
+void datacont_to_string(datacont* dc, char* buffer)
 {
-	for (int i = 1; i < argc; i++)
-	{
-		long long num = strtol(argv[i], NULL, 10);
-		char* str = itoa(num);
-		printf("len(%s) = %d\n", str, strlen(str));
-	}
-}
-
-
-/*
-const char* datactont_to_string(dc)
-{
-  char* result;
   switch(dc->type)
   {
     case CHAR:
-      result = (char*)malloc(sizeof(char));
-      result* = dc->c;
+      sprintf(buffer, "%c", dc->c);
       break;
     case SHORT:
-      result = (char*)malloc(sizeof(short));
-      result* = dc->s;
+      sprintf(buffer, "%hi", dc->s);
       break;
     case INT:
-      result = char*
-      
+      sprintf(buffer, "%i", dc->i);
+      break;
+    case LL:
+      sprintf(buffer, "%lli", dc->ll);
+      break;
+    case FLOAT:
+      sprintf(buffer, "%.5f", dc->f);
+      break;
+    case DOUBLE:
+      sprintf(buffer, "%.5lf", dc->d);
+      break;
+    case UCHAR:
+      sprintf(buffer, "%hhu", dc->uc);
+      break;
+    case USHORT:
+      sprintf(buffer, "%hu", dc->us);
+      break;
+    case UINT:
+      sprintf(buffer, "%u", dc->i);
+      break;
+    case ULL:
+      sprintf(buffer, "%llu", dc->ull);
+      break;
+    case CHARP:
+      sprintf(buffer, "%s", dc->cp);
+      break;
+    default:
+      buffer[0] = '[';
+      int currlen = 1;
+      int numlen = 0, i = 0;
+      for (; i < dc->count; i++)
+      {
+	/* for integer values, add 2 to numlen to account for
+	 * ',' and ' ' (space) at end of value.
+	 * for floating point values, add 5 -- 2 for ',' and
+	 * ' ', and 3 for '.00' sig digs
+	 */
+	switch(dc->type)
+	{
+          case SHORTP: numlen = snum_len(dc->sp[i], 10) + 2; break;
+          case INTP: numlen = snum_len(dc->ip[i], 10) + 2; break;
+          case LLP: numlen = snum_len(dc->llp[i], 10) + 2; break;
+	  case FLOATP: numlen = snum_len(FLOOR(dc->fp[i]), 10) + 5; break;
+          case DOUBLEP: numlen = snum_len(FLOOR(dc->dp[i]), 10) + 5; break;
+	  case UCHARP: numlen = unum_len(dc->ucp[i], 10) + 2; break;
+          case USHORTP: numlen = unum_len(dc->usp[i], 10) + 2; break;
+	  case UINTP: numlen = unum_len(dc->uip[i], 10) + 2; break;
+          case ULLP: numlen = unum_len(dc->ullp[i], 10) + 2; break;
+	}
+        if (currlen + numlen > 27) break;
+        switch(dc->type)
+	{
+	  case SHORTP: sprintf( &(buffer[currlen]), "%hi, ", dc->sp[i]); break;
+	  case INTP: sprintf( &(buffer[currlen]), "%i, ", dc->ip[i]); break;
+	  case LLP: sprintf( &(buffer[currlen]), "%lli, ", dc->llp[i]); break;
+	  case FLOATP: sprintf( &(buffer[currlen]), "%.2f, ", dc->fp[i]); break;
+	  case DOUBLEP: sprintf( &(buffer[currlen]), "%.2lf, ", dc->dp[i]); break;
+	  case UCHARP: sprintf( &(buffer[currlen]), "%hhu, ", dc->ucp[i]); break;
+	  case USHORTP: sprintf( &(buffer[currlen]), "%hu, ", dc->usp[i]); break;
+	  case UINTP: sprintf( &(buffer[currlen]), "%u, ", dc->uip[i]); break;
+	  case ULLP: sprintf( &(buffer[currlen]), "%llu, ", dc->ullp[i]); break;
+	}
+	currlen += numlen;
+      }
+      if (i < dc->count)
+	currlen--; // put period in place of last space
+        for (int j = 0; j < 3 && j+currlen < 27; j++)
+          buffer[currlen++] = '.';
+      buffer[currlen++] = ']';
+      buffer[currlen] = '\0';
+      break;
+  }
 }
 
 
 static void _generate_dotfile(const treenode* tn)
 {
+  char buffer_parent[30];
+  char buffer_child[30];
+  datacont_to_string(tn->dc, buffer_parent);
   if (tn->right)
   {
-    printf("%s->%s[color=red];\n", tn->dc, tn->right->word);
+    datacont_to_string(tn->right->dc, buffer_child);
+    printf("\"%s\"->\"%s\"[color=red];\n", buffer_parent, buffer_child);
     _generate_dotfile(tn->right);
   }
   if (tn->left)
   {
-    printf("%s->%s[color=blue];\n", tn->dc, tn->left->word);
+    datacont_to_string(tn->left->dc, buffer_child);
+    printf("\"%s\"->\"%s\"[color=blue];\n", buffer_parent, buffer_child);
     _generate_dotfile(tn->left);
   }
 }
@@ -80,20 +139,46 @@ static void _generate_dotfile(const treenode* tn)
 
 void generate_dotfile(const treenode* tn)
 {
+  char buffer_parent[30];
+  char buffer_child[30];
   if (tn)
   {
-    printf("%s;\n", tn->dc);
+    datacont_to_string(tn->dc, buffer_parent);
+    printf("\"%s\";\n", buffer_parent);
     if (tn->right)
     {
-      printf("%s->%s[color=red];\n", tn->dc, tn->right->word);
+      datacont_to_string(tn->right->dc, buffer_child);
+      printf("\"%s\"->\"%s\"[color=red];\n", buffer_parent, buffer_child);
       _generate_dotfile(tn->right);
     }
     if (tn->left)
     {
-      printf("%s->%s[color=blue];\n", tn->dc, tn->left->word);
+      datacont_to_string(tn->left->dc, buffer_child);
+      printf("\"%s\"->\"%s\"[color=blue];\n", buffer_parent, buffer_child);
       _generate_dotfile(tn->left);
     }
   }
   else printf("NULL;\n");
 }
-*/
+
+
+int main()
+{
+  hashset* hs = hashset_new(5, 0x0123456789ABCDEF);
+  for (int i = 0; i < 50; i++)
+  {
+	  float num = ((float) rand()) / (0.5 * RAND_MAX);
+	  hashset_add(hs, datacont_new(&num, FLOAT, 1));
+  }
+
+  printf("digraph G {\n");
+  for (int i = 0; i < hs->num_buckets; i++)
+  {
+    printf("# tree in bucket %d:\n", i);
+    generate_dotfile(hs->buckets[i]->root);
+  }
+  printf("}\n\n");
+  return 0;
+}
+
+
