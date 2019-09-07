@@ -122,17 +122,17 @@ static void _generate_dotfile(const treenode* tn)
   char buffer_parent[30];
   char buffer_child[30];
   datacont_to_string(tn->dc, buffer_parent);
-  if (tn->right)
-  {
-    datacont_to_string(tn->right->dc, buffer_child);
-    printf("\"%s\"->\"%s\"[color=red];\n", buffer_parent, buffer_child);
-    _generate_dotfile(tn->right);
-  }
   if (tn->left)
   {
     datacont_to_string(tn->left->dc, buffer_child);
     printf("\"%s\"->\"%s\"[color=blue];\n", buffer_parent, buffer_child);
     _generate_dotfile(tn->left);
+  }
+  if (tn->right)
+  {
+    datacont_to_string(tn->right->dc, buffer_child);
+    printf("\"%s\"->\"%s\"[color=red];\n", buffer_parent, buffer_child);
+    _generate_dotfile(tn->right);
   }
 }
 
@@ -145,17 +145,17 @@ void generate_dotfile(const treenode* tn)
   {
     datacont_to_string(tn->dc, buffer_parent);
     printf("\"%s\";\n", buffer_parent);
-    if (tn->right)
-    {
-      datacont_to_string(tn->right->dc, buffer_child);
-      printf("\"%s\"->\"%s\"[color=red];\n", buffer_parent, buffer_child);
-      _generate_dotfile(tn->right);
-    }
     if (tn->left)
     {
       datacont_to_string(tn->left->dc, buffer_child);
       printf("\"%s\"->\"%s\"[color=blue];\n", buffer_parent, buffer_child);
       _generate_dotfile(tn->left);
+    }
+    if (tn->right)
+    {
+      datacont_to_string(tn->right->dc, buffer_child);
+      printf("\"%s\"->\"%s\"[color=red];\n", buffer_parent, buffer_child);
+      _generate_dotfile(tn->right);
     }
   }
   else printf("NULL;\n");
@@ -164,20 +164,52 @@ void generate_dotfile(const treenode* tn)
 
 int main()
 {
-  hashset* hs = hashset_new(5, 0x0123456789ABCDEF);
+  /*
+  hashset* hs = hashset_new(3, 0x0123456789ABCDEF);
   for (int i = 0; i < 50; i++)
   {
-	  float num = ((float) rand()) / (0.5 * RAND_MAX);
-	  hashset_add(hs, datacont_new(&num, FLOAT, 1));
+    short num = rand() % 1000;
+    hashset_add(hs, datacont_new(&num, SHORT, 1));
   }
+  */
 
+  treeset* ts = treeset_new();
+  for (int i = 0; i < 10; i++)
+  {
+    int numitems = (rand() % 5) + 1;
+    float numlist[numitems];
+    for (int j = 0; j < numitems; j++)
+      numlist[j] = ((float) rand()) / (0.1 * RAND_MAX);
+
+    treeset_add(ts, datacont_new(&numlist, FLOATP, numitems));
+  }
+  /*
+  treeset* ts = treeset_new();
+
+  treeset_add(ts, datacont_new("BAZ", CHARP, 3));
+  treeset_add(ts, datacont_new("FOO", CHARP, 3));
+  treeset_add(ts, datacont_new("BAR", CHARP, 3));
+  */
+  printf("\ndigraph G {\n");
+  printf("subgraph cluster_t {\n");
+  printf("label = \"Treeset\";\n");
+  generate_dotfile(ts->root);
+  printf("}\n}\n\n");
+
+  /*
   printf("digraph G {\n");
+  printf("subgraph cluster_h {\n");
+  printf("label = \"Hashset\\lblue = 'less than'\\lred = 'greater than'\";");
   for (int i = 0; i < hs->num_buckets; i++)
   {
     printf("# tree in bucket %d:\n", i);
+    printf("subgraph cluster_%d {\n", i);
+    printf("label = \"Treeset in bucket %d\"\n", i);
     generate_dotfile(hs->buckets[i]->root);
+    printf("}\n");
   }
-  printf("}\n\n");
+  printf("}\n}\n");
+  */
   return 0;
 }
 
