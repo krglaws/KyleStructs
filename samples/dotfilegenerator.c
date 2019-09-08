@@ -164,15 +164,15 @@ void generate_dotfile(const treenode* tn)
 
 int main()
 {
-  /*
-  hashset* hs = hashset_new(3, 0x0123456789ABCDEF);
+  srand(time(NULL));
+  hashset* hs = hashset_new(3, rand());
   for (int i = 0; i < 50; i++)
   {
     short num = rand() % 1000;
     hashset_add(hs, datacont_new(&num, SHORT, 1));
   }
-  */
-
+  
+/*
   treeset* ts = treeset_new();
   for (int i = 0; i < 10; i++)
   {
@@ -183,6 +183,7 @@ int main()
 
     treeset_add(ts, datacont_new(&numlist, FLOATP, numitems));
   }
+*/
   /*
   treeset* ts = treeset_new();
 
@@ -190,13 +191,13 @@ int main()
   treeset_add(ts, datacont_new("FOO", CHARP, 3));
   treeset_add(ts, datacont_new("BAR", CHARP, 3));
   */
-  printf("\ndigraph G {\n");
+/*  printf("\ndigraph G {\n");
   printf("subgraph cluster_t {\n");
   printf("label = \"Treeset\";\n");
   generate_dotfile(ts->root);
   printf("}\n}\n\n");
-
-  /*
+*/
+  
   printf("digraph G {\n");
   printf("subgraph cluster_h {\n");
   printf("label = \"Hashset\\lblue = 'less than'\\lred = 'greater than'\";");
@@ -209,7 +210,7 @@ int main()
     printf("}\n");
   }
   printf("}\n}\n");
-  */
+  
   return 0;
 }
 
