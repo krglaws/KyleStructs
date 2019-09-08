@@ -21,6 +21,8 @@ hashset[ hash(data) % hashset_length ].add(data)
 I also added support for adding arrays of any kind of data to a `treeset`/`hashset`:
 ![Treeset List](/samples/treeset_list.png)
 
+_Images generated using [Graphviz](https://www.graphviz.org/)_
+
 ## To Do:
 - create hashtable data structure
 - write toString functions for each structure
