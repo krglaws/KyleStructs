@@ -26,25 +26,34 @@ void treeset_delete(treeset* ts)
 int treeset_add(treeset* ts, const datacont* dc)
 {
   if (ts == NULL || dc == NULL) return -1;
+
   int retval;
+
   if (ts->root == NULL)
   {
     ts->root = treenode_new(dc);
     retval = 0;
   }
-  else
-  {
-    retval = treenode_add(ts->root, dc);
-  }
+  else retval = treenode_add(ts->root, dc);
+
   if (retval == 0) ts->num_nodes++;
+
   return retval;
 }
 
 
 int treeset_remove(treeset* ts, const datacont* dc)
 {
-  if (ts == NULL || dc == NULL) return 1;
-  return treenode_remove(ts->root, dc);
+  if (ts == NULL) return 1;
+  int retval = treenode_remove(ts->root, dc);
+
+  if (retval == 0)
+    ts->num_nodes--;
+
+  if (ts->num_nodes < 1)
+    ts->root = NULL;
+
+  return retval;
 }
 
 
@@ -60,3 +69,4 @@ unsigned int treeset_height(const treeset* ts)
   if (ts == NULL) return 0;
   return treenode_height(ts->root);
 }
+
