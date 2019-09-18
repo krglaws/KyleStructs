@@ -83,6 +83,71 @@ static int treenode_add_tests()
 }
 
 
+static int treenode_remove_tests()
+{
+  int retval = 0;
+
+  treenode* root = treenode_new(datacont_new("D", CHAR, 1));
+  treenode_add(root, datacont_new("B", CHAR, 1));
+  treenode_add(root, datacont_new("F", CHAR, 1));
+  treenode_add(root, datacont_new("A", CHAR, 1));
+  treenode_add(root, datacont_new("C", CHAR, 1));
+  treenode_add(root, datacont_new("E", CHAR, 1));
+  treenode_add(root, datacont_new("G", CHAR, 1));
+  
+  datacont* dc_Z = datacont_new("Z", CHAR, 1);
+  datacont* dc_D = datacont_new("D", CHAR, 1);
+  datacont* dc_B = datacont_new("B", CHAR, 1);
+  datacont* dc_A = datacont_new("A", CHAR, 1);
+
+  if (treenode_remove(root, dc_Z) != 1)
+  {
+    printf("TEST 1: treenode_remove() should return 1 when a non-existent datacont value is passed.\n");
+    retval = -1;
+  }
+
+  if (treenode_remove(root, dc_D) != 0)
+  {
+    printf("TEST 2: treenode_remove() should return 0 on successful removal.\n");
+    retval = -1;
+  }
+  if (treenode_contains(root, dc_D))
+  {
+    printf("TEST 2: treenode should not contain 'D' datacont value.\n");
+    retval = -1;
+  }
+
+  if (treenode_remove(root, dc_B) != 0)
+  {
+    printf("TEST 3: treenode_remove() should return 0 on successful removal.\n");
+    retval = -1;
+  }
+  if (treenode_contains(root, dc_B))
+  {
+    printf("TEST 3: treenode should not contain 'B' datacont value.\n");
+    retval = -1;
+  }
+
+  if (treenode_remove(root, dc_A))
+  {
+    printf("TEST 4: treenode_remove() should return 0 on successful removal.\n");
+    retval = -1;
+  }
+  if (treenode_contains(root, dc_A))
+  {
+    printf("TEST 4: treenode should not contain 'A' datacont value.\n");
+    retval = -1;
+  }
+  datacont_delete(dc_Z);
+  datacont_delete(dc_D);
+  datacont_delete(dc_B);
+  datacont_delete(dc_A);
+  treenode_delete(root);
+
+  return retval;
+}
+
+
 static int treenode_contains_tests()
 {
   int retval = 0;
@@ -144,6 +209,12 @@ int main()
   printf("==-----------------------------------==\n");
   printf("Running treenode_add_tests()...\n");
   if (treenode_add_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running treenode_remove_tests()...\n");
+  if (treenode_remove_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 
