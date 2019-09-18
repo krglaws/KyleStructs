@@ -49,8 +49,40 @@ int treenode_add(treenode* tn, const datacont* dc)
 
 int treenode_remove(treenode* tn, const datacont* dc)
 {
-  // this is gon' be tricky
-  return 0;
+  if (tn == NULL || dc == NULL) return 1;
+  
+  enum datacontcomp result = datacont_compare(dc, tn->dc);
+
+  if (result == EQUAL)
+  {
+    if (tn->left != NULL && tn->right != NULL)
+    {
+      treenode* leftmost = tn->right;
+      while (leftmost->left) leftmost = leftmost->left;
+      datacont_delete(tn->dc);
+      tn->dc = datacont_copy(leftmost->dc);
+      return treenode_remove(leftmost, leftmost->dc);
+    }
+    else if (tn->left)
+    {
+      datacont_delete(tn->dc);
+      tn->dc = datacont_copy(tn->left->dc);
+      return treenode_remove(tn->left, tn->left->dc);
+    }
+    else if (tn->right)
+    {
+      datacont_delete(tn->dc);
+      tn->dc = datacont_copy(tn->right->dc);
+      return treenode_remove(tn->right, tn->right->dc);
+    }
+    else treenode_delete(tn);
+    return 0;
+  }
+  else if (result == LESSTHAN) 
+    return treenode_remove(tn->left, dc);
+  else if (result == GREATERTHAN)
+    return treenode_remove(tn->right, dc);
+  return 1;
 }
 
 
