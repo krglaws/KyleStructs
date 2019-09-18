@@ -49,6 +49,45 @@ static int datacont_new_tests()
 }
 
 
+static int datacont_copy_tests()
+{
+  int retval = 0;
+  datacont* dc1 = datacont_new("ABCDEF\0", CHARP, 7);
+  datacont* dc2 = datacont_copy(dc1);
+
+  /* TEST 1 */
+  if (dc1 == dc2) 
+  {
+    printf("TEST 1: datacont_copy() should return different reference.\n");
+    retval = -1;
+  }
+  if (dc1->cp == dc2->cp)
+  {
+    printf("TEST 1: dc1->cp should contain different value than dc2->cp.\n");
+    retval = -1;
+  }
+
+  /* TEST 2 */
+  enum datacontcomp result = datacont_compare(dc1, dc2);
+  if (result != EQUAL)
+  {
+    printf("TEST 2: dc1 and dc2 should be equal. datacont_compare() returned: %d.\n", result);
+    printf("\ndc1->type = %d\n", dc1->type);
+    printf("dc2->type = %d\n", dc2->type);
+    printf("\ndc1->count = %d\n", dc1->count);
+    printf("dc2->count = %d\n", dc2->count);
+    printf("\ndc1->cp = %s\n", dc1->cp);
+    printf("dc2->cp = %s\n", dc2->cp);
+    retval = -1;
+  }
+
+  datacont_delete(dc1);
+  datacont_delete(dc2);
+  
+  return retval;
+}
+
+
 static int datacont_compare_tests()
 {
   int retval = 0;
@@ -131,6 +170,12 @@ int main()
   printf("==-----------------------------------==\n");
   printf("Running datacont_new_tests()...\n");
   if (datacont_new_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running datacont_copy_tests()...\n");
+  if (datacont_copy_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 
