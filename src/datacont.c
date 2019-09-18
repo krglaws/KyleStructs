@@ -101,6 +101,54 @@ void datacont_delete(datacont* dc)
 }
 
 
+datacont* datacont_copy(const datacont* dc)
+{
+  if (dc == NULL) return NULL;
+  switch(dc->type)
+  {
+    case CHAR:
+      return datacont_new(&(dc->c), dc->type, dc->count);
+    case SHORT:
+      return datacont_new(&(dc->s), dc->type, dc->count);
+    case INT:
+      return datacont_new(&(dc->i), dc->type, dc->count);
+    case LL:
+      return datacont_new(&(dc->ll), dc->type, dc->count);
+    case FLOAT:
+      return datacont_new(&(dc->f), dc->type, dc->count);
+    case DOUBLE:
+      return datacont_new(&(dc->d), dc->type, dc->count);
+    case UCHAR:
+      return datacont_new(&(dc->uc), dc->type, dc->count);
+    case USHORT:
+      return datacont_new(&(dc->us), dc->type, dc->count);
+    case UINT:
+      return datacont_new(&(dc->ui), dc->type, dc->count);
+    case ULL:
+      return datacont_new(&(dc->ull), dc->type, dc->count);
+    case CHARP:
+      return datacont_new(dc->cp, dc->type, dc->count);
+    case SHORTP:
+      return datacont_new(dc->sp, dc->type, dc->count);
+    case INTP:
+      return datacont_new(dc->ip, dc->type, dc->count);
+    case FLOATP:
+      return datacont_new(dc->fp, dc->type, dc->count);
+    case DOUBLEP:
+      return datacont_new(dc->dp, dc->type, dc->count);
+    case UCHARP:
+      return datacont_new(dc->ucp, dc->type, dc->count);
+    case USHORTP:
+      return datacont_new(dc->usp, dc->type, dc->count);
+    case UINTP:
+      return datacont_new(dc->uip, dc->type, dc->count);
+    case ULLP:
+      return datacont_new(dc->ullp, dc->type, dc->count);
+  }
+  return NULL;
+}
+
+
 static enum datacontcomp _compare_single_items(const datacont* dca, const datacont* dcb)
 {
   switch(dca->type)

@@ -75,6 +75,8 @@ datacont* datacont_new(const void* data, const enum dataconttype dct, const unsi
 
 void datacont_delete(datacont* dc);
 
+datacont* datacont_copy(const datacont* datacont);
+
 static enum datacontcomp _compare_single_items(const datacont* dca, const datacont* dcb);
 
 static enum datacontcomp _compare_multi_items(const datacont* dca, const datacont* dcb);
