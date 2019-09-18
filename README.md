@@ -1,5 +1,4 @@
 # KyleStructs
-
 This is a C library I am working on to satisfy my own curiosity as to how simple data structures like tree sets and hash sets might be implemented.
 
 Here are some visual examples of the data structures I have implemented so far:
@@ -25,5 +24,6 @@ _Images generated using [Graphviz](https://www.graphviz.org/)_
 
 ## To Do:
 - create hashtable data structure
+- implement `hashset_remove`, `treeset_remove` and `treenode_remove`
 - write toString functions for each structure
 - write set operation functions (e.g. union, intersection, difference, comparison, etc.)
