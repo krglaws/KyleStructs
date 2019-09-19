@@ -56,7 +56,33 @@ static int treeset_add_tests()
 static int treeset_remove_tests()
 {
   int retval = 0;
-  /* treeset_remove() not yet implemented */
+  treeset* ts = treeset_new();
+  treeset_add(ts, datacont_new("D", CHAR, 1));
+  treeset_add(ts, datacont_new("B", CHAR, 1));
+  treeset_add(ts, datacont_new("F", CHAR, 1));
+  treeset_add(ts, datacont_new("A", CHAR, 1));
+  treeset_add(ts, datacont_new("C", CHAR, 1));
+  treeset_add(ts, datacont_new("E", CHAR, 1));
+  treeset_add(ts, datacont_new("G", CHAR, 1));
+
+  datacont* dc_D = datacont_new("D", CHAR, 1);
+
+  int num_nodes = ts->num_nodes;
+  if (treeset_remove(ts, dc_D) != 0)
+  {
+    printf("TEST 1: treeset_remove() should return 0 when removing a present node.\n");
+    retval = -1;
+  }
+  if (num_nodes - ts->num_nodes != 1)
+  {
+    printf("TEST 1: unexpected ts->num_nodes value after call to treeset_remove(). Expected: %d. Received: %d.\n",
+		    num_nodes-1, ts->num_nodes);
+    retval = -1;
+  }
+  
+  datacont_delete(dc_D);
+  treeset_delete(ts);
+
   return retval;
 }
 
