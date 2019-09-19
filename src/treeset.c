@@ -45,7 +45,7 @@ int treeset_add(treeset* ts, const datacont* dc)
 int treeset_remove(treeset* ts, const datacont* dc)
 {
   if (ts == NULL) return 1;
-  int retval = treenode_remove(ts->root, dc);
+  int retval = treenode_remove(&ts->root, dc);
 
   if (retval == 0)
     ts->num_nodes--;
