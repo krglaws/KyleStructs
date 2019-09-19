@@ -94,19 +94,19 @@ static int treenode_remove_tests()
   treenode_add(root, datacont_new("C", CHAR, 1));
   treenode_add(root, datacont_new("E", CHAR, 1));
   treenode_add(root, datacont_new("G", CHAR, 1));
-  
+ 
   datacont* dc_Z = datacont_new("Z", CHAR, 1);
   datacont* dc_D = datacont_new("D", CHAR, 1);
   datacont* dc_B = datacont_new("B", CHAR, 1);
   datacont* dc_A = datacont_new("A", CHAR, 1);
 
-  if (treenode_remove(root, dc_Z) != 1)
+  if (treenode_remove(&root, dc_Z) != 1)
   {
     printf("TEST 1: treenode_remove() should return 1 when a non-existent datacont value is passed.\n");
     retval = -1;
   }
 
-  if (treenode_remove(root, dc_D) != 0)
+  if (treenode_remove(&root, dc_D) != 0)
   {
     printf("TEST 2: treenode_remove() should return 0 on successful removal.\n");
     retval = -1;
@@ -117,7 +117,7 @@ static int treenode_remove_tests()
     retval = -1;
   }
 
-  if (treenode_remove(root, dc_B) != 0)
+  if (treenode_remove(&root, dc_B) != 0)
   {
     printf("TEST 3: treenode_remove() should return 0 on successful removal.\n");
     retval = -1;
@@ -128,7 +128,7 @@ static int treenode_remove_tests()
     retval = -1;
   }
 
-  if (treenode_remove(root, dc_A))
+  if (treenode_remove(&root, dc_A))
   {
     printf("TEST 4: treenode_remove() should return 0 on successful removal.\n");
     retval = -1;
