@@ -1,6 +1,6 @@
 
 CC := gcc
-CFLAGS := -fPIC  
+CFLAGS := -fPIC 
 
 SRC := src
 INC := src/include
@@ -58,36 +58,29 @@ TESTDEPS := $(DATACONTTARG) $(HASHTARG)
 DATACONTTESTTARG := $(TBIN)/datacont_tests.out
 
 $(DATACONTTESTTARG): $(TEST)/datacont_tests.c $(TESTDEPS)
-	$(CC) $^ -o $@
+	$(CC) -g $^ -o $@
 
 
 TESTDEPS += $(TREENODETARG)
 TREENODETESTTARG := $(TBIN)/treenode_tests.out
 
 $(TREENODETESTTARG): $(TEST)/treenode_tests.c $(TESTDEPS)
-	$(CC) $^ -o $@
+	$(CC) -g $^ -o $@
 
 
 TESTDEPS += $(TREESETTARG)
 TREESETTESTTARG := $(TBIN)/treeset_tests.out
 
 $(TREESETTESTTARG): $(TEST)/treeset_tests.c $(TESTDEPS)
-	$(CC) $^ -o $@
+	$(CC) -g $^ -o $@
 
 
 TESTDEPS += $(HASHSETTARG)
 HASHSETTESTTARG := $(TBIN)/hashset_tests.out
 
 $(HASHSETTESTTARG): $(TEST)/hashset_tests.c $(TESTDEPS)
-	$(CC) $^ -o $@
+	$(CC) -g $^ -o $@
 
-
-.PHONY: clean
-clean:
-	rm *.so
-	rm *.a
-	rm -f src/bin/*.o
-	rm -f tests/bin/*.out
 
 
 .PHONY: run_tests
@@ -123,6 +116,17 @@ uninstall:
 	if [ -d "$(INCLOC)" ]; then rm -r $(INCLOC); fi;
 	if [ -f "$(LIBLOC)/$(STATICLIB)" ]; then rm $(LIBLOC)/$(STATICLIB); fi;
 	if [ -f "$(LIBLOC)/$(DYNAMICLIB)" ]; then rm $(LIBLOC)/$(DYNAMICLIB); fi;
+
+
+.PHONY: clean
+clean:
+	if [ -f $(STATICLIB) ]; then rm $(STATICLIB); fi;
+	if [ -f $(DYNAMICLIB) ]; then rm $(DYNAMICLIB); fi;
+	if [ -f $(HASHTARG) ]; then rm $(HASHTARG); fi;
+	if [ -f $(DATACONTTARG) ]; then rm $(DATACONTTARG); fi;
+	if [ -f $(TREENODETARG) ]; then rm $(TREENODETARG); fi;
+	if [ -f $(TREESETTARG) ]; then rm $(TREESETTARG); fi;
+	if [ -f $(HASHSETTARG) ]; then rm $(HASHSETTARG); fi;
 
 
 .PHONY: all
