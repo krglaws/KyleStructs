@@ -43,7 +43,7 @@ int treenode_add(treenode* tn, const datacont* dc);
  * 0 - successfully removed node
  * 1 - node not found
  */
-int treenode_remove(treenode* tn, const datacont* dc);
+int treenode_remove(treenode** tn, const datacont* dc);
 
 int treenode_contains(const treenode* tn, const datacont* dc);
 
