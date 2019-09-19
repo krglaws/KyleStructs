@@ -21,8 +21,7 @@ int treeset_add(treeset* ts, const datacont* dc);
  * Remove a node from a treeset that contains a
  * data container matching the value of the 'dc'
  * argument. On successful removal, 1 is subtracted 
- * from the treeset's num_nodes value. If num_nodes 
- * reaches 0, the treeset's root pointer is set to NULL.
+ * from the treeset's num_nodes value.
  *
  * inputs:
  * treeset* ts - remove treenode from this treeset.
@@ -31,7 +30,7 @@ int treeset_add(treeset* ts, const datacont* dc);
  *
  * returns:
  * 0 - successfully removed node
- * 1 - node not found
+ * 1 - node not found/received empty parameter
  */
 int treeset_remove(treeset* ts, const datacont* dc);
 
