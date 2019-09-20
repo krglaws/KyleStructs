@@ -124,9 +124,14 @@ clean:
 	if [ -f $(DYNAMICLIB) ]; then rm $(DYNAMICLIB); fi;
 	if [ -f $(HASHTARG) ]; then rm $(HASHTARG); fi;
 	if [ -f $(DATACONTTARG) ]; then rm $(DATACONTTARG); fi;
+	if [ -f $(DATACONTTESTTARG) ]; then rm $(DATACONTTESTTARG); fi;
 	if [ -f $(TREENODETARG) ]; then rm $(TREENODETARG); fi;
+	if [ -f $(TREENODETESTTARG) ]; then rm $(TREENODETESTTARG); fi;
 	if [ -f $(TREESETTARG) ]; then rm $(TREESETTARG); fi;
+	if [ -f $(TREESETTESTTARG) ]; then rm $(TREESETTESTTARG); fi;
 	if [ -f $(HASHSETTARG) ]; then rm $(HASHSETTARG); fi;
+	if [ -f $(HASHSETTESTTARG) ]; then rm $(HASHSETTESTTARG); fi;
+
 
 
 .PHONY: all
