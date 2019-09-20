@@ -57,8 +57,17 @@ static int hashset_add_tests()
 static int hashset_remove_tests()
 {
   int retval = 0;
-  
-  /* not yet implemented */
+
+  hashset* hs = hashset_new(10, 0x1234);
+  datacont* dc = datacont_new("A", CHAR, 1);
+  hashset_add(hs, dc);
+
+  if (hashset_remove(hs, dc) != 0)
+  {
+    printf("TEST 1: hahset_remove() should return 0 when removing present datacont.\n");
+    retval = -1;
+  }
+  hashset_delete(hs); 
 
   return retval;
 }
