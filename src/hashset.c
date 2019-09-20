@@ -48,9 +48,6 @@ int hashset_remove(hashset* hs, const datacont* dc)
 {
   const unsigned long long hashval = datacont_hash(hs->seed, dc);
 
-  if (hs->buckets[hashval % hs->num_buckets] == NULL)
-    return 1;
-
   return treeset_remove(hs->buckets[hashval % hs->num_buckets], dc);
 }
 
