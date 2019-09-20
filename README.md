@@ -24,6 +24,5 @@ _Images generated using [Graphviz](https://www.graphviz.org/)_
 
 ## To Do:
 - create hashtable data structure
-- implement `hashset_remove`, `treeset_remove` and `treenode_remove`
 - write toString functions for each structure
 - write set operation functions (e.g. union, intersection, difference, comparison, etc.)
