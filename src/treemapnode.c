@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "include/datacont.h"
+#include "include/listnode.h"
 #include "include/treemapnode.h"
 
 
@@ -121,10 +122,46 @@ datacont* treemapnode_get(const treemapnode* tmn, const datacont* key)
 
 listnode* treemapnode_getkeys(const treemapnode* tmn)
 {
+  if (tmn == NULL) return NULL;
+  
+  listnode* ln = treemapnode_getkeys(tmn->left);
+  
+  if (ln == NULL)
+  {
+    ln = listnode_new(datacont_copy(tmn->key));
+    ln->next = treemapnode_getkeys(tmn->right);
+    return ln;
+  }
+  else
+  {
+    listnode* end = ln;
+    while (end->next) end = end->next;
+    end->next = listnode_new(datacont_copy(tmn->key));
+    end->next->next = treemapnode_getkeys(tmn->right);
+    return ln;
+  }
 }
+
 
 listnode* treemapnode_getvals(const treemapnode* tmn)
 {
-}
+  if (tmn == NULL) return NULL;
 
+  listnode* ln = treemapnode_getkeys(tmn->left);
+
+  if (ln == NULL)
+  {
+    ln = listnode_new(datacont_copy(tmn->value));
+    ln->next = treemapnode_getkeys(tmn->right);
+    return ln;
+  }
+  else
+  {
+    listnode* end = ln;
+    while (end->next) end = end->next;
+    end->next = listnode_new(datacont_copy(tmn->value));
+    end->next->next = treemapnode_getkeys(tmn->right);
+    return ln;
+  }
+}
 
