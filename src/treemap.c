@@ -1,6 +1,9 @@
 
 #include <stdlib.h>
 
+#include "include/datacont.h"
+#include "treemapnode.h"
+
 
 treemap* treemap_new()
 {
@@ -27,99 +30,44 @@ int treemap_add(treemap* tm, const datacont* key, const datacont* value)
 }
 
 
-/* ---------------------------
- * treemap_remove():
- * Find key/value pare and delete it.
- *
- * inputs:
- * treemap* tm - the treemap to be operated on
- * datacont* key - the key to be removed
- *
- * returns:
- * 0 - pair removed successfully
- * 1 - pair not removed (e.g. could not be found)
- */
-int treemap_remove(treemap* tm, const datacont* key);
+int treemap_remove(treemap* tm, const datacont* key)
+{
+  if (tm == NULL) return 1;
+  return treemapnode_remove(&tm->root, key);
+}
 
 
-/* ---------------------------
- * treemap_get():
- * Get the value from a treemap by key. The returned
- * value is a copy of the datacont contained
- * within the treemap, and can be free()'d or
- * otherwise modified.
- *
- * inputs:
- * treemap* tm - the treemap to be operated on
- * datacont* key - the key to use to retrieve a value
- *
- * returns:
- * datacont* value - the value mapped to by the key
- * NULL - returned when the key could not be found
- */
-datacont* treemap_get(const treemap* tm, const datacont* key);
+datacont* treemap_get(const treemap* tm, const datacont* key)
+{
+  if (tm == NULL) return NULL;
+  return treemapnode_get(tm->root, key);
+}
 
 
-/* --------------------------
- * treemap_getkeys():
- * Get a linked list of all keys contained within
- * a treemap. These are copies of the originals
- * in the treemap, and can be free()'d or 
- * otherwise modified.
- *
- * inputs:
- * treemap* tm - the treemap to be operated on
- *
- * returns:
- * listnode* - a pointer to a list of datacont*'s
- * NULL - returned if map has no keys
- */
-listnode* treemap_getkeys(const treemap* tm);
+listnode* treemap_getkeys(const treemap* tm)
+{
+  if (tm == NULL) return NULL;
+  return treemapnode_getkeys(tm->root);
+}
 
 
-/* --------------------------
- * treemap_getvals():
- * Get a linked list of all values contained within
- * a treemap. These are copies of the originals
- * in the treemap, and can be free()'d or
- * otherwise modified.
- *
- * inputs:
- * treemap* tm - the treemap to be operated on
- *
- * returns:
- * listnode* - a pointer to a list of datacont*'s
- * NULL - returned if map has no keys
- */
-listnode* treemap_getvalues(const treemap* tm);
+listnode* treemap_getvalues(const treemap* tm)
+{
+  if (tm == NULL) return NULL;
+  return treemapnode_getvalues(tm->root);
+}
 
 
-/* ----------------------------
- * treemap_count():
- * Count the number of key/value pairs stored
- * within a treemap.
- *
- * inputs:
- * treemap* tm - the treemap to be operated on
- *
- * returns:
- * unsigned int - the number of pairs found in 
- * the treemap >=0.
- */
-unsigned int treemap_count(const treemap* tm);
+unsigned int treemap_count(const treemap* tm)
+{
+  if (tm == NULL) return 0;
+  return treemapnode_count(tm->root);
+}
 
 
-/* --------------------------
- * treemap_height():
- * Calculate the maximum height of a treemap.
- *
- * inputs:
- * treemap* tm - the treemap to be operated on
- *
- * returns:
- * unsigned int - the height of the tree >=0.
- */
-unsigned int treemap_height(const treemap* tm);
-
-#endif
+unsigned int treemap_height(const treemap* tm)
+{
+  if (tm == NULL) return 0;
+  return treemapnode_height(tm->root);
+}
 
