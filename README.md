@@ -23,6 +23,6 @@ I also added support for adding arrays of any kind of data to a `treeset`/`hashs
 _Images generated using [Graphviz](https://www.graphviz.org/)_
 
 ## To Do:
-- create hashtable data structure
+- write unit tests for map structures
 - write toString functions for each structure
 - write set operation functions (e.g. union, intersection, difference, comparison, etc.)
