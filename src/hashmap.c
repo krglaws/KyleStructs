@@ -2,6 +2,8 @@
 #include <stdlib.h>
 
 #include "include/datacont.h"
+#include "include/listnode.h"
+#include "include/treemapnode.h"
 #include "include/treemap.h"
 #include "include/hashmap.h"
 
@@ -22,7 +24,7 @@ hashmap* hashmap_new(const unsigned int num_buckets, const unsigned long long se
 void hashmap_delete(hashmap* hm)
 {
   if (hm == NULL) return;
-  for (int i = 0; i < hm->num_buckets)
+  for (int i = 0; i < hm->num_buckets; i++)
     treemap_delete(hm->buckets[i]);
   free(hm->buckets);
   free(hm);
@@ -34,7 +36,7 @@ int hashmap_add(hashmap* hm, const datacont* key, const datacont* value)
   if (hm == NULL || key == NULL || value == NULL)
     return -1;
 
-  unsigned long long hashval = datacont_hash(key);
+  unsigned long long hashval = datacont_hash(hm->seed, key);
 
   if (hm->buckets[hashval % hm->num_buckets] == NULL)
     hm->buckets[hashval % hm->num_buckets] = treemap_new();
@@ -48,7 +50,7 @@ int hashmap_remove(hashmap* hm, const datacont* key)
   if (hm == NULL || hm->buckets == NULL || key == NULL) 
     return 1;
 
-  unsigned long long hashval = datacont_hash(key);
+  unsigned long long hashval = datacont_hash(hm->seed, key);
 
   if (hm->buckets[hashval % hm->num_buckets] == NULL)
     return 1;
@@ -62,7 +64,7 @@ datacont* hashmap_get(const hashmap* hm, const datacont* key)
   if (hm == NULL || key == NULL)
     return NULL;
 
-  unsigned long long hashval = datacont_hash(key);
+  unsigned long long hashval = datacont_hash(hm->seed, key);
 
   return treemap_get(hm->buckets[hashval % hm->num_buckets], key);
 }
