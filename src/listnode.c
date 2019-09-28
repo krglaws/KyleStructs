@@ -1,13 +1,8 @@
 
 #include <stdlib.h>
 
-
-struct listnode
-{
-  datacont* item;
-  listnode* prev;
-  listnode* next;
-}
+#include "include/datacont.h"
+#include "include/listnode.h"
 
 
 listnode* listnode_new(datacont* dc)
@@ -18,9 +13,14 @@ listnode* listnode_new(datacont* dc)
 }
 
 
+
 void listnode_delete(listnode* ln)
 {
-  if (listnode->item) datacont_delete(listnode->item);
+  if (ln == NULL) return;
+  
+  ln = listnode_seek_beg(ln);
+
+  if (ln->item) datacont_delete(ln->item);
   free(ln);
 }
 
@@ -45,6 +45,7 @@ unsigned int listnode_length(listnode* ln)
 {
   if (ln == NULL) return 0;
   unsigned int length = 0;
+  ln = listnode_seek_beg(ln);
   while (ln)
   {
     length++;
