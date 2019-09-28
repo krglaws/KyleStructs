@@ -109,7 +109,7 @@ listnode* treemapnode_getkeys(const treemapnode* tmn);
 
 
 /* --------------------------
- * treemapnode_getvals():
+ * treemapnode_getvalues():
  * Get a linked list of all values contained within
  * a treemapnode. These are copies of the originals
  * in the treemapnode, and can be free()'d or
@@ -122,7 +122,22 @@ listnode* treemapnode_getkeys(const treemapnode* tmn);
  * listnode* - a pointer to a list of datacont*'s
  * NULL - returned if map has no keys
  */
-listnode* treemapnode_getvals(const treemapnode* tmn);
+listnode* treemapnode_getvalues(const treemapnode* tmn);
+
+
+/* ----------------------------
+ * treemapnode_count():
+ * Count the number of key/value pairs stored
+ * within a treemapnode.
+ *
+ * inputs:
+ * treemapnode* tmn - the treemapnode to be operated on
+ *
+ * returns:
+ * unsigned int - the number of pairs found in
+ * the treemapnode >=0.
+ */
+unsigned int treemapnode_count(const treemapnode* tmn);
 
 
 /* --------------------------
@@ -135,6 +150,8 @@ listnode* treemapnode_getvals(const treemapnode* tmn);
  * returns:
  * unsigned int - the height of the tree >=0.
  */
-unsigned int treemapnode_height(const treenodemap* tmn);
+unsigned int treemapnode_height(const treemapnode* tmn);
+
 
 #endif
+
