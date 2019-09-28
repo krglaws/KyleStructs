@@ -2,7 +2,9 @@
 #include <stdlib.h>
 
 #include "include/datacont.h"
-#include "treemapnode.h"
+#include "include/listnode.h"
+#include "include/treemapnode.h"
+#include "include/treemap.h"
 
 
 treemap* treemap_new()
