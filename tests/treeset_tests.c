@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 #include "../src/include/datacont.h"
-#include "../src/include/treenode.h"
+#include "../src/include/treesetnode.h"
 #include "../src/include/treeset.h"
 
 
@@ -14,7 +14,7 @@ static int treeset_new_tests()
   treeset* ts = treeset_new();
   if (ts->root != NULL | ts->num_nodes != 0)
   {
-    printf("TEST 1: new treenode should be empty.\n");
+    printf("TEST 1: new treesetnode should be empty.\n");
     retval = -1;
   }
   treeset_delete(ts);

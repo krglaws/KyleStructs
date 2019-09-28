@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "include/datacont.h"
-#include "include/treenode.h"
+#include "include/treesetnode.h"
 #include "include/treeset.h"
 #include "include/hashset.h"
 

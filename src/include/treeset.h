@@ -7,7 +7,7 @@ typedef struct treeset treeset;
 struct treeset
 {
 	int num_nodes;
-	treenode* root;
+	treesetnode* root;
 };
 
 treeset* treeset_new();
@@ -24,8 +24,8 @@ int treeset_add(treeset* ts, const datacont* dc);
  * from the treeset's num_nodes value.
  *
  * inputs:
- * treeset* ts - remove treenode from this treeset.
- * datacont* dc - remove treenode with matching 
+ * treeset* ts - remove treesetnode from this treeset.
+ * datacont* dc - remove treesetnode with matching 
  * datacont value.
  *
  * returns:
