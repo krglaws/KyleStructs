@@ -52,6 +52,35 @@ $(HASHSETTARG): $(HASHSETDEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
+LISTNODEDEPS := $(SRC)/listnode.c $(INC)/listnode.h
+LISTNODETARG := $(SBIN)/listnode.o
+
+$(LISTNODETARG): $(LISTNODEDEPS)
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+
+TREEMAPNODEDEPS := $(SRC)/treemapnode.c $(INC)/treemapnode.h
+TREEMAPNODETARG := $(SBIN)/treemapnode.o
+
+$(TREEMAPNODETARG): $(TREEMAPNODEDEPS)
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+
+TREEMAPDEPS := $(SRC)/treemap.c $(INC)/treemap.h
+TREEMAPTARG := $(SBIN)/treemap.o
+
+$(TREEMAPTARG): $(TREEMAPDEPS)
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+
+HASHMAPDEPS := $(SRC)/hashmap.c $(INC)/hashmap.h
+HASHMAPTARG := $(SBIN)/hashmap.o
+
+$(HASHMAPTARG): $(HASHMAPDEPS)
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+
+
 # compile tests
 
 TESTDEPS := $(DATACONTTARG) $(HASHTARG)
@@ -82,6 +111,33 @@ $(HASHSETTESTTARG): $(TEST)/hashset_tests.c $(TESTDEPS)
 	$(CC) -g $^ -o $@
 
 
+TESTDEPS := $(DATACONTTARG) $(HASHTARG) $(LISTNODETARG)
+LISTNODETESTTARG := $(TBIN)/listnode_tests.out
+
+$(LISTNODETESTTARG): $(TEST)/listnode_tests.c $(TESTDEPS)
+	$(CC) -g $^ -o $@
+
+
+TESTDEPS += $(TREEMAPNODETARG)
+TREEMAPNODETESTTARG := $(TBIN)/treemapnode_tests.out
+
+$(TREEMAPNODETESTTARG): $(TEST)/treemapnode_tests.c $(TESTDEPS)
+	$(CC) -g $^ -o $@
+
+
+TESTDEPS += $(TREEMAPTARG)
+TREEMAPTESTTARG := $(TBIN)/treemap_tests.out
+
+$(TREEMAPTESTTARG): $(TEST)/treemap_tests.c $(TESTDEPS)
+	$(CC) -g $^ -o $@
+
+
+TESTDEPS += $(HASHMAPTARG)
+HASHMAPTESTTARG := $(TBIN)/hashmap_tests.out
+
+$(HASHMAPTESTTARG): $(TEST)/hashmap_tests.c $(TESTDEPS)
+	$(CC) -g $^ -o $@
+
 
 .PHONY: run_tests
 run_tests: tests
@@ -89,18 +145,39 @@ run_tests: tests
 
 
 .PHONY: tests
-tests: $(DATACONTTESTTARG) $(TREENODETESTTARG) $(TREESETTESTTARG) $(HASHSETTESTTARG)
+tests: $(DATACONTTESTTARG) $(TREENODETESTTARG) $(TREESETTESTTARG) $(HASHSETTESTTARG)\
+	$(LISTNODETESTTARG) $(TREEMAPNODETESTTARG) $(TREEMAPTESTTARG) $(HASHMAPTESTTARG)
 	@echo Finished building tests.
 
 
 STATICLIB := libkylestructs.a
-$(STATICLIB): $(HASHTARG) $(DATACONTTARG) $(TREENODETARG) $(TREESETTARG) $(HASHSETTARG)
-	ar rcs $(STATICLIB) $(SBIN)/*.o
+$(STATICLIB): $(HASHTARG) $(DATACONTTARG) $(TREENODETARG) $(TREESETTARG) $(HASHSETTARG)\
+	$(LISTNODETARG) $(TREEMAPNODETARG) $(TREEMAPTARG) $(HASHMAPTARG)
+	ar rcs $(STATICLIB)\
+	       	$(HASHTARG)\
+		$(DATACONTTARG)\
+		$(TREENODETARG)\
+		$(TREESETTARG)\
+		$(HASHSETTARG)\
+		$(LISTNODETARG)\
+		$(TREEMAPNODETARG)\
+		$(TREEMAPTARG)\
+		$(HASHMAPTARG)
 
 
 DYNAMICLIB := libkylestructs.so
-$(DYNAMICLIB): $(HASHTARG) $(DATACONTTARG) $(TREENODETARG) $(TREESETTARG) $(HASHSETTARG)
-	gcc -shared $(SBIN)/*.o -o $(DYNAMICLIB)
+$(DYNAMICLIB): $(HASHTARG) $(DATACONTTARG) $(TREENODETARG) $(TREESETTARG) $(HASHSETTARG)\
+	$(LISTNODETARG) $(TREEMAPNODETARG) $(TREEMAPTARG) $(HASHMAPTARG)
+	gcc -shared -o $(DYNAMICLIB)\
+		$(HASHTARG)\
+		$(DATACONTTARG)\
+		$(TREENODETARG)\
+		$(TREESETTARG)\
+		$(HASHSETTARG)\
+		$(LISTNODETARG)\
+		$(TREEMAPNODETARG)\
+		$(TREEMAPTARG)\
+		$(HASHMAPTARG)
 
 
 .PHONY: install
@@ -131,7 +208,13 @@ clean:
 	if [ -f $(TREESETTESTTARG) ]; then rm $(TREESETTESTTARG); fi;
 	if [ -f $(HASHSETTARG) ]; then rm $(HASHSETTARG); fi;
 	if [ -f $(HASHSETTESTTARG) ]; then rm $(HASHSETTESTTARG); fi;
-
+	if [ -f $(LISTNODETARG) ]; then rm $(LISTNODETARG); fi;
+	if [ -f $(LISTNODETESTTARG) ]; then rm $(LISTNODETESTTARG); fi;
+	if [ -f $(TREEMAPNODETARG) ]; then rm $(TREEMAPNODETARG); fi;
+	if [ -f $(TREEMAPNODETESTTARG) ]; then rm $(TREEMAPNODETESTTARG); fi;
+	if [ -f $(TREEMAPTARG) ]; then rm $(TREEMAPTARG); fi;
+	if [ -f $(TREEMAPTESTTARG) ]; then rm $(TREEMAPTESTTARG); fi;
+	if [ -f $(HASHMAPTARG) ]; then rm $(HASHMAPTARG); fi;
 
 
 .PHONY: all
