@@ -6,13 +6,13 @@
 #include "include/treemapnode.h"
 
 
-treemapnode* treemapnode_new(datacont* key, datacont* value)
+treemapnode* treemapnode_new(const datacont* key, const datacont* value)
 {
   if (key == NULL || value == NULL) return NULL;
 
   treemapnode* tmn = calloc(1, sizeof(treemapnode));
-  tmn->key = key;
-  tmn->value = value;
+  tmn->key = (datacont*) key;
+  tmn->value = (datacont*) value;
 
   return tmn;
 }
@@ -29,7 +29,7 @@ void treemapnode_delete(treemapnode* tmn)
 }
 
 
-int treemapnode_add(treemapnode* tmn, datacont* key, datacont* value)
+int treemapnode_add(treemapnode* tmn, const datacont* key, const datacont* value)
 {
   if (tmn == NULL || key == NULL || value == NULL) return -1;
   
@@ -40,7 +40,7 @@ int treemapnode_add(treemapnode* tmn, datacont* key, datacont* value)
   if (result == EQUAL)
   {
     datacont_delete(tmn->value);
-    tmn->value = value;
+    tmn->value = (datacont*) value;
     return 1;
   }
   else if (result == LESSTHAN)
@@ -57,7 +57,7 @@ int treemapnode_add(treemapnode* tmn, datacont* key, datacont* value)
 }
 
 
-int treemapnode_remove(treemapnode** tmn, datacont* key)
+int treemapnode_remove(treemapnode** tmn, const datacont* key)
 {
   if (tmn == NULL || *tmn == NULL || key == NULL) return 1;
 
@@ -174,4 +174,22 @@ listnode* treemapnode_getvalues(const treemapnode* tmn)
     return ln;
   }
 }
+
+
+unsigned int treemapnode_count(const treemapnode* tmn)
+{
+  if (tmn == NULL) return 0;
+
+  return 1 + treemapnode_count(tmn->left) + treemapnode_count(tmn->right);
+}
+
+
+unsigned int treemapnode_height(const treemapnode* tmn)
+{
+  if (tmn == NULL) return 0;
+  int left_h = treemapnode_height(tmn->left);
+  int right_h = treemapnode_height(tmn->right);
+  return left_h > right_h ? left_h + 1 : right_h + 1;
+}
+
 
