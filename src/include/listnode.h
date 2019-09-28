@@ -9,7 +9,7 @@ struct listnode
   datacont* item;
   listnode* prev;
   listnode* next;
-}
+};
 
 listnode* listnode_new(datacont* dc);
 
