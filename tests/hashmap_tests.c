@@ -3,6 +3,7 @@
 
 #include "../src/include/datacont.h"
 #include "../src/include/listnode.h"
+#include "../src/include/treemapnode.h"
 #include "../src/include/treemap.h"
 #include "../src/include/hashmap.h"
 
@@ -61,7 +62,7 @@ static int hashmap_add_tests()
 }
 
 
-static int hashmap_remove()
+static int hashmap_remove_tests()
 {
   int retval = 0;
 
