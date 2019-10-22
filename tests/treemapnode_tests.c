@@ -108,8 +108,13 @@ static int treemapnode_remove_tests()
   datacont* val3 = datacont_new("C", CHAR, 1);
 
   treemapnode* root = treemapnode_new(key2, val2);
+  key2 = datacont_copy(key2);
+
   treemapnode_add(root, key1, val1);
+  key1 = datacont_copy(key1);
+
   treemapnode_add(root, key3, val3);
+  key3 = datacont_copy(key3);
 
   if (treemapnode_remove(&root, key2))
   {
@@ -157,6 +162,10 @@ static int treemapnode_remove_tests()
     printf("TEST 4: Expected root node to be NULL after last treemap_remove().\n");
     retval = -1;
   }
+
+  datacont_delete(key1);
+  datacont_delete(key2);
+  datacont_delete(key3);
 
   return retval;
 }
