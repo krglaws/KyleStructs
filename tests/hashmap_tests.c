@@ -22,7 +22,7 @@ static int hashmap_new_tests()
   }
   if (hm->seed != 0x12345678)
   {
-    printf("TEST 1: Unexpected seed value: %X. Expected 0x12345678.\n", hm->seed);
+    printf("TEST 1: Unexpected seed value: %llX. Expected 0x12345678.\n", hm->seed);
     retval = -1;
   }
 
