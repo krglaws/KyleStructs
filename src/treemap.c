@@ -15,6 +15,7 @@ treemap* treemap_new()
 
 void treemap_delete(treemap* tm)
 {
+  if (tm == NULL) return;
   treemapnode_delete(tm->root);
   free(tm);
 }
