@@ -13,7 +13,6 @@ listnode* listnode_new(datacont* dc)
 }
 
 
-
 void listnode_delete(listnode* ln)
 {
   if (ln == NULL) return;
