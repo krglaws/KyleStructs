@@ -70,7 +70,9 @@ int treemapnode_remove(treemapnode** tmn, const datacont* key)
       treemapnode** leftmost = &(*tmn)->right;
       while ((*leftmost)->left) leftmost = &(*leftmost)->left;
       datacont_delete((*tmn)->key);
+      datacont_delete((*tmn)->value);
       (*tmn)->key = datacont_copy((*leftmost)->key);
+      (*tmn)->value = datacont_copy((*leftmost)->value);
       return treemapnode_remove(leftmost, (*leftmost)->key);
     }
     else if ((*tmn)->left)
