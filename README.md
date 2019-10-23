@@ -23,6 +23,9 @@ I also added support for adding arrays of any kind of data to a `treeset`/`hashs
 _Images generated using [Graphviz](https://www.graphviz.org/)_
 
 ## To Do:
-- write unit tests for map structures
+- fix `listnode_delete()`
+- make sets more easily iterable, maybe `*set_getnth(...)`
+- add `listnode_add()`, `listnode_remove()`, `listnode_deleteall()`
 - write toString functions for each structure
 - write set operation functions (e.g. union, intersection, difference, comparison, etc.)
+
