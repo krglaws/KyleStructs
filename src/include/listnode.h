@@ -15,6 +15,12 @@ listnode* listnode_new(datacont* dc);
 
 void listnode_delete(listnode* ln);
 
+void listnode_delete_all(listnode* ln);
+
+int listnode_add(listnode* ln, datacont* dc);
+
+int listnode_remove(listnode* ln, datacont* dc);
+
 listnode* listnode_seek_beg(listnode* ln);
 
 listnode* listnode_seek_end(listnode* ln);
