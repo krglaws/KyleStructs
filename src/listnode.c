@@ -67,6 +67,20 @@ int listnode_remove(listnode* ln, datacont* dc)
 }
 
 
+datacont* listnode_get_nth(listnode* ln, int n)
+{
+  if (ln == NULL || n < 0) return NULL;
+
+  ln = listnode_seek_beg(ln);
+
+  while (n-- > 0 && ln != NULL) ln = ln->next;
+
+  if (ln != NULL) return datacont_copy(ln->item);
+  
+  return NULL;
+}
+
+
 listnode* listnode_seek_beg(listnode* ln)
 {
   if (ln == NULL) return NULL;

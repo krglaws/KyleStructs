@@ -21,6 +21,8 @@ int listnode_add(listnode* ln, datacont* dc);
 
 int listnode_remove(listnode* ln, datacont* dc);
 
+datacont* listnode_get_nth(listnode* ln, int n);
+
 listnode* listnode_seek_beg(listnode* ln);
 
 listnode* listnode_seek_end(listnode* ln);
