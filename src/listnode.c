@@ -25,12 +25,10 @@ void listnode_delete(listnode* ln)
 void listnode_delete_all(listnode* ln)
 {
   if (ln == NULL) return;
-  ln = listnode_seek_beg(ln);
 
-  listnode* next = ln->next;
-
+  listnode_delete_all(ln->next);
+  
   listnode_delete(ln);
-  listnode_delete_all(next);
 }
 
 
