@@ -36,6 +36,8 @@ int treeset_remove(treeset* ts, const datacont* dc);
 
 int treeset_contains(const treeset* ts, const datacont* dc);
 
+datacont* treeset_get_nth(const treeset* ts, int n);
+
 unsigned int treeset_height(const treeset* ts);
 
 #endif

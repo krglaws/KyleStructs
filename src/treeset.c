@@ -64,6 +64,13 @@ int treeset_contains(const treeset* ts, const datacont* dc)
 }
 
 
+datacont* treemap_get_nth(const treeset* ts, int n)
+{
+  if (ts == NULL || n < 0) return NULL;
+  return treesetnode_get_nth(ts->root, n);
+}
+
+
 unsigned int treeset_height(const treeset* ts)
 {
   if (ts == NULL) return 0;
