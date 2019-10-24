@@ -45,6 +45,17 @@ int listnode_add(listnode* ln, datacont* dc)
 }
 
 
+int listnode_contains(listnode* ln, datacont* dc)
+{
+  if (ln == NULL || dc == NULL) return 0;
+  
+  if (datacont_compare(dc, ln->item) == EQUAL)
+    return 1;
+  
+  return listnode_contains(ln->next, dc);
+}
+
+
 int listnode_remove(listnode* ln, datacont* dc)
 {
   if (dc == NULL) return 1;

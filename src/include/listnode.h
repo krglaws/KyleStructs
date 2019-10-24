@@ -19,6 +19,8 @@ void listnode_delete_all(listnode* ln);
 
 int listnode_add(listnode* ln, datacont* dc);
 
+int listnode_contains(listnode* ln, datacont* dc);
+
 int listnode_remove(listnode* ln, datacont* dc);
 
 datacont* listnode_get_nth(listnode* ln, int n);
