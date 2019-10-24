@@ -53,8 +53,8 @@ int listnode_remove(listnode* ln, datacont* dc)
   {
     if (datacont_compare(dc, ln->item) == EQUAL)
     {
-      ln->next->prev = ln->prev;
-      ln->prev->next = ln->next;
+      if (ln->next) ln->next->prev = ln->prev;
+      if (ln->prev) ln->prev->next = ln->next;
       listnode_delete(ln);
       return 0;
     }
