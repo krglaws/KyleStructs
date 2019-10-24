@@ -100,6 +100,27 @@ int treesetnode_contains(const treesetnode* tn, const datacont* dc)
 }
 
 
+static datacont* _treesetnode_get_nth(const treesetnode* tn, int n, int* index)
+{
+  if (tn == NULL || n < 0) return NULL;
+  
+  datacont* result = _treesetnode_get_nth(tn->left, n, index);
+
+  if (result != NULL) return result;
+
+  if (*index++ == n) return datacont_copy(tn->dc);
+
+  return _treesetnode_get_nth(tn->right, n, index);
+}
+
+
+datacont* treesetnode_get_nth(const treesetnode* tn, int n)
+{
+  int index = 0;
+  return _treesetnode_get_nth(tn, n, &index);
+}
+
+
 static int _treesetnode_height(const treesetnode* tn, unsigned int accum)
 {
   if (tn != NULL)
@@ -117,3 +138,4 @@ unsigned int treesetnode_height(const treesetnode* tn)
 {
   return _treesetnode_height(tn, 0);
 }
+

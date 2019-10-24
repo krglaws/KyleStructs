@@ -37,6 +37,10 @@ int treesetnode_remove(treesetnode** tn, const datacont* dc);
 
 int treesetnode_contains(const treesetnode* tn, const datacont* dc);
 
+static datacont* _treesetnode_get_nth(const treesetnode* tn, int n, int* index);
+
+datacont* treesetnode_get_nth(const treesetnode* tn, int n);
+
 static int _treesetnode_height(const treesetnode* tn, unsigned int accum);
 
 unsigned int treesetnode_height(const treesetnode* tn);
