@@ -215,6 +215,7 @@ clean:
 	if [ -f $(TREEMAPTARG) ]; then rm $(TREEMAPTARG); fi;
 	if [ -f $(TREEMAPTESTTARG) ]; then rm $(TREEMAPTESTTARG); fi;
 	if [ -f $(HASHMAPTARG) ]; then rm $(HASHMAPTARG); fi;
+	if [ -f $(HASHMAPTESTTARG) ]; then rm $(HASHMAPTESTTARG); fi;
 
 
 .PHONY: all
