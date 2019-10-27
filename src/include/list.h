@@ -102,6 +102,21 @@ int list_remove(list* l, const datacont* dc);
 datacont* list_index(const list* l, const int i);
 
 
+/* -------------------
+ * list_contains():
+ * Function to determine whether or not a datacont* of a certain value is contained within a list.
+ * 
+ * Inputs:
+ * list* l - the list being operated on.
+ * datacont* dc - the datacont* to search for within the list.
+ *
+ * outputs:
+ * int result - (0) if the list does not contain the datacont*, or when either param is NULL.
+ *            - (1) if the list does contain the datacont*.
+ */
+int list_contains(const list* l, const datacont* dc);
+
+
 /* -----------------
  * list_length():
  * Computes and returns the length of the list.
@@ -110,7 +125,7 @@ datacont* list_index(const list* l, const int i);
  * list* l - the list being operated on.
  *
  * Returns:
- * int len - the length of the list (0 when NULL).
+ * int len - the length of the list (0 when 'l' is NULL).
  */
 int list_length(const list* l);
 
