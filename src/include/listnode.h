@@ -70,12 +70,10 @@ void listnode_delete_all(listnode* ln);
  * datacont* dc - the datacont being added to the list.
  *
  * Returns:
- * void
- *
- * Notes:
- * If 'ln' or 'dc' is NULL, nothing happens.
+ * int result - (-1) if either param is NULL.
+ *            - (0) on success.
  */
-void listnode_add(listnode* ln, datacont* dc);
+int listnode_add(listnode* ln, datacont* dc);
 
 
 /* -----------------------
@@ -83,14 +81,20 @@ void listnode_add(listnode* ln, datacont* dc);
  * Removes the first occurrence of a datacont found within a chain of listnodes.
  *
  * Inputs:
- * listnode* ln - the listnode being operated on.
+ * listnode** ln - the listnode being operated on.
  * datacont* dc - the datacont to be removed from the listnode.
  *
  * Returns:
- * int result - (-1) if the list does not contain the datacont specified, or if either param is NULL.
- *            - (0) if the datacont was successfully removed.
+ * int result - (-1) if either param is NULL.
+ *            - (0) if the datacont was not found.
+ *            - (1) if the datacont was successfully removed.
+ *
+ * Notes:
+ * This function may delete the listnode reference passed to 'ln' if it is the node that contains the
+ * 'dc' value being deleted. Because of this, a nested pointer must be passed into 'ln', so that 
+ * it can be set either to the next node in the list, or NULL if there are no remaining nodes.
  */
-int listnode_remove(listnode* ln, datacont* dc);
+int listnode_remove(listnode** ln, datacont* dc);
 
 
 /* ------------------------
@@ -98,14 +102,17 @@ int listnode_remove(listnode* ln, datacont* dc);
  * Removes all occurrences of a specified datacont value within a chain of listnodes.
  *
  * Inputs:
- * listnode* ln - the listnode being operated on.
+ * listnode** ln - the listnode being operated on.
  * datacont* dc - the datacont being removed from the listnode.
  *
  * Returns:
  * int result - (-1) if either param is NULL.
  *            - >= (0) the number of nodes removed from the listnode chain.
+ *
+ * Notes:
+ * See listnode_remove() notes, as they apply to this function as well.
  */
-int listnode_remove_all(listnode* ln, datacont* dc);
+int listnode_remove_all(listnode** ln, datacont* dc);
 
 
 /* -------------------------
@@ -113,29 +120,39 @@ int listnode_remove_all(listnode* ln, datacont* dc);
  * Inserts a datacont* at a location specified in a chain of listnodes.
  *
  * Inputs:
- * listnode* ln - the listnode being operated on.
+ * listnode** ln - the listnode being operated on.
  * datacont* dc - the datacont being inserted.
  * int index - the location to insert the datacont.
  *
  * Returns:
  * int result - (-1) when either parameter is NULL, or when 'index' is OOB.
  *            - (0) on success.
+ *
+ * Notes:
+ * In the event that a datacont is being inserted at the beginning of a listnode chain,
+ * the reference to 'ln' will have to changed to the new 0th listnode, which is why
+ * 'ln' must be passed in as a nested pointer.
  */
-int listnode_insert(listnode* ln, datacont* dc, int index); 
+int listnode_insert(listnode** ln, datacont* dc, int index); 
 
 
 /* -------------------------
  * listnode_get():
- * Returns a copy of the datacont contained within a listnode that is a specified number of nodes down the chain from 'ln' (in the 'ln->next' direction).
+ * Returns a copy of the datacnt contained within a listnode that is a specified number of nodes down the chain from 'ln'.
  *
  * Inputs:
  * listnode* ln - the listnode being operated on.
- * int index - the index used to locate the desired datacont. When negative, it will iterate over
- *             the list in REVERSE order.
+ * int index - the index used to locate the desired datacont.
  *
  * Returns:
  * datacont* dc - (NULL) if the 'index' is OOB, or if either param is NULL.
  *              - a copy of the datacont located at 'index'.
+ *
+ * Notes:
+ * When 'index' is negative, the datacont will be searched for in the list in REVERSE order. 
+ * Example: listnode_get(ln, -1) will return the last item in the list.
+ * The datacont returned by this function is a COPY of the original from the list. It is the responsibility
+ * of the user code to use datacont_delete() on it to avoid memory leaks.
  */
 datacont* listnode_get(listnode* ln, int index);
 
@@ -149,8 +166,8 @@ datacont* listnode_get(listnode* ln, int index);
  * datacont* dc - the datacont to search for within the connected listnodes.
  * 
  * Returns:
- * int index - (-1) if the datacont could not be found.
- *           - >= (0) the index of the datacont
+ * int index - (-1) if the datacont could not be found, or either param is NULL.
+ *           - >= (0) the index of the datacont.
  *
  * Notes:
  * This function can also serve as a 'listnode_contains' function. Example:
@@ -172,6 +189,10 @@ int listnode_index(listnode* ln, datacont* dc);
  * Returns:
  * int result - (-1) when either 'ln' or 'dc' are NULL, or when 'index' is OOB.
  *            - (0) on success.
+ *
+ * Notes:
+ * The datacont replacement 'dc' should not be deleted by the user code. It will
+ * be stored directly into the list.
  */
 int listnode_replace_at(listnode* ln, datacont* dc, int index);
 
@@ -188,6 +209,11 @@ int listnode_replace_at(listnode* ln, datacont* dc, int index);
  * Returns:
  * int result - (-1) when any param is NULL, or when 'old_dc' could not be found.
  *            - (0) on success.
+ *
+ * Notes:
+ * The datacont replacement 'dc' should not be deleted by the user code, as it
+ * will be stored directly into the list. The 'old_dc' parameter, however, WILL
+ * need to be deleted by the user code.
  */
 int listnode_replace_by(listnode* ln, datacont* old_dc, datacont* new_dc);
 
@@ -202,7 +228,10 @@ int listnode_replace_by(listnode* ln, datacont* old_dc, datacont* new_dc);
  * datacont* new_dc - the new datacont replacing the orignal.
  *
  * Returns:
- * int result - >= (0) the number of replacements that occurred. 
+ * int result - >= (0) the number of replacements that occurred.
+ *
+ * Notes:
+ * See notes on listnode_replace_by(). The same applies here. 
  */
 int listnode_replace_all(listnode* ln, datacont* old_dc, datacont* new_dc);
 
@@ -215,12 +244,7 @@ int listnode_replace_all(listnode* ln, datacont* old_dc, datacont* new_dc);
  * listnode* ln - the listnode be operated on.
  *
  * Returns:
- * int length - the length of the list. (0) when 'ln' is NULL.
- *
- * Notes:
- * This function will only search in the 'ln->next' direction. If the user code is passing in a listnode
- * that is in the middle of the list, 'listnode_seek()' can be used to retrieve the first node in the list,
- * then pass THAT listnode into 'listnode_length()' to get the whole length.
+ * int length - >= (0) the length of the list. (0) when 'ln' is NULL.
  */
 unsigned int listnode_length(listnode* ln);
 
