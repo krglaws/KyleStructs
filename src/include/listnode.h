@@ -23,7 +23,7 @@ struct listnode
  * Returns:
  * listnode* ln - a listnode*, (NULL) if 'dc' is NULL.
  */
-listnode* listnode_new(datacont* dc);
+listnode* listnode_new(const datacont* dc);
 
 
 /* --------------------
@@ -38,7 +38,7 @@ listnode* listnode_new(datacont* dc);
  * 
  * Notes:
  * This function will not touch the other nodes that 'ln' might be connected to. It is
- * assumed that the user code has or will handle any connected nodes.
+ * assumed that the user code has or will disconnect any connected nodes.
  */
 void listnode_delete(listnode* ln);
 
@@ -73,11 +73,11 @@ void listnode_delete_all(listnode* ln);
  * int result - (-1) if either param is NULL.
  *            - (0) on success.
  */
-int listnode_add(listnode* ln, datacont* dc);
+int listnode_add(listnode* ln, const datacont* dc);
 
 
 /* -----------------------
- * listnode_remove():
+ * listnode_remove_by():
  * Removes the first occurrence of a datacont found within a chain of listnodes.
  *
  * Inputs:
@@ -91,10 +91,53 @@ int listnode_add(listnode* ln, datacont* dc);
  *
  * Notes:
  * This function may delete the listnode reference passed to 'ln' if it is the node that contains the
- * 'dc' value being deleted. Because of this, a nested pointer must be passed into 'ln', so that 
- * it can be set either to the next node in the list, or NULL if there are no remaining nodes.
+ * 'dc' value being deleted. Because of this, a nested pointer must be passed into 'ln' so that
+ * it can be set either to the next node in the list, or NULL if there are no remaining nodes. Also,
+ * the datacont being passed into this function is assumed to be deleted by the user code. The 'dc'
+ * parameter will not be modified in any way.
  */
-int listnode_remove(listnode** ln, datacont* dc);
+int listnode_remove_by(listnode** ln, const datacont* dc);
+
+
+/* -----------------------------
+ * listnode_remove_at():
+ * Removes a datacont at a specified location within a listnode chain.
+ *
+ * Inputs:
+ * listnode* ln - the listnode being operated on.
+ * int index - the index at which the removal will take place. Negative
+ *             values will wrap around.
+ *
+ * Returns:
+ * int result - (-1) when 'ln' is NULL, or when 'index' is OOB.
+ *            - (0) on success.
+ *
+ * Notes:
+ * The datacont replacement 'dc' should not be deleted by the user code. It will
+ * be stored directly into the list.
+ */
+int listnode_remove_at(listnode* ln, const int index);
+
+
+/* -----------------------------
+ * listnode_replace_at():
+ * Replaces a datacont at a specified location within a listnode chain.
+ *
+ * Inputs:
+ * listnode* ln - the listnode being operated on.
+ * datacont* dc - the new datacont being added to the listnode chain.
+ * int index - the index at which the replacement will take place. Negative
+ *             values will wrap around.
+ *
+ * Returns:
+ * int result - (-1) when either 'ln' or 'dc' are NULL, or when 'index' is OOB.
+ *            - (0) on success.
+ *
+ * Notes:
+ * The datacont replacement 'dc' should not be deleted by the user code. It will
+ * be stored directly into the list.
+ */
+int listnode_replace_at(listnode* ln, const datacont* dc, const int index);
 
 
 /* ------------------------
@@ -112,7 +155,7 @@ int listnode_remove(listnode** ln, datacont* dc);
  * Notes:
  * See listnode_remove() notes, as they apply to this function as well.
  */
-int listnode_remove_all(listnode** ln, datacont* dc);
+int listnode_remove_all(listnode** ln, const datacont* dc);
 
 
 /* -------------------------
@@ -122,7 +165,8 @@ int listnode_remove_all(listnode** ln, datacont* dc);
  * Inputs:
  * listnode** ln - the listnode being operated on.
  * datacont* dc - the datacont being inserted.
- * int index - the location to insert the datacont.
+ * int index - the location to insert the datacont. Negative values
+ *             will wrap around.
  *
  * Returns:
  * int result - (-1) when either parameter is NULL, or when 'index' is OOB.
@@ -142,19 +186,18 @@ int listnode_insert(listnode** ln, datacont* dc, int index);
  *
  * Inputs:
  * listnode* ln - the listnode being operated on.
- * int index - the index used to locate the desired datacont.
+ * int index - the index used to locate the desired datacont. Negative
+ *             values will wrap around.
  *
  * Returns:
  * datacont* dc - (NULL) if the 'index' is OOB, or if either param is NULL.
  *              - a copy of the datacont located at 'index'.
  *
  * Notes:
- * When 'index' is negative, the datacont will be searched for in the list in REVERSE order. 
- * Example: listnode_get(ln, -1) will return the last item in the list.
  * The datacont returned by this function is a COPY of the original from the list. It is the responsibility
  * of the user code to use datacont_delete() on it to avoid memory leaks.
  */
-datacont* listnode_get(listnode* ln, int index);
+datacont* listnode_get(const listnode* ln, const int index);
 
 
 /* ---------------------------
@@ -173,8 +216,7 @@ datacont* listnode_get(listnode* ln, int index);
  * This function can also serve as a 'listnode_contains' function. Example:
  * if (listnode_index(ln, dc) >= 0) puts("Found it!");
  */
-int listnode_index(listnode* ln, datacont* dc);
-
+int listnode_index(const listnode* ln, const datacont* dc);
 
 
 /* -----------------------------
@@ -184,7 +226,8 @@ int listnode_index(listnode* ln, datacont* dc);
  * Inputs:
  * listnode* ln - the listnode being operated on.
  * datacont* dc - the new datacont being added to the listnode chain.
- * int index - the index at which the replacement will take place.
+ * int index - the index at which the replacement will take place. Negative
+ *             values will wrap around.
  *
  * Returns:
  * int result - (-1) when either 'ln' or 'dc' are NULL, or when 'index' is OOB.
@@ -194,7 +237,7 @@ int listnode_index(listnode* ln, datacont* dc);
  * The datacont replacement 'dc' should not be deleted by the user code. It will
  * be stored directly into the list.
  */
-int listnode_replace_at(listnode* ln, datacont* dc, int index);
+int listnode_replace_at(listnode* ln, const datacont* dc, const int index);
 
 
 /* -----------------------------
