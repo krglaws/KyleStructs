@@ -132,19 +132,14 @@ listnode* treemapnode_getkeys(const treemapnode* tmn)
   {
     ln = listnode_new(datacont_copy(tmn->key));
     ln->next = treemapnode_getkeys(tmn->right);
-    if (ln->next) ln->next->prev = ln;
     return ln;
   }
   else
   {
     listnode* end = ln;
     while (end->next) end = end->next;
-    
     end->next = listnode_new(datacont_copy(tmn->key));
-    end->next->prev = end;
-
     end->next->next = treemapnode_getkeys(tmn->right);
-    end->next->next->prev = end->next;
     return ln;
   }
 }
@@ -160,19 +155,14 @@ listnode* treemapnode_getvalues(const treemapnode* tmn)
   {
     ln = listnode_new(datacont_copy(tmn->value));
     ln->next = treemapnode_getvalues(tmn->right);
-    if (ln->next) ln->next->prev = ln;
     return ln;
   }
   else
   {
     listnode* end = ln;
     while (end->next) end = end->next;
-
     end->next = listnode_new(datacont_copy(tmn->value));
-    end->next->prev = end;
-
     end->next->next = treemapnode_getvalues(tmn->right);
-    end->next->next->prev = end->next;
     return ln;
   }
 }

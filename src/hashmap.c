@@ -85,12 +85,12 @@ listnode* hashmap_getkeys(const hashmap* hm)
 
     if (ln == NULL) ln = temp;
     else {
-      listnode* end = listnode_seek_end(ln);
+      listnode* end = ln;
+      while(end->next) end = end->next;
       end->next = temp;
-      temp->prev = end;
     }
   }
-  return listnode_seek_beg(ln);
+  return ln;
 }
 
 
@@ -109,12 +109,12 @@ listnode* hashmap_getvalues(const hashmap* hm)
 
     if (ln == NULL) ln = temp;
     else {
-      listnode* end = listnode_seek_end(ln);
+      listnode* end = ln;
+      while(end->next) end = end->next;
       end->next = temp;
-      temp->prev = end;
     }
   }
-  return listnode_seek_beg(ln);
+  return ln;
 }
 
 

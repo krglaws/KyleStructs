@@ -241,9 +241,9 @@ static int treemap_getkeys_tests()
     printf("TEST 1: unexpected listnode length: %d. Expected: 3.\n", listnode_length(keys));
     retval = -1;
   }
-  if (keys->item->i != 1)
+  if (keys->dc->i != 1)
   {
-    printf("TEST 1: unexpected datacont value at 1st listnode: %d. Expected 1.\n", keys->item->i);
+    printf("TEST 1: unexpected datacont value at 1st listnode: %d. Expected 1.\n", keys->dc->i);
     retval = -1;
   }
 
@@ -253,9 +253,9 @@ static int treemap_getkeys_tests()
     printf("TEST 1: listnode missing 2nd item.\n");
     return -1; // can't continue
   }
-  if (keys->item->i != 2)
+  if (keys->dc->i != 2)
   {
-    printf("TEST 1: unexpected datacont value at 2nd listnode: %d. Expected 2.\n", keys->item->i);
+    printf("TEST 1: unexpected datacont value at 2nd listnode: %d. Expected 2.\n", keys->dc->i);
     retval = -1;
   }
 
@@ -265,9 +265,9 @@ static int treemap_getkeys_tests()
     printf("TEST 1: listnode missing 3rd item.\n");
     return -1; // can't continue
   }
-  if (keys->item->i != 3)
+  if (keys->dc->i != 3)
   {
-    printf("TEST 1: unexpected datacont value at 3rd listnode: %d. Expected 3.\n", keys->item->i);
+    printf("TEST 1: unexpected datacont value at 3rd listnode: %d. Expected 3.\n", keys->dc->i);
     retval = -1;
   }
 
@@ -311,9 +311,9 @@ static int treemap_getvalues_tests()
     printf("TEST 1: unexpected listnode length: %d. Expected: 3.\n", listnode_length(vals));
     retval = -1;
   }
-  if (vals->item->c != 'A')
+  if (vals->dc->c != 'A')
   {
-    printf("TEST 1: unexpected datacont value at 1st listnode: %c. Expected: A.\n", vals->item->c);
+    printf("TEST 1: unexpected datacont value at 1st listnode: %c. Expected: A.\n", vals->dc->c);
     retval = -1;
   }
 
@@ -323,9 +323,9 @@ static int treemap_getvalues_tests()
     printf("TEST 1: listnode missing 2nd item.\n");
     return -1; // can't continue
   }
-  if (vals->item->c != 'B')
+  if (vals->dc->c != 'B')
   {
-    printf("TEST 1: unexpected datacont value at 2nd listnode: %c. Expected B.\n", vals->item->c);
+    printf("TEST 1: unexpected datacont value at 2nd listnode: %c. Expected B.\n", vals->dc->c);
     retval = -1;
   }
 
@@ -335,9 +335,9 @@ static int treemap_getvalues_tests()
     printf("TEST 1: listnode missing 3rd item.\n");
     return -1; // can't continue
   }
-  if (vals->item->c != 'C')
+  if (vals->dc->c != 'C')
   {
-    printf("TEST 1: unexpected datacont value at 3rd listnode: %c. Expected C.\n", vals->item->c);
+    printf("TEST 1: unexpected datacont value at 3rd listnode: %c. Expected C.\n", vals->dc->c);
     retval = -1;
   }
 

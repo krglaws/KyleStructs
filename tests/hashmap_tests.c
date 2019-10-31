@@ -133,9 +133,9 @@ static int hashmap_getkeys_tests()
   hashmap_add(hm, datacont_new(&one, INT, 1), datacont_new("A", CHAR, 1));
 
   listnode* ln = hashmap_getkeys(hm);
-  if (ln->item->i != 1)
+  if (ln->dc->i != 1)
   {
-    printf("TEST 1: Unexpected listnode item value: %d. Expected 1.\n", ln->item->i);
+    printf("TEST 1: Unexpected listnode item value: %d. Expected 1.\n", ln->dc->i);
     retval = -1;
   }
 
@@ -157,9 +157,9 @@ static int hashmap_getvalues_tests()
   hashmap_add(hm, datacont_new(&one, INT, 1), datacont_new("A", CHAR, 1));
 
   listnode* ln = hashmap_getvalues(hm);
-  if (ln->item->c != 'A')
+  if (ln->dc->c != 'A')
   {
-    printf("TEST 1: Unexpected listnode item value: %c. Expected 'A'.\n", ln->item->c);
+    printf("TEST 1: Unexpected listnode item value: %c. Expected 'A'.\n", ln->dc->c);
     retval = -1;
   }
 
