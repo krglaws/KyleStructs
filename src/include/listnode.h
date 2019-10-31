@@ -115,7 +115,7 @@ int listnode_remove_by(listnode** ln, const datacont* dc);
  * Notes:
  * See listnode_remove_by() notes, as they apply to this function as well.
  */
-int listnode_remove_at(listnode** ln, const int index);
+int listnode_remove_at(listnode** ln, int index);
 
 
 /* ------------------------
@@ -150,11 +150,11 @@ int listnode_remove_all(listnode** ln, const datacont* dc);
  *            - (0) on success.
  *
  * Notes:
- * The datacont replacement 'dc' should not be deleted by the user code, as it
- * will be stored directly into the list. The 'old_dc' parameter, however, WILL
- * need to be deleted by the user code.
+ * The datacont replacement 'new_dc' should not be deleted by the user code
+ * UNLESS the replacement fails. It will be stored directly into the list. 
+ * The 'old_dc' parameter WILL always need to be deleted by the user code.
  */
-int listnode_replace_by(listnode* ln, datacont* old_dc, datacont* new_dc);
+int listnode_replace_by(listnode* ln, const datacont* old_dc, const datacont* new_dc);
 
 
 /* -----------------------------
@@ -175,7 +175,7 @@ int listnode_replace_by(listnode* ln, datacont* old_dc, datacont* new_dc);
  * The datacont replacement 'dc' should not be deleted by the user code. It will
  * be stored directly into the list.
  */
-int listnode_replace_at(listnode* ln, const datacont* dc, const int index);
+int listnode_replace_at(listnode* ln, const datacont* dc, int index);
 
 
 /* ------------------------------
@@ -194,7 +194,7 @@ int listnode_replace_at(listnode* ln, const datacont* dc, const int index);
  * Notes:
  * See notes on listnode_replace_by(). The same applies here.
  */
-int listnode_replace_all(listnode* ln, datacont* old_dc, datacont* new_dc);
+int listnode_replace_all(listnode* ln, const datacont* old_dc, const datacont* new_dc);
 
 
 /* -------------------------
@@ -216,7 +216,7 @@ int listnode_replace_all(listnode* ln, datacont* old_dc, datacont* new_dc);
  * the reference to 'ln' will have to changed to the new 0th listnode, which is why
  * 'ln' must be passed in as a nested pointer.
  */
-int listnode_insert(listnode** ln, datacont* dc, int index);
+int listnode_insert(listnode** ln, const datacont* dc, int index);
 
 
 /* ---------------------------
@@ -255,7 +255,7 @@ int listnode_index(const listnode* ln, const datacont* dc);
  * The datacont returned by this function is a COPY of the original from the list. It is the responsibility
  * of the user code to use datacont_delete() on it to avoid memory leaks.
  */
-datacont* listnode_get(const listnode* ln, const int index);
+datacont* listnode_get(const listnode* ln, int index);
 
 
 /* ----------------------------
@@ -267,7 +267,8 @@ datacont* listnode_get(const listnode* ln, const int index);
  * datacont* dc - the datacont to look for within the list.
  *
  * Returns:
- * unsigned int num - >= (0) the number of listnodes that contain the same value as 'dc'.
+ * unsigned int num - (-1) when either param is NULL.
+ *                  - >= (0) the number of listnodes that contain the same value as 'dc'.
  */
 unsigned int listnode_count(const listnode* ln, const datacont* dc);
 
@@ -282,7 +283,7 @@ unsigned int listnode_count(const listnode* ln, const datacont* dc);
  * Returns:
  * unsigned int length - >= (0) the length of the list. (0) when 'ln' is NULL.
  */
-unsigned int listnode_length(listnode* ln);
+unsigned int listnode_length(const listnode* ln);
 
 
 #endif
