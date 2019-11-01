@@ -10,70 +10,70 @@ TEST := tests
 TBIN := tests/bin
 
 INCLOC := /usr/include/kylestructs
-LIBLOC := /usr/lib/
+LIBLOC := /usr/lib
 
 default: all
 
 
 # compile sources
 
-HASHDEPS := $(SRC)/hash.c #$(INC)/hash.h
+HASHDEPS := $(SRC)/hash.c
 HASHTARG := $(SBIN)/hash.o
 
 $(HASHTARG): $(HASHDEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-DATACONTDEPS := $(SRC)/datacont.c #$(INC)/datacont.h
+DATACONTDEPS := $(SRC)/datacont.c 
 DATACONTTARG := $(SBIN)/datacont.o
 
 $(DATACONTTARG): $(DATACONTDEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-TREESETNODEDEPS := $(SRC)/treesetnode.c #$(INC)/treesetnode.h
+TREESETNODEDEPS := $(SRC)/treesetnode.c
 TREESETNODETARG := $(SBIN)/treesetnode.o
 
 $(TREESETNODETARG): $(TREESETNODEDEPS) 
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-TREESETDEPS := $(SRC)/treeset.c #$(INC)/treeset.h
+TREESETDEPS := $(SRC)/treeset.c 
 TREESETTARG := $(SBIN)/treeset.o
 
 $(TREESETTARG): $(TREESETDEPS) 
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-HASHSETDEPS := $(SRC)/hashset.c #$(INC)/hashset.h
+HASHSETDEPS := $(SRC)/hashset.c 
 HASHSETTARG := $(SBIN)/hashset.o
 
 $(HASHSETTARG): $(HASHSETDEPS) 
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-LISTNODEDEPS := $(SRC)/listnode.c #$(INC)/listnode.h
+LISTNODEDEPS := $(SRC)/listnode.c 
 LISTNODETARG := $(SBIN)/listnode.o
 
 $(LISTNODETARG): $(LISTNODEDEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-TREEMAPNODEDEPS := $(SRC)/treemapnode.c #$(INC)/treemapnode.h
+TREEMAPNODEDEPS := $(SRC)/treemapnode.c 
 TREEMAPNODETARG := $(SBIN)/treemapnode.o
 
 $(TREEMAPNODETARG): $(TREEMAPNODEDEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-TREEMAPDEPS := $(SRC)/treemap.c #$(INC)/treemap.h
+TREEMAPDEPS := $(SRC)/treemap.c 
 TREEMAPTARG := $(SBIN)/treemap.o
 
 $(TREEMAPTARG): $(TREEMAPDEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-HASHMAPDEPS := $(SRC)/hashmap.c #$(INC)/hashmap.h
+HASHMAPDEPS := $(SRC)/hashmap.c 
 HASHMAPTARG := $(SBIN)/hashmap.o
 
 $(HASHMAPTARG): $(HASHMAPDEPS)
