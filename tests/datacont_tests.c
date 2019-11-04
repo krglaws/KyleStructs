@@ -13,9 +13,9 @@ static int datacont_new_tests()
     printf("TEST 1: Unexpected container type: %d. Expected: %d\n", char_cont->type, CHAR);
     retval = -1;
   }
-  if (char_cont->count != 1)
+  if (char_cont->size != 1)
   {
-    printf("TEST 1: Unexpected count value: %d. Expected: %d\n", char_cont->count, 1);
+    printf("TEST 1: Unexpected size value: %ld. Expected: %d\n", char_cont->size, 1);
     retval = -1;
   }
   if (char_cont->c != 'A')
@@ -33,9 +33,9 @@ static int datacont_new_tests()
     printf("TEST 2: Unexpected container type: %d. Expected: %d\n", uint_cont->type, UINT);
     retval = -1;
   }
-  if (uint_cont->count != 1)
+  if (uint_cont->size != 1)
   {
-    printf("TEST 2: Unexpected count value: %d. Expected: %d\n", uint_cont->count, 1);
+    printf("TEST 2: Unexpected size value: %ld. Expected: %d\n", uint_cont->size, 1);
     retval = -1;
   }
   if (uint_cont->ui != num)
@@ -74,8 +74,8 @@ static int datacont_copy_tests()
     printf("TEST 2: dc1 and dc2 should be equal. datacont_compare() returned: %d.\n", result);
     printf("\ndc1->type = %d\n", dc1->type);
     printf("dc2->type = %d\n", dc2->type);
-    printf("\ndc1->count = %d\n", dc1->count);
-    printf("dc2->count = %d\n", dc2->count);
+    printf("\ndc1->size = %ld\n", dc1->size);
+    printf("dc2->size = %ld\n", dc2->size);
     printf("\ndc1->cp = %s\n", dc1->cp);
     printf("dc2->cp = %s\n", dc2->cp);
     retval = -1;

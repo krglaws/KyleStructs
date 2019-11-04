@@ -1,16 +1,19 @@
 
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 
-#include "include/hash.h"
 #include "include/datacont.h"
 
 
-datacont* datacont_new(const void* data, const enum dataconttype dct, const unsigned int count)
+datacont* datacont_new(const void* data, const enum dataconttype dct, const size_t size)
 {
+  if (data == NULL || size == 0) return NULL;
+
   datacont* dc = (datacont*) malloc(sizeof(datacont));
   dc->type = dct;
-  dc->count = count;
+  dc->size = size;
+
   switch(dct)
   {
     case CHAR:
@@ -44,44 +47,44 @@ datacont* datacont_new(const void* data, const enum dataconttype dct, const unsi
       dc->ull = *((unsigned long long*) data);
       break;
     case CHARP:
-      dc->cp = malloc(sizeof(char) * count);
-      memcpy(dc->cp, data, sizeof(char) * count);
+      dc->cp = malloc(sizeof(char) * size);
+      memcpy(dc->cp, data, sizeof(char) * size);
       break;
     case SHORTP:
-      dc->sp = malloc(sizeof(short) * count);
-      memcpy(dc->sp, data, sizeof(short) * count);
+      dc->sp = malloc(sizeof(short) * size);
+      memcpy(dc->sp, data, sizeof(short) * size);
       break;
     case INTP:
-      dc->ip = malloc(sizeof(int) * count);
-      memcpy(dc->ip, data, sizeof(int) * count);
+      dc->ip = malloc(sizeof(int) * size);
+      memcpy(dc->ip, data, sizeof(int) * size);
       break;
     case LLP:
-      dc->llp = malloc(sizeof(long long) * count);
-      memcpy(dc->llp, data, sizeof(long long) * count);
+      dc->llp = malloc(sizeof(long long) * size);
+      memcpy(dc->llp, data, sizeof(long long) * size);
       break;
     case FLOATP:
-      dc->fp = malloc(sizeof(float) * count);
-      memcpy(dc->fp, data, sizeof(float) * count);
+      dc->fp = malloc(sizeof(float) * size);
+      memcpy(dc->fp, data, sizeof(float) * size);
       break;
     case DOUBLEP:
-      dc->dp = malloc(sizeof(double) * count);
-      memcpy(dc->dp, data, sizeof(double) * count);
+      dc->dp = malloc(sizeof(double) * size);
+      memcpy(dc->dp, data, sizeof(double) * size);
       break;
     case UCHARP:
-      dc->ucp = malloc(sizeof(unsigned char) * count);
-      memcpy(dc->ucp, data, sizeof(char) * count);
+      dc->ucp = malloc(sizeof(unsigned char) * size);
+      memcpy(dc->ucp, data, sizeof(char) * size);
       break;
     case USHORTP:
-      dc->usp = malloc(sizeof(unsigned short) * count);
-      memcpy(dc->usp, data, sizeof(short) * count);
+      dc->usp = malloc(sizeof(unsigned short) * size);
+      memcpy(dc->usp, data, sizeof(short) * size);
       break;
     case UINTP:
-      dc->uip = malloc(sizeof(unsigned int) * count);
-      memcpy(dc->uip, data, sizeof(int) * count);
+      dc->uip = malloc(sizeof(unsigned int) * size);
+      memcpy(dc->uip, data, sizeof(int) * size);
       break;
     case ULLP:
-      dc->ullp = malloc(sizeof(unsigned long long) * count);
-      memcpy(dc->ullp, data, sizeof(long long) * count);
+      dc->ullp = malloc(sizeof(unsigned long long) * size);
+      memcpy(dc->ullp, data, sizeof(long long) * size);
       break;
   }
   return dc;
@@ -107,43 +110,43 @@ datacont* datacont_copy(const datacont* dc)
   switch(dc->type)
   {
     case CHAR:
-      return datacont_new(&(dc->c), dc->type, dc->count);
+      return datacont_new(&(dc->c), dc->type, dc->size);
     case SHORT:
-      return datacont_new(&(dc->s), dc->type, dc->count);
+      return datacont_new(&(dc->s), dc->type, dc->size);
     case INT:
-      return datacont_new(&(dc->i), dc->type, dc->count);
+      return datacont_new(&(dc->i), dc->type, dc->size);
     case LL:
-      return datacont_new(&(dc->ll), dc->type, dc->count);
+      return datacont_new(&(dc->ll), dc->type, dc->size);
     case FLOAT:
-      return datacont_new(&(dc->f), dc->type, dc->count);
+      return datacont_new(&(dc->f), dc->type, dc->size);
     case DOUBLE:
-      return datacont_new(&(dc->d), dc->type, dc->count);
+      return datacont_new(&(dc->d), dc->type, dc->size);
     case UCHAR:
-      return datacont_new(&(dc->uc), dc->type, dc->count);
+      return datacont_new(&(dc->uc), dc->type, dc->size);
     case USHORT:
-      return datacont_new(&(dc->us), dc->type, dc->count);
+      return datacont_new(&(dc->us), dc->type, dc->size);
     case UINT:
-      return datacont_new(&(dc->ui), dc->type, dc->count);
+      return datacont_new(&(dc->ui), dc->type, dc->size);
     case ULL:
-      return datacont_new(&(dc->ull), dc->type, dc->count);
+      return datacont_new(&(dc->ull), dc->type, dc->size);
     case CHARP:
-      return datacont_new(dc->cp, dc->type, dc->count);
+      return datacont_new(dc->cp, dc->type, dc->size);
     case SHORTP:
-      return datacont_new(dc->sp, dc->type, dc->count);
+      return datacont_new(dc->sp, dc->type, dc->size);
     case INTP:
-      return datacont_new(dc->ip, dc->type, dc->count);
+      return datacont_new(dc->ip, dc->type, dc->size);
     case FLOATP:
-      return datacont_new(dc->fp, dc->type, dc->count);
+      return datacont_new(dc->fp, dc->type, dc->size);
     case DOUBLEP:
-      return datacont_new(dc->dp, dc->type, dc->count);
+      return datacont_new(dc->dp, dc->type, dc->size);
     case UCHARP:
-      return datacont_new(dc->ucp, dc->type, dc->count);
+      return datacont_new(dc->ucp, dc->type, dc->size);
     case USHORTP:
-      return datacont_new(dc->usp, dc->type, dc->count);
+      return datacont_new(dc->usp, dc->type, dc->size);
     case UINTP:
-      return datacont_new(dc->uip, dc->type, dc->count);
+      return datacont_new(dc->uip, dc->type, dc->size);
     case ULLP:
-      return datacont_new(dc->ullp, dc->type, dc->count);
+      return datacont_new(dc->ullp, dc->type, dc->size);
   }
   return NULL;
 }
@@ -212,78 +215,78 @@ static enum datacontcomp _compare_multi_items(const datacont* dca, const datacon
   switch(dca->type)
   {
     case CHARP:
-      for (int i = 0; i < dca->count && i < dcb->count; i++)
+      for (int i = 0; i < dca->size && i < dcb->size; i++)
       {
         if (dca->cp[i] < dcb->cp[i]) return LESSTHAN;
 	else if (dca->cp[i] > dcb->cp[i]) return GREATERTHAN;
       }
       break;
     case SHORTP:
-      for (int i = 0; i < dca->count && i < dcb->count; i++)
+      for (int i = 0; i < dca->size && i < dcb->size; i++)
       {
         if (dca->sp[i] < dcb->sp[i]) return LESSTHAN;
 	else if (dca->sp[i] > dcb->sp[i]) return GREATERTHAN;
       }
       break;
     case INTP:
-      for (int i = 0; i < dca->count && i < dcb->count; i++)
+      for (int i = 0; i < dca->size && i < dcb->size; i++)
       {
         if (dca->ip[i] < dcb->ip[i]) return LESSTHAN;
 	else if (dca->ip[i] > dcb->ip[i]) return GREATERTHAN;
       }
       break;
     case LLP:
-      for (int i = 0; i < dca->count && i < dcb->count; i++)
+      for (int i = 0; i < dca->size && i < dcb->size; i++)
       {
         if (dca->llp[i] < dcb->llp[i]) return LESSTHAN;
 	else if (dca->llp[i] > dcb->llp[i]) return GREATERTHAN;
       }
       break;
     case FLOATP:
-      for (int i = 0; i < dca->count && i < dcb->count; i++)
+      for (int i = 0; i < dca->size && i < dcb->size; i++)
       {
         if (dca->fp[i] < dcb->fp[i]) return LESSTHAN;
 	else if (dca->fp[i] > dcb->fp[i]) return GREATERTHAN;
       }
       break;
     case DOUBLEP:
-      for (int i = 0; i < dca->count && i < dcb->count; i++)
+      for (int i = 0; i < dca->size && i < dcb->size; i++)
       {
         if (dca->dp[i] < dcb->dp[i]) return LESSTHAN;
 	else if (dca->dp[i] > dcb->dp[i]) return GREATERTHAN;
       }
       break;
     case UCHARP:
-      for (int i = 0; i < dca->count && i < dcb->count; i++)
+      for (int i = 0; i < dca->size && i < dcb->size; i++)
       {
         if (dca->ucp[i] < dcb->ucp[i]) return LESSTHAN;
 	else if (dca->ucp[i] > dcb->ucp[i]) return GREATERTHAN;
       }
       break;
     case USHORTP:
-      for (int i = 0; i < dca->count && i < dcb->count; i++)
+      for (int i = 0; i < dca->size && i < dcb->size; i++)
       {
         if (dca->usp[i] < dcb->usp[i]) return LESSTHAN;
 	else if (dca->usp[i] > dcb->usp[i]) return GREATERTHAN;
       }
       break;
     case UINTP:
-      for (int i = 0; i < dca->count && i < dcb->count; i++)
+      for (int i = 0; i < dca->size && i < dcb->size; i++)
       {
         if (dca->uip[i] < dcb->uip[i]) return LESSTHAN;
 	else if (dca->uip[i] > dcb->uip[i]) return GREATERTHAN;
       }
       break;
     case ULLP:
-      for (int i = 0; i < dca->count && i < dcb->count; i++)
+      for (int i = 0; i < dca->size && i < dcb->size; i++)
       {
         if (dca->ullp[i] < dcb->ullp[i]) return LESSTHAN;
 	else if (dca->ullp[i] > dcb->ullp[i]) return GREATERTHAN;
       }
       break;
   }
-  if (dca->count < dcb->count) return LESSTHAN;
-  else if (dca->count > dcb->count) return GREATERTHAN;
+  if (dca->size < dcb->size) return LESSTHAN;
+  else if (dca->size > dcb->size) return GREATERTHAN;
   else return EQUAL;
 }
 
@@ -299,38 +302,50 @@ enum datacontcomp datacont_compare(const datacont* dca, const datacont* dcb)
 }
 
 
-unsigned long long datacont_hash(unsigned long long seed, const datacont* dc)
+static __uint64_t __hash(__uint64_t seed, const void* data, const size_t size)
+{
+  for (int i = 0; i < size; i++)
+  {
+	  uint8_t byte = *((uint8_t*) data + i);
+	  seed = ((seed + byte) << 4) + ((seed * byte) >> 4);
+  }
+  return seed;
+}
+
+
+__uint64_t datacont_hash(__uint64_t seed, const datacont* dc)
 {
   switch(dc->type)
   {
     case CHAR:
     case UCHAR:
-      return hash(seed, &dc->c, sizeof(char));
+      return __hash(seed, &dc->c, sizeof(char));
     case SHORT:
     case USHORT:
-      return hash(seed, &dc->s, sizeof(short));
+      return __hash(seed, &dc->s, sizeof(short));
     case INT:
     case UINT:
-      return hash(seed, &dc->i, sizeof(int));
+      return __hash(seed, &dc->i, sizeof(int));
     case LL:
     case ULL:
-      return hash(seed, &dc->ll, sizeof(long long));
+      return __hash(seed, &dc->ll, sizeof(long long));
     case FLOAT:
-      return hash(seed, &dc->f, sizeof(float));
+      return __hash(seed, &dc->f, sizeof(float));
     case DOUBLE:
-      return hash(seed, &dc->d, sizeof(double));
+      return __hash(seed, &dc->d, sizeof(double));
     case CHARP:
-      return hash(seed, dc->cp, sizeof(char) * dc->count);
+      return __hash(seed, dc->cp, sizeof(char) * dc->size);
     case SHORTP:
-      return hash(seed, dc->sp, sizeof(short) * dc->count);
+      return __hash(seed, dc->sp, sizeof(short) * dc->size);
     case INTP:
-      return hash(seed, dc->ip, sizeof(int) * dc->count);
+      return __hash(seed, dc->ip, sizeof(int) * dc->size);
     case LLP:
-      return hash(seed, dc->llp, sizeof(long long) * dc->count);
+      return __hash(seed, dc->llp, sizeof(long long) * dc->size);
     case FLOATP:
-      return hash(seed, dc->fp, sizeof(float) * dc->count);
+      return __hash(seed, dc->fp, sizeof(float) * dc->size);
     case DOUBLEP:
-      return hash(seed, dc->dp, sizeof(double) * dc->count);
+      return __hash(seed, dc->dp, sizeof(double) * dc->size);
   }
-  /* should figure out some way to report error */
 }
+
+

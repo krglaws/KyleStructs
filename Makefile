@@ -10,70 +10,77 @@ TEST := tests
 TBIN := tests/bin
 
 INCLOC := /usr/include/kylestructs
-LIBLOC := /usr/lib/
+LIBLOC := /usr/lib
 
 default: all
 
 
 # compile sources
 
-HASHDEPS := $(SRC)/hash.c #$(INC)/hash.h
-HASHTARG := $(SBIN)/hash.o
-
-$(HASHTARG): $(HASHDEPS)
-	$(CC) -c $< -o $@ $(CFLAGS)
-
-
-DATACONTDEPS := $(SRC)/datacont.c #$(INC)/datacont.h
+DATACONTDEPS := $(SRC)/datacont.c 
 DATACONTTARG := $(SBIN)/datacont.o
 
 $(DATACONTTARG): $(DATACONTDEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-TREESETNODEDEPS := $(SRC)/treesetnode.c #$(INC)/treesetnode.h
-TREESETNODETARG := $(SBIN)/treesetnode.o
-
-$(TREESETNODETARG): $(TREESETNODEDEPS) 
-	$(CC) -c $< -o $@ $(CFLAGS)
-
-
-TREESETDEPS := $(SRC)/treeset.c #$(INC)/treeset.h
-TREESETTARG := $(SBIN)/treeset.o
-
-$(TREESETTARG): $(TREESETDEPS) 
-	$(CC) -c $< -o $@ $(CFLAGS)
-
-
-HASHSETDEPS := $(SRC)/hashset.c #$(INC)/hashset.h
-HASHSETTARG := $(SBIN)/hashset.o
-
-$(HASHSETTARG): $(HASHSETDEPS) 
-	$(CC) -c $< -o $@ $(CFLAGS)
-
-
-LISTNODEDEPS := $(SRC)/listnode.c #$(INC)/listnode.h
+LISTNODEDEPS := $(SRC)/listnode.c
 LISTNODETARG := $(SBIN)/listnode.o
 
 $(LISTNODETARG): $(LISTNODEDEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-TREEMAPNODEDEPS := $(SRC)/treemapnode.c #$(INC)/treemapnode.h
+LISTDEPS := $(SRC)/list.c
+LISTTARG := $(SBIN)/list.o
+
+$(LISTTARG): $(LISTDEPS)
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+
+STACKDEPS := $(SRC)/stack.c
+STACKTARG := $(SBIN)/stack.o
+
+$(STACKTARG): $(STACKDEPS)
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+
+TREESETNODEDEPS := $(SRC)/treesetnode.c
+TREESETNODETARG := $(SBIN)/treesetnode.o
+
+$(TREESETNODETARG): $(TREESETNODEDEPS) 
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+
+TREESETDEPS := $(SRC)/treeset.c 
+TREESETTARG := $(SBIN)/treeset.o
+
+$(TREESETTARG): $(TREESETDEPS) 
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+
+HASHSETDEPS := $(SRC)/hashset.c 
+HASHSETTARG := $(SBIN)/hashset.o
+
+$(HASHSETTARG): $(HASHSETDEPS) 
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+
+TREEMAPNODEDEPS := $(SRC)/treemapnode.c 
 TREEMAPNODETARG := $(SBIN)/treemapnode.o
 
 $(TREEMAPNODETARG): $(TREEMAPNODEDEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-TREEMAPDEPS := $(SRC)/treemap.c #$(INC)/treemap.h
+TREEMAPDEPS := $(SRC)/treemap.c 
 TREEMAPTARG := $(SBIN)/treemap.o
 
 $(TREEMAPTARG): $(TREEMAPDEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-HASHMAPDEPS := $(SRC)/hashmap.c #$(INC)/hashmap.h
+HASHMAPDEPS := $(SRC)/hashmap.c 
 HASHMAPTARG := $(SBIN)/hashmap.o
 
 $(HASHMAPTARG): $(HASHMAPDEPS)
@@ -83,59 +90,73 @@ $(HASHMAPTARG): $(HASHMAPDEPS)
 
 # compile tests
 
-TESTDEPS := $(DATACONTDEPS) $(HASHDEPS)
+DATACONTTESTDEPS := $(DATACONTDEPS)
 DATACONTTESTTARG := $(TBIN)/datacont_tests.out
 
-$(DATACONTTESTTARG): $(TEST)/datacont_tests.c $(TESTDEPS)
+$(DATACONTTESTTARG): $(TEST)/datacont_tests.c $(DATACONTTESTDEPS)
 	$(CC) -g $^ -o $@
 
 
-TESTDEPS += $(TREESETNODEDEPS)
-TREESETNODETESTTARG := $(TBIN)/treesetnode_tests.out
-
-$(TREESETNODETESTTARG): $(TEST)/treesetnode_tests.c $(TESTDEPS)
-	$(CC) -g $^ -o $@
-
-
-TESTDEPS += $(TREESETDEPS)
-TREESETTESTTARG := $(TBIN)/treeset_tests.out
-
-$(TREESETTESTTARG): $(TEST)/treeset_tests.c $(TESTDEPS)
-	$(CC) -g $^ -o $@
-
-
-TESTDEPS += $(HASHSETDEPS)
-HASHSETTESTTARG := $(TBIN)/hashset_tests.out
-
-$(HASHSETTESTTARG): $(TEST)/hashset_tests.c $(TESTDEPS)
-	$(CC) -g $^ -o $@
-
-
-TESTDEPS := $(DATACONTDEPS) $(HASHDEPS) $(LISTNODEDEPS)
+LISTNODETESTDEPS := $(DATACONTTESTDEPS) $(LISTNODEDEPS) 
 LISTNODETESTTARG := $(TBIN)/listnode_tests.out
 
-$(LISTNODETESTTARG): $(TEST)/listnode_tests.c $(TESTDEPS)
+$(LISTNODETESTTARG): $(TEST)/listnode_tests.c $(LISTNODETESTDEPS)
 	$(CC) -g $^ -o $@
 
 
-TESTDEPS += $(TREEMAPNODEDEPS)
+LISTTESTDEPS := $(LISTNODETESTDEPS) $(LISTDEPS)
+LISTTESTTARG := $(TBIN)/list_tests.out
+
+$(LISTTESTTARG): $(TEST)/list_tests.c $(LISTTESTDEPS)
+	$(CC) -g $^ -o $@
+
+
+STACKTESTDEPS := $(LISTNODETESTDEPS) $(STACKDEPS)
+STACKTESTTARG := $(TBIN)/stack_tests.out
+
+$(STACKTESTTARG): $(TEST)/stack_tests.c $(STACKTESTDEPS) 
+	$(CC) -g $^ -o $@
+
+
+TREESETNODETESTDEPS := $(LISTNODETESTDEPS) $(TREESETNODEDEPS)
+TREESETNODETESTTARG := $(TBIN)/treesetnode_tests.out
+
+$(TREESETNODETESTTARG): $(TEST)/treesetnode_tests.c $(TREESETNODETESTDEPS)
+	$(CC) -g $^ -o $@
+
+
+TREESETTESTDEPS := $(TREESETNODETESTDEPS) $(TREESETDEPS)
+TREESETTESTTARG := $(TBIN)/treeset_tests.out
+
+$(TREESETTESTTARG): $(TEST)/treeset_tests.c $(TREESETTESTDEPS)
+	$(CC) -g $^ -o $@
+
+
+HASHSETTESTDEPS := $(TREESETTESTDEPS) $(HASHSETDEPS)
+HASHSETTESTTARG := $(TBIN)/hashset_tests.out
+
+$(HASHSETTESTTARG): $(TEST)/hashset_tests.c $(HASHSETTESTDEPS)
+	$(CC) -g $^ -o $@
+
+
+TREEMAPNODETESTDEPS := $(LISTNODETESTDEPS) $(TREEMAPNODEDEPS)
 TREEMAPNODETESTTARG := $(TBIN)/treemapnode_tests.out
 
-$(TREEMAPNODETESTTARG): $(TEST)/treemapnode_tests.c $(TESTDEPS)
+$(TREEMAPNODETESTTARG): $(TEST)/treemapnode_tests.c $(TREEMAPNODETESTDEPS)
 	$(CC) -g $^ -o $@
 
 
-TESTDEPS += $(TREEMAPDEPS)
+TREEMAPTESTDEPS := $(TREEMAPNODETESTDEPS) $(TREEMAPDEPS)
 TREEMAPTESTTARG := $(TBIN)/treemap_tests.out
 
-$(TREEMAPTESTTARG): $(TEST)/treemap_tests.c $(TESTDEPS)
+$(TREEMAPTESTTARG): $(TEST)/treemap_tests.c $(TREEMAPTESTDEPS)
 	$(CC) -g $^ -o $@
 
 
-TESTDEPS += $(HASHMAPDEPS)
+HASHMAPTESTDEPS += $(TREEMAPTESTDEPS) $(HASHMAPDEPS)
 HASHMAPTESTTARG := $(TBIN)/hashmap_tests.out
 
-$(HASHMAPTESTTARG): $(TEST)/hashmap_tests.c $(TESTDEPS)
+$(HASHMAPTESTTARG): $(TEST)/hashmap_tests.c $(HASHMAPTESTDEPS)
 	$(CC) -g $^ -o $@
 
 
@@ -145,36 +166,39 @@ run_tests: tests
 
 
 .PHONY: tests
-tests: $(DATACONTTESTTARG) $(TREESETNODETESTTARG) $(TREESETTESTTARG) $(HASHSETTESTTARG)\
-	$(LISTNODETESTTARG) $(TREEMAPNODETESTTARG) $(TREEMAPTESTTARG) $(HASHMAPTESTTARG)
+tests: $(DATACONTTESTTARG) $(LISTNODETESTTARG) $(LISTTESTTARG) $(STACKTESTTARG)\
+	$(TREESETNODETESTTARG) $(TREESETTESTTARG) $(HASHSETTESTTARG) $(TREEMAPNODETESTTARG)\
+	$(TREEMAPTESTTARG) $(HASHMAPTESTTARG)
 	@echo Finished building tests.
 
 
 STATICLIB := libkylestructs.a
-$(STATICLIB): $(HASHTARG) $(DATACONTTARG) $(TREESETNODETARG) $(TREESETTARG) $(HASHSETTARG)\
-	$(LISTNODETARG) $(TREEMAPNODETARG) $(TREEMAPTARG) $(HASHMAPTARG)
+$(STATICLIB): $(DATACONTTARG) $(LISTNODETARG) $(LISTTARG) $(STACKTARG) $(TREESETNODETARG)\
+	$(TREESETTARG) $(HASHSETTARG) $(TREEMAPNODETARG) $(TREEMAPTARG) $(HASHMAPTARG)
 	ar rcs $(STATICLIB)\
-	       	$(HASHTARG)\
 		$(DATACONTTARG)\
+		$(LISTNODETARG)\
+		$(LISTTARG)\
+		$(STACKTARG)\
 		$(TREESETNODETARG)\
 		$(TREESETTARG)\
 		$(HASHSETTARG)\
-		$(LISTNODETARG)\
 		$(TREEMAPNODETARG)\
 		$(TREEMAPTARG)\
 		$(HASHMAPTARG)
 
 
 DYNAMICLIB := libkylestructs.so
-$(DYNAMICLIB): $(HASHTARG) $(DATACONTTARG) $(TREESETNODETARG) $(TREESETTARG) $(HASHSETTARG)\
-	$(LISTNODETARG) $(TREEMAPNODETARG) $(TREEMAPTARG) $(HASHMAPTARG)
+$(DYNAMICLIB): $(DATACONTTARG) $(LISTNODETARG) $(LISTTARG) $(STACKTARG) $(TREESETNODETARG) $(TREESETTARG)\
+                $(HASHSETTARG) $(LISTNODETARG) $(TREEMAPNODETARG) $(TREEMAPTARG) $(HASHMAPTARG)
 	gcc -shared -o $(DYNAMICLIB)\
-		$(HASHTARG)\
 		$(DATACONTTARG)\
+		$(LISTNODETARG)\
+		$(LISTTARG)\
+		$(STACKTARG)\
 		$(TREESETNODETARG)\
 		$(TREESETTARG)\
 		$(HASHSETTARG)\
-		$(LISTNODETARG)\
 		$(TREEMAPNODETARG)\
 		$(TREEMAPTARG)\
 		$(HASHMAPTARG)
@@ -199,17 +223,20 @@ uninstall:
 clean:
 	if [ -f $(STATICLIB) ]; then rm $(STATICLIB); fi;
 	if [ -f $(DYNAMICLIB) ]; then rm $(DYNAMICLIB); fi;
-	if [ -f $(HASHTARG) ]; then rm $(HASHTARG); fi;
 	if [ -f $(DATACONTTARG) ]; then rm $(DATACONTTARG); fi;
 	if [ -f $(DATACONTTESTTARG) ]; then rm $(DATACONTTESTTARG); fi;
+	if [ -f $(LISTNODETARG) ]; then rm $(LISTNODETARG); fi;
+	if [ -f $(LISTNODETESTTARG) ]; then rm $(LISTNODETESTTARG); fi;
+	if [ -f $(LISTTARG) ]; then rm $(LISTTARG); fi;
+	if [ -f $(LISTTESTTARG) ]; then rm $(LISTTESTTARG); fi;
+	if [ -f $(STACKTARG) ]; then rm $(STACKTARG); fi;
+	if [ -f $(STACKTESTTARG) ]; then rm $(STACKTESTTARG); fi;
 	if [ -f $(TREESETNODETARG) ]; then rm $(TREESETNODETARG); fi;
 	if [ -f $(TREESETNODETESTTARG) ]; then rm $(TREESETNODETESTTARG); fi;
 	if [ -f $(TREESETTARG) ]; then rm $(TREESETTARG); fi;
 	if [ -f $(TREESETTESTTARG) ]; then rm $(TREESETTESTTARG); fi;
 	if [ -f $(HASHSETTARG) ]; then rm $(HASHSETTARG); fi;
 	if [ -f $(HASHSETTESTTARG) ]; then rm $(HASHSETTESTTARG); fi;
-	if [ -f $(LISTNODETARG) ]; then rm $(LISTNODETARG); fi;
-	if [ -f $(LISTNODETESTTARG) ]; then rm $(LISTNODETESTTARG); fi;
 	if [ -f $(TREEMAPNODETARG) ]; then rm $(TREEMAPNODETARG); fi;
 	if [ -f $(TREEMAPNODETESTTARG) ]; then rm $(TREEMAPNODETESTTARG); fi;
 	if [ -f $(TREEMAPTARG) ]; then rm $(TREEMAPTARG); fi;
