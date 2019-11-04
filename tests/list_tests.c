@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 #include "../src/include/datacont.h"
-#include "../src/include/list.h"
+#include "../src/include/listnode.h"
 #include "../src/include/list.h"
 
 
@@ -12,20 +12,14 @@ static int list_new_tests()
 
   /* TEST 1 */
   list* ls = list_new();
-  list_add(ls, datacont_new("A", CHAR, 1));
 
-  if (ln->next != NULL)
+  if (ls->head != NULL)
   {
-    printf("TEST 1: ln->next should be NULL.\n");
-    retval = -1;
-  }
-  if (ln->dc->c != 'A')
-  {
-    printf("TEST 1: Unexpected datacont value: '%c'. Expected: 'A'.\n", ln->dc->c);
+    printf("TEST 1: ls->head should be NULL.\n");
     retval = -1;
   }
 
-  list_delete(ln);
+  list_delete(ls);
 
   return retval;
 }
@@ -45,26 +39,27 @@ static int list_add_tests()
   }
 
   /* TEST 2 */
-  list* ls = list_new(datacont_new("A", CHAR, 1));
-  if (list_add(ln, dc) != 0)
+  list* ls = list_new();
+  if (list_add(ls, datacont_new("A", CHAR, 1)) != 0)
   {
     printf("TEST 2: list_add() should return 0 when successful");
     retval = -1;
   }
 
-  if (ln->dc->c != 'A')
+  if (ls->head->dc->c != 'A')
   {
-    printf("TEST 2: unexpected datacont value at first list: %c. Expected: %c\n", ln->dc->c, 'A');
+    printf("TEST 2: unexpected datacont value at first list: %c. Expected: A\n", ls->head->dc->c);
     retval = -1;
   }
 
-  if (ln->next->dc->c != 'B')
+  list_add(ls, dc);
+  if (ls->head->next->dc->c != 'B')
   {
-    printf("TEST 2: unexpected datacont value at second list: %c. Expected: %c\n", ln->next->dc->c, 'B');
+    printf("TEST 2: unexpected datacont value at second list: %c. Expected: B\n", ls->head->next->dc->c);
     retval = -1;
   }
   
-  list_delete_all(ln);
+  list_delete(ls);
 
   return retval;
 }
@@ -79,40 +74,41 @@ static int list_remove_by_tests()
   datacont* dcB = datacont_new("B", CHAR, 1);
   datacont* dcC = datacont_new("C", CHAR, 1);
 
-  list* ls = list_new(datacont_copy(dcA));
-  list_add(ln, datacont_copy(dcB));
-  list_add(ln, datacont_copy(dcC));
+  list* ls = list_new();
+  list_add(ls, datacont_copy(dcA));
+  list_add(ls, datacont_copy(dcB));
+  list_add(ls, datacont_copy(dcC));
 
-  if (list_remove_by(&ln, dcC) != 1)
+  if (list_remove_by(ls, dcC) != 1)
   {
     printf("TEST 1: list_remove_by() should return 1 on successful removal\n");
     retval = -1;
   }
 
   /* TEST 2 */
-  if (list_remove_by(&ln, dcC) != 0)
+  if (list_remove_by(ls, dcC) != 0)
   {
     printf("TEST 2: list_remove_by() should return 0 when removing not-present datacont\n");
     retval = -1;
   }
 
   /* TEST 3 */
-  if (list_remove_by(&ln, dcB) != 1)
+  if (list_remove_by(ls, dcB) != 1)
   {
     printf("TEST 3: list_remove_by() should return 1 on successful removal\n");
     retval = -1;
   }
 
   /* TEST 4 */
-  if (list_remove_by(&ln, dcA) != 1)
+  if (list_remove_by(ls, dcA) != 1)
   {
     printf("TEST 4: list_remove_by() should return 1 on successful removal\n");
     retval = -1;
   }
 
-  if (ln != NULL)
+  if (ls->head != NULL)
   {
-    printf("TEST 4: list should be NULL after final removal\n");
+    printf("TEST 4: list->head should be NULL after final removal\n");
     retval = -1;
   }
 
@@ -126,6 +122,8 @@ static int list_remove_by_tests()
   datacont_delete(dcA);
   datacont_delete(dcB);
   datacont_delete(dcC);
+  
+  list_delete(ls);
 
   return retval;
 }
@@ -140,45 +138,46 @@ static int list_remove_at_tests()
   datacont* dcB = datacont_new("B", CHAR, 1);
   datacont* dcC = datacont_new("C", CHAR, 1);
 
-  list* ls = list_new(datacont_copy(dcA));
-  list_add(ln, datacont_copy(dcB));
-  list_add(ln, datacont_copy(dcC));
+  list* ls = list_new();
+  list_add(ls, datacont_copy(dcA));
+  list_add(ls, datacont_copy(dcB));
+  list_add(ls, datacont_copy(dcC));
 
-  if (list_remove_at(&ln, -1) != 0)
+  if (list_remove_at(ls, -1) != 0)
   {
     printf("TEST 1: list_remove_at() should return 0 on successful removal\n");
     retval = -1;
   }
 
   /* TEST 2 */
-  if (list_remove_at(&ln, 10) != -1)
+  if (list_remove_at(ls, 10) != -1)
   {
     printf("TEST 2: list_remove_at() should return -1 on index OOB\n");
     retval = -1;
   }
 
   /* TEST 3 */
-  if (list_remove_at(&ln, 0) != 0)
+  if (list_remove_at(ls, 0) != 0)
   {
     printf("TEST 3: list_remove_at() should return 0 on successful removal\n");
     retval = -1;
   }
 
   /* TEST 4 */
-  if (list_remove_at(&ln, -1) != 0)
+  if (list_remove_at(ls, -1) != 0)
   {
     printf("TEST 4: list_remove_at() should return 0 on successful removal\n");
     retval = -1;
   }
 
-  if (ln != NULL)
+  if (ls->head != NULL)
   {
     printf("TEST 4: list should be NULL after final removal\n");
     retval = -1;
   }
 
   /* TEST 5 */
-  if (list_remove_at(&ln, 0) != -1)
+  if (list_remove_at(ls, 0) != -1)
   {
     printf("TEST 5: list_remove_at() should return -1 when params are NULL\n");
     retval = -1;
@@ -187,6 +186,8 @@ static int list_remove_at_tests()
   datacont_delete(dcA);
   datacont_delete(dcB);
   datacont_delete(dcC);
+
+  list_delete(ls);
 
   return retval;
 }
@@ -201,49 +202,50 @@ static int list_remove_all_tests()
   datacont* dcB = datacont_new("B", CHAR, 1);
   datacont* dcC = datacont_new("C", CHAR, 1);
 
-  list* ls = list_new(datacont_copy(dcA));
-  list_add(ln, datacont_copy(dcB));
-  list_add(ln, datacont_copy(dcA));
-  list_add(ln, datacont_copy(dcC));
-  list_add(ln, datacont_copy(dcA));
+  list* ls = list_new();
+  list_add(ls, datacont_copy(dcA));
+  list_add(ls, datacont_copy(dcB));
+  list_add(ls, datacont_copy(dcA));
+  list_add(ls, datacont_copy(dcC));
+  list_add(ls, datacont_copy(dcA));
 
   int num;
 
-  if ((num = list_remove_all(&ln, dcA)) != 3)
+  if ((num = list_remove_all(ls, dcA)) != 3)
   {
     printf("TEST 1: list_remove_all() should return the number of nodes removed. Returned: %d. Expected: 3\n", num);
     retval = -1;
   }
 
   /* TEST 2 */
-  if ((num = list_remove_all(&ln, dcB)) != 1)
+  if ((num = list_remove_all(ls, dcB)) != 1)
   {
     printf("TEST 2: list_remove_all() should return the number of nodes removed. Returned: %d. Expected: 1\n", num);
     retval = -1;
   }
 
   /* TEST 3 */
-  if ((num = list_remove_all(&ln, dcB)) != 0)
+  if ((num = list_remove_all(ls, dcB)) != 0)
   {
     printf("TEST 3: list_remove_all() should return the number of nodes removed. Returned: %d. Expected: 0\n", num);
     retval = -1;
   }
 
   /* TEST 4 */
-  if ((num = list_remove_all(&ln, dcC)) != 1)
+  if ((num = list_remove_all(ls, dcC)) != 1)
   {
     printf("TEST 4: list_remove_all() should return the number of nodes removed. Returned: %d. Expected: 1\n", num);
     retval = -1;
   }
 
-  if (ln != NULL)
+  if (ls->head != NULL)
   {
     printf("TEST 4: list should be NULL after final removal\n");
     retval = -1;
   }
 
   /* TEST 5 */
-  if (list_remove_all(&ln, dcC) != -1)
+  if (list_remove_all(ls, dcC) != -1)
   {
     printf("TEST 5: list_remove_all() should return -1 when either param is NULL\n");
     retval = -1;
@@ -267,17 +269,18 @@ static int list_replace_by_tests()
   datacont* dcB = datacont_new("B", CHAR, 1);
   datacont* dcC = datacont_new("C", CHAR, 1);
 
-  list* ls = list_new(datacont_copy(dcA));
-  list_add(ln, datacont_copy(dcB));
-  list_add(ln, datacont_copy(dcC));
+  list* ls = list_new();
+  list_add(ls, datacont_copy(dcA));
+  list_add(ls, datacont_copy(dcB));
+  list_add(ls, datacont_copy(dcC));
 
-  if (list_replace_by(ln, dcB, datacont_new("Z", CHAR, 1)) != 0)
+  if (list_replace_by(ls, dcB, datacont_new("Z", CHAR, 1)) != 0)
   {
     printf("TEST 1: list_replace_by() should return 0 on successful replacement\n");
     retval = -1;
   }
 
-  get_dc = list_get(ln, 1);
+  get_dc = list_get(ls, 1);
   if (get_dc->c != 'Z')
   {
     printf("TEST 1: Unexpected datacont value at 2nd list following list_replace_by(): %c. Expected Z\n", get_dc->c);
@@ -286,7 +289,7 @@ static int list_replace_by_tests()
   datacont_delete(get_dc);
 
   /* TEST 2 */
-  if (list_replace_by(ln, dcB, dcB) != -1)
+  if (list_replace_by(ls, dcB, dcB) != -1)
   {
     printf("TEST 2: list_replace_by() should return -1 when trying to remove not-present datacont\n");
     retval = -1;
@@ -299,7 +302,7 @@ static int list_replace_by_tests()
     retval = -1;
   }
 
-  list_delete_all(ln);
+  list_delete(ls);
   datacont_delete(dcA);
   datacont_delete(dcB);
   datacont_delete(dcC);
@@ -319,16 +322,16 @@ static int list_replace_at_tests()
   datacont* dcC = datacont_new("C", CHAR, 1);
 
   list* ls = list_new(datacont_copy(dcA));
-  list_add(ln, datacont_copy(dcB));
-  list_add(ln, datacont_copy(dcC));
+  list_add(ls, datacont_copy(dcB));
+  list_add(ls, datacont_copy(dcC));
 
-  if (list_replace_at(ln, datacont_new("Z", CHAR, 1), 1) != 0)
+  if (list_replace_at(ls, datacont_new("Z", CHAR, 1), 1) != 0)
   {
     printf("TEST 1: list_replace_at() should return 0 on successful replacement\n");
     retval = -1;
   }
   
-  get_dc = list_get(ln, 1);
+  get_dc = list_get(ls, 1);
   if (get_dc->c != 'Z')
   {
     printf("TEST 1: Unexpected datacont value at 2nd list following list_replace_at(): %c. Expected Z\n", get_dc->c);
@@ -337,7 +340,7 @@ static int list_replace_at_tests()
   datacont_delete(get_dc);
 
   /* TEST 2 */
-  if (list_replace_at(ln, dcB, 10) != -1)
+  if (list_replace_at(ls, dcB, 10) != -1)
   {
     printf("TEST 2: list_replace_at() should return -1 when index is OOB\n");
     retval = -1;
@@ -350,7 +353,7 @@ static int list_replace_at_tests()
     retval = -1;
   }
 
-  list_delete_all(ln);
+  list_delete(ls);
   datacont_delete(dcA);
   datacont_delete(dcB);
   datacont_delete(dcC);
@@ -369,19 +372,20 @@ static int list_replace_all_tests()
   datacont* dcB = datacont_new("B", CHAR, 1);
   datacont* dcC = datacont_new("C", CHAR, 1);
 
-  list* ls = list_new(datacont_copy(dcA));
-  list_add(ln, datacont_copy(dcB));
-  list_add(ln, datacont_copy(dcA));
-  list_add(ln, datacont_copy(dcC));
-  list_add(ln, datacont_copy(dcA));
+  list* ls = list_new();
+  list_add(ls, datacont_copy(dcA));
+  list_add(ls, datacont_copy(dcB));
+  list_add(ls, datacont_copy(dcA));
+  list_add(ls, datacont_copy(dcC));
+  list_add(ls, datacont_copy(dcA));
 
-  if (list_replace_all(ln, dcA, datacont_new("Z", CHAR, 1)) != 3)
+  if (list_replace_all(ls, dcA, datacont_new("Z", CHAR, 1)) != 3)
   {
     printf("TEST 1: list_replace_all() should return the number of replacements that occurred\n");
     retval = -1;
   }
 
-  get_dc = list_get(ln, -1);
+  get_dc = list_get(ls, -1);
   if (get_dc->c != 'Z')
   {
     printf("TEST 1: Unexpected datacont value in last node after list_replace_all(): %c. Expected: Z\n", get_dc->c);
@@ -389,13 +393,13 @@ static int list_replace_all_tests()
   }
 
   /* TEST 2 */
-  if (list_replace_all(ln, dcA, get_dc) != 0)
+  if (list_replace_all(ls, dcA, get_dc) != 0)
   {
     printf("TEST 2: list_replace_all() should return 0 when replacing not-present datacont value\n");
     retval = -1;
   }
 
-  list_delete_all(ln);
+  list_delete(ls);
   datacont_delete(get_dc);
   datacont_delete(dcA);
   datacont_delete(dcB);
@@ -414,16 +418,17 @@ static int list_insert_tests()
   datacont* dcB = datacont_new("B", CHAR, 1);
   datacont* dcC = datacont_new("C", CHAR, 1);
   datacont* get_dc;
-  list* ls = list_new(datacont_copy(dcA));
-  list_add(ln, datacont_copy(dcC));
+  list* ls = list_new();
+  list_add(ls, datacont_copy(dcA));
+  list_add(ls, datacont_copy(dcC));
 
-  if (list_insert(&ln, datacont_copy(dcB), 0) != 0)
+  if (list_insert(ls, datacont_copy(dcB), 0) != 0)
   {
     printf("TEST 1: list_insert() should return 0 on successful insertion\n");
     retval = -1;
   }
 
-  get_dc = list_get(ln, 0); 
+  get_dc = list_get(ls, 0); 
   if (get_dc->c != 'B')
   {
     printf("TEST 1: Unexpected datacont value at first list after list_insert(): %c. Expected B\n", get_dc->c);
@@ -432,13 +437,13 @@ static int list_insert_tests()
   datacont_delete(get_dc);
 
   /* TEST 2 */
-  if (list_insert(&ln, datacont_copy(dcB), -1) != 0)
+  if (list_insert(ls, datacont_copy(dcB), -1) != 0)
   {
     printf("TEST 2: list_insert() should return 0 on successful insertion\n");
     retval = -1;
   }
  
-  get_dc = list_get(ln, -2);
+  get_dc = list_get(ls, -2);
   if (get_dc->c != 'B')
   {
     printf("TEST 2: Unexpected datacont value at 2nd to last list after list_insert(): %d. Expected: B\n", get_dc->c);
@@ -447,13 +452,13 @@ static int list_insert_tests()
   datacont_delete(get_dc); 
 
   /* TEST 3 */
-  if (list_insert(&ln, NULL, 2) != -1)
+  if (list_insert(ls, NULL, 2) != -1)
   {
     printf("TEST 3: list_insert() should return -1 when any params are NULL\n");
     retval = -1;
   }
 
-  list_delete_all(ln);
+  list_delete(ls);
   datacont_delete(dcA);
   datacont_delete(dcB);
   datacont_delete(dcC);
@@ -471,34 +476,35 @@ static int list_index_tests()
   datacont* dcB = datacont_new("B", CHAR, 1);
   datacont* dcC = datacont_new("C", CHAR, 1);
 
-  list* ls = list_new(datacont_copy(dcA));
-  list_add(ln, dcB);
-  list_add(ln, dcC);
-  list_add(ln, dcA);
+  list* ls = list_new();
+  list_add(ls, dcA);
+  list_add(ls, dcB);
+  list_add(ls, dcC);
+  list_add(ls, datacont_copy(dcA));
 
   int index;
 
-  if ((index = list_index(ln, dcA)) != 0)
+  if ((index = list_index(ls, dcA)) != 0)
   {
     printf("TEST 1: Unexpected index for datacont value 'A': %d. Expected: 0\n", index);
     retval = -1;
   }
 
   /* TEST 2 */
-  if ((index = list_index(ln, dcB)) != 1)
+  if ((index = list_index(ls, dcB)) != 1)
   {
     printf("TEST 2: Unexpected index for datacont value 'B': %d. Expected: 1\n", index);
     retval = -1;
   }
 
   /* TEST 3 */
-  if ((index = list_index(ln, dcC)) != 2)
+  if ((index = list_index(ls, dcC)) != 2)
   {
     printf("TEST 3: Unexpected index for datacont value 'C': %d. Expected: 2\n", index);
     retval = -1;
   }
 
-  list_delete_all(ln);
+  list_delete(ls);
   
   return retval;
 }
@@ -509,11 +515,12 @@ static int list_get_tests()
   int retval = 0;
 
   /* TEST 1 */
-  list* ls = list_new(datacont_new("A", CHAR, 1));
-  list_add(ln, datacont_new("B", CHAR, 1));
-  list_add(ln, datacont_new("C", CHAR, 1));
+  list* ls = list_new();
+  list_add(ls, datacont_new("A", CHAR, 1));
+  list_add(ls, datacont_new("B", CHAR, 1));
+  list_add(ls, datacont_new("C", CHAR, 1));
 
-  datacont* dcC = list_get(ln, 2);
+  datacont* dcC = list_get(ls, 2);
   if (dcC->c != 'C')
   {
     printf("TEST 1: Unexpected return value: %c. Expected: C\n", dcC->c);
@@ -521,7 +528,7 @@ static int list_get_tests()
   }
 
   /* TEST 2 */
-  datacont* dcA = list_get(ln, 0);
+  datacont* dcA = list_get(ls, 0);
   if (dcA->c != 'A')
   {
     printf("TEST 2: Unexpected return value: %c. Expected: A\n", dcA->c);
@@ -529,14 +536,14 @@ static int list_get_tests()
   }
 
   /* TEST 3 */
-  datacont* dcB = list_get(ln, 1);
+  datacont* dcB = list_get(ls, 1);
   if (dcB->c != 'B')
   {
     printf("TEST 3: Unexpected return value: %c. Expected: B\n", dcB->c);
     retval = -1;
   }
 
-  list_delete_all(ln);
+  list_delete(ls);
   datacont_delete(dcA);
   datacont_delete(dcB);
   datacont_delete(dcC);
@@ -552,27 +559,28 @@ static int list_count_tests()
   /* TEST 1 */
   datacont* dcA = datacont_new("A", CHAR, 1);
   datacont* dcB = datacont_new("B", CHAR, 1);
-  list* ls = list_new(datacont_copy(dcA));
-  list_add(ln, datacont_copy(dcA));
-  list_add(ln, datacont_copy(dcB));
-  list_add(ln, datacont_copy(dcA));
+  list* ls = list_new();
+  list_add(ls, datacont_copy(dcA));
+  list_add(ls, datacont_copy(dcA));
+  list_add(ls, datacont_copy(dcB));
+  list_add(ls, datacont_copy(dcA));
 
   int count;
 
-  if ((count = list_count(ln, dcA)) != 3)
+  if ((count = list_count(ls, dcA)) != 3)
   {
     printf("TEST 1: Unexpected list_count() result: %d. Expected: 3\n", count);
     retval = -1;
   }
 
   /* TEST 2 */
-  if ((count = list_count(ln, dcB)) != 1)
+  if ((count = list_count(ls, dcB)) != 1)
   {
     printf("TEST 2: Unexpected list_count() result: %d. Expected: 1\n", count);
     retval = -1;
   }
 
-  list_delete_all(ln);
+  list_delete(ls);
   datacont_delete(dcA);
   datacont_delete(dcB);
 
@@ -586,18 +594,19 @@ static int list_length_tests()
 
   /* TEST 1 */
   datacont* dc = datacont_new("A", CHAR, 1);
-  list* ls = list_new(datacont_copy(dc));
-  list_add(ln, datacont_copy(dc));
-  list_add(ln, datacont_copy(dc));
+  list* ls = list_new();
+  list_add(ls, datacont_copy(dc));
+  list_add(ls, datacont_copy(dc));
+  list_add(ls, datacont_copy(dc));
 
   int len;
-  if ((len = list_length(ln)) != 3)
+  if ((len = list_length(ls)) != 3)
   {
     printf("TEST 1: Unexpected list_length() result: %d. Expected: 3\n", len);
     retval = -1;
   }
 
-  list_delete_all(ln);
+  list_delete(ls);
   datacont_delete(dc);
   
   return retval;

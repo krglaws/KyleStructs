@@ -54,7 +54,7 @@ int list_remove_all(list* ls, const datacont* dc)
 {
   if (ls == NULL || dc == NULL) return -1;
 
-  return listnode_remove_all(ls->head, dc);
+  return listnode_remove_all(&(ls->head), dc);
 }
 
 
@@ -86,7 +86,7 @@ int list_insert(list* ls, const datacont* dc, int index)
 {
   if (ls == NULL || dc == NULL) return -1;
 
-  return listnode_insert(ls->head, dc, index);
+  return listnode_insert(&(ls->head), dc, index);
 }
 
 
@@ -121,6 +121,4 @@ unsigned int list_length(const list* ls)
   return listnode_length(ls->head);
 }
 
-
-#endif
 
