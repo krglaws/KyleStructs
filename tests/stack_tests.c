@@ -18,7 +18,7 @@ static int stack_new_tests()
     retval = -1;
   }
 
-  if (s->head != NULL)
+  if (s->top != NULL)
   {
     printf("TEST 1: stack_new() should return a stack* with a NULL stack*\n");
     retval = -1;
