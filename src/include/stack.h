@@ -8,7 +8,7 @@ typedef struct stack stack;
 
 struct stack
 {
-  listnode* head;
+  listnode* top;
 };
 
 
