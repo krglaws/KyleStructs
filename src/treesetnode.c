@@ -8,134 +8,246 @@
 treesetnode* treesetnode_new(const datacont* dc)
 {
   if (dc == NULL) return NULL;
-  treesetnode* tn = (treesetnode*) malloc(sizeof(treesetnode));
-  tn->dc = (datacont*) dc;
-  tn->left = tn->right = NULL;
-  return tn;
+
+  treesetnode* tsn = calloc(1, sizeof(treesetnode));
+
+  tsn->dc = (datacont*) dc;
+
+  return tsn;
 }
 
 
-void treesetnode_delete(treesetnode* tn)
+void treesetnode_delete(treesetnode* tsn)
 {
-  if (tn == NULL) return;
-  if (tn->right != NULL) treesetnode_delete(tn->right);
-  if (tn->left != NULL) treesetnode_delete(tn->left);
-  datacont_delete((datacont*) tn->dc);
-  free(tn);
+  if (tsn == NULL) return;
+
+  datacont_delete(tsn->dc);
+
+  free(tsn);
 }
 
 
-int treesetnode_add(treesetnode* tn, const datacont* dc)
+void treesetnode_delete_all(treesetnode* tsn)
 {
-  if (tn == NULL || dc == NULL) return -1;
+  if (tsn == NULL) return;
 
-  enum datacontcomp result = datacont_compare(dc, tn->dc);
+  treesetnode_delete(tsn->right);
+
+  treesetnode_delete(tsn->left);
+
+  datacont_delete(tsn->dc);
+
+  free(tsn);
+}
+
+
+int treesetnode_add(treesetnode* tsn, const datacont* dc)
+{
+  if (tsn == NULL || dc == NULL) return -1;
+
+  enum datacontcomp result = datacont_compare(dc, tsn->dc);
+
   if (result == EQUAL) return 1;
   if (result == CANTCOMPARE) return -1;
 
   else if (result == LESSTHAN)
   {
-    if (tn->left) return treesetnode_add(tn->left, dc);
-    else tn->left = treesetnode_new(dc);
+    if (tsn->left) return treesetnode_add(tsn->left, dc);
+    else tsn->left = treesetnode_new(dc);
   }
   else
   {
-    if (tn->right) return treesetnode_add(tn->right, dc);
-    else tn->right = treesetnode_new(dc);
+    if (tsn->right) return treesetnode_add(tsn->right, dc);
+    else tsn->right = treesetnode_new(dc);
   }
   return 0;
 }
 
 
-int treesetnode_remove(treesetnode** tn, const datacont* dc)
+int treesetnode_remove_by(treesetnode** tsn, const datacont* dc)
 {
-  if (tn == NULL || *tn == NULL || dc == NULL) return 1;
+  if (tsn == NULL || *tsn == NULL || dc == NULL) return -1;
   
-  enum datacontcomp result = datacont_compare(dc, (*tn)->dc);
+  enum datacontcomp result = datacont_compare(dc, (*tsn)->dc);
 
   if (result == EQUAL)
   {
-    if ((*tn)->left != NULL && (*tn)->right != NULL)
+    if ((*tsn)->left != NULL && (*tsn)->right != NULL)
     {
-      treesetnode** leftmost = &(*tn)->right;
+      treesetnode** leftmost = &(*tsn)->right;
       while ((*leftmost)->left) leftmost = &(*leftmost)->left;
-      datacont_delete((*tn)->dc);
-      (*tn)->dc = datacont_copy((*leftmost)->dc);
-      return treesetnode_remove(leftmost, (*leftmost)->dc);
+      datacont_delete((*tsn)->dc);
+      (*tsn)->dc = datacont_copy((*leftmost)->dc);
+      return treesetnode_remove_by(leftmost, (*leftmost)->dc);
     }
-    else if ((*tn)->left)
+    else if ((*tsn)->left)
     {
-      datacont_delete((*tn)->dc);
-      (*tn)->dc = datacont_copy((*tn)->left->dc);
-      return treesetnode_remove(&(*tn)->left, (*tn)->left->dc);
+      datacont_delete((*tsn)->dc);
+      (*tsn)->dc = datacont_copy((*tsn)->left->dc);
+      return treesetnode_remove_by(&(*tsn)->left, (*tsn)->left->dc);
     }
-    else if ((*tn)->right)
+    else if ((*tsn)->right)
     {
-      datacont_delete((*tn)->dc);
-      (*tn)->dc = datacont_copy((*tn)->right->dc);
-      return treesetnode_remove(&(*tn)->right, (*tn)->right->dc);
+      datacont_delete((*tsn)->dc);
+      (*tsn)->dc = datacont_copy((*tsn)->right->dc);
+      return treesetnode_remove_by(&(*tsn)->right, (*tsn)->right->dc);
     }
     else
     {
-      treesetnode_delete(*tn);
-      *tn = NULL;
+      treesetnode_delete(*tsn);
+      *tsn = NULL;
       return 0;
     }
   }
   else if (result == LESSTHAN) 
-    return treesetnode_remove(&(*tn)->left, dc);
+    return treesetnode_remove_by(&(*tsn)->left, dc);
   else if (result == GREATERTHAN)
-    return treesetnode_remove(&(*tn)->right, dc);
-  return 1;
+    return treesetnode_remove_by(&(*tsn)->right, dc);
+  return -1;
 }
 
 
-int treesetnode_contains(const treesetnode* tn, const datacont* dc)
+static void __treesetnode_remove_at(treesetnode** tsn, int index, int* curr_index)
 {
-  if (tn == NULL || dc == NULL) return 0;
-  enum datacontcomp result = datacont_compare(dc, tn->dc);
-  if (result == EQUAL) return 1;
-  if (result == GREATERTHAN) return treesetnode_contains(tn->right, dc);
-  return treesetnode_contains(tn->left, dc);
+  if (tsn == NULL || *tsn == NULL) return;
+
+  __treesetnode_remove_at(&(*tsn)->left, index, curr_index);
+
+  if (*curr_index++ == index)
+    treesetnode_remove_by(tsn, (*tsn)->dc);
+
+  __treesetnode_remove_at(&(*tsn)->right, index, curr_index);
 }
 
 
-static datacont* _treesetnode_get_nth(const treesetnode* tn, int n, int* index)
+int treesetnode_remove_at(treesetnode** tsn, int index)
 {
-  if (tn == NULL || n < 0) return NULL;
+  if (index < 0 && (index = treesetnode_count(*tsn) + index) < 0)
+    return -1;
+
+  int curr_index = 0;
+
+  __treesetnode_remove_at(tsn, index, &curr_index);
+
+  return 0;
+}
+
+
+int __treesetnode_index(treesetnode* tsn, const datacont* dc)
+{
+  if (tsn == NULL) return NULL;
   
-  datacont* result = _treesetnode_get_nth(tn->left, n, index);
+  datacont* result = __treesetnode_get(tsn->left, index, curr_index);
 
   if (result != NULL) return result;
 
-  if (*index++ == n) return datacont_copy(tn->dc);
+  if (*curr_index++ == index) return datacont_copy(tsn->dc);
 
-  return _treesetnode_get_nth(tn->right, n, index);
+  return __treesetnode_get(tsn->right, index, curr_index);
 }
 
 
-datacont* treesetnode_get_nth(const treesetnode* tn, int n)
+datacont* treesetnode_index(const treesetnode* tsn, const datacont* dc)
 {
-  int index = 0;
-  return _treesetnode_get_nth(tn, n, &index);
+  if (index < 0 && (index = treesetnode_count(tsn) + index) < 0)
+    return NULL;
+
+  int curr_index = 0;
+
+  return __treesetnode_get(tsn, index, &curr_index);
+}
+ 
+
+int treesetnode_contains(const treesetnode* tsn, const datacont* dc)
+{
+  if (tsn == NULL || dc == NULL) return 0;
+
+  enum datacontcomp result = datacont_compare(dc, tsn->dc);
+ 
+  if (result == EQUAL) return 1;
+
+  if (result == GREATERTHAN) return treesetnode_contains(tsn->right, dc);
+ 
+  return treesetnode_contains(tsn->left, dc);
 }
 
 
-static int _treesetnode_height(const treesetnode* tn, unsigned int accum)
+static datacont* __treesetnode_get(const treesetnode* tsn, int index, int* curr_index)
 {
-  if (tn != NULL)
+  if (tsn == NULL) return NULL;
+  
+  datacont* result = __treesetnode_get(tsn->left, index, curr_index);
+
+  if (result != NULL) return result;
+
+  if (*curr_index++ == index) return datacont_copy(tsn->dc);
+
+  return __treesetnode_get(tsn->right, index, curr_index);
+}
+
+
+datacont* treesetnode_get(const treesetnode* tsn, int index)
+{
+  if (index < 0 && (index = treesetnode_count(tsn) + index) < 0)
+    return NULL;
+
+  int curr_index = 0;
+
+  return __treesetnode_get(tsn, index, &curr_index);
+}
+
+
+unsigned int treesetnode_count(const treesetnode* tsn)
+{
+  if (tsn == NULL) return 0;
+
+  return 1 + treesetnode_count(tsn->left) + 
+    treesetnode_count(tsn->right);
+}
+
+
+unsigned int treesetnode_height(const treesetnode* tsn)
+{
+  if (tsn == NULL) return 0;
+
+  unsigned int left_height = treesetnode_height(tsn->left);
+    
+  unsigned int right_height = treesetnode_height(tsn->right);
+    
+  return 1 + (left_height > right_height ? left_height : right_height);
+}
+
+
+void treesetnode_balance(treesetnode** tsn)
+{
+  if (tsn == NULL || *tsn == NULL) return;
+
+  float prev, curr;
+  int count, temp, added, log, rowlen;
+
+  treesetnode* new_tree = treesetnode_new(
+                            treesetnode_get(*tsn, count/2));
+ 
+  count = temp = treesetnode_count(*tsn);
+  added = 0; log = 1; rowlen = 1; prev = 1.0; curr = 0.5;
+
+  while (temp /= 2) log++;
+
+  for (int i = 0; i < log + 1 && added < count; i++)
   {
-    accum++;
-    int left_height = _treesetnode_height(tn->left, accum);
-    int right_height = _treesetnode_height(tn->right, accum);
-    return left_height > right_height ? left_height : right_height;
+    for (int j = 0; j < rowlen && added < count; j++)
+    {
+      treesetnode_add(new_tree,
+        treesetnode_get(*tsn, (int) (count * (curr + (j * prev)))));
+      added++;
+    }
+    prev = curr;
+    curr /= 2;
+    rowlen *= 2;
   }
-  return accum;
-}
 
-
-unsigned int treesetnode_height(const treesetnode* tn)
-{
-  return _treesetnode_height(tn, 0);
+  treesetnode_delete_all(*tsn);
+  
+  *tsn = new_tree;
 }
 
