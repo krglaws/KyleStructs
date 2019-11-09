@@ -107,54 +107,62 @@ int treesetnode_remove_by(treesetnode** tsn, const datacont* dc)
 }
 
 
-static void __treesetnode_remove_at(treesetnode** tsn, int index, int* curr_index)
+static int __treesetnode_remove_at(treesetnode** tsn, int index, int* curr_index)
 {
-  if (tsn == NULL || *tsn == NULL) return;
+  if (tsn == NULL || *tsn == NULL) return -1;
 
-  __treesetnode_remove_at(&(*tsn)->left, index, curr_index);
+  if (index < 0 &&
+        (__treesetnode_remove_at(&(*tsn)->right, index, curr_index) == 0))
+    return 0;
 
-  if (*curr_index++ == index)
-    treesetnode_remove_by(tsn, (*tsn)->dc);
+  else if (__treesetnode_remove_at(&(*tsn)->left, index, curr_index) == 0)
+    return 0;
 
-  __treesetnode_remove_at(&(*tsn)->right, index, curr_index);
+  if (*curr_index == index)
+    return treesetnode_remove_by(tsn, (*tsn)->dc);
+
+  index < 0 ? (*curr_index)-- : (*curr_index)++;
+
+  if (index < 0)
+    return __treesetnode_remove_at(&(*tsn)->left, index, curr_index);
+
+  return __treesetnode_remove_at(&(*tsn)->right, index, curr_index);
 }
 
 
 int treesetnode_remove_at(treesetnode** tsn, int index)
 {
-  if (index < 0 && (index = treesetnode_count(*tsn) + index) < 0)
-    return -1;
+  int curr_index;
+ 
+  if (index < 0) curr_index = -1;
+  else curr_index = 0;
 
-  int curr_index = 0;
-
-  __treesetnode_remove_at(tsn, index, &curr_index);
-
-  return 0;
+  return __treesetnode_remove_at(tsn, index, &curr_index);
 }
 
 
-int __treesetnode_index(treesetnode* tsn, const datacont* dc)
+static int __treesetnode_index(const treesetnode* tsn, const datacont* dc, int* curr_index)
 {
-  if (tsn == NULL) return NULL;
-  
-  datacont* result = __treesetnode_get(tsn->left, index, curr_index);
+  if (tsn == NULL) return -1;
 
-  if (result != NULL) return result;
+  int index;
+  if ((index = __treesetnode_index(tsn->left, dc, curr_index)) > -1)
+    return index;
 
-  if (*curr_index++ == index) return datacont_copy(tsn->dc);
+  if (datacont_compare(dc, tsn->dc) == EQUAL)
+    return *curr_index;
 
-  return __treesetnode_get(tsn->right, index, curr_index);
+  (*curr_index)++;
+
+  return __treesetnode_index(tsn->right, dc, curr_index);
 }
 
 
-datacont* treesetnode_index(const treesetnode* tsn, const datacont* dc)
+int treesetnode_index(const treesetnode* tsn, const datacont* dc)
 {
-  if (index < 0 && (index = treesetnode_count(tsn) + index) < 0)
-    return NULL;
-
   int curr_index = 0;
 
-  return __treesetnode_get(tsn, index, &curr_index);
+  return __treesetnode_index(tsn, dc, &curr_index);
 }
  
 
@@ -172,26 +180,37 @@ int treesetnode_contains(const treesetnode* tsn, const datacont* dc)
 }
 
 
-static datacont* __treesetnode_get(const treesetnode* tsn, int index, int* curr_index)
+static datacont* __treesetnode_get(const treesetnode* tsn, const int index, int* curr_index)
 {
   if (tsn == NULL) return NULL;
-  
-  datacont* result = __treesetnode_get(tsn->left, index, curr_index);
 
-  if (result != NULL) return result;
+  datacont* dc;
 
-  if (*curr_index++ == index) return datacont_copy(tsn->dc);
+  if (index < 0 &&
+        (dc = __treesetnode_get(tsn->right, index, curr_index)) != NULL)
+    return dc;
+
+  else if ((dc = __treesetnode_get(tsn->left, index, curr_index)) != NULL)
+    return dc;
+
+  if (*curr_index == index)
+    return datacont_copy(tsn->dc);
+
+  index < 0 ? (*curr_index)-- : (*curr_index)++;
+
+  if (index < 0)
+    return __treesetnode_get(tsn->left, index, curr_index);
 
   return __treesetnode_get(tsn->right, index, curr_index);
 }
 
 
-datacont* treesetnode_get(const treesetnode* tsn, int index)
+datacont* treesetnode_get(const treesetnode* tsn, const int index)
 {
-  if (index < 0 && (index = treesetnode_count(tsn) + index) < 0)
-    return NULL;
-
-  int curr_index = 0;
+  int curr_index;
+ 
+  if (index < 0) curr_index = -1;
+  else curr_index = 0;
 
   return __treesetnode_get(tsn, index, &curr_index);
 }
@@ -225,12 +244,12 @@ void treesetnode_balance(treesetnode** tsn)
   float prev, curr;
   int count, temp, added, log, rowlen;
 
-  treesetnode* new_tree = treesetnode_new(
-                            treesetnode_get(*tsn, count/2));
- 
   count = temp = treesetnode_count(*tsn);
   added = 0; log = 1; rowlen = 1; prev = 1.0; curr = 0.5;
 
+  treesetnode* new_tree = treesetnode_new(
+                            treesetnode_get(*tsn, count/2));
+ 
   while (temp /= 2) log++;
 
   for (int i = 0; i < log + 1 && added < count; i++)
