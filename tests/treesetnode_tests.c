@@ -100,9 +100,9 @@ static int treesetnode_remove_by_tests()
   datacont* dc_B = datacont_new("B", CHAR, 1);
   datacont* dc_A = datacont_new("A", CHAR, 1);
 
-  if (treesetnode_remove_by(&tsn, dc_Z) != 1)
+  if (treesetnode_remove_by(&tsn, dc_Z) != -1)
   {
-    printf("TEST 1: treesetnode_remove_by() should return 1 when a non-existent datacont value is passed.\n");
+    printf("TEST 1: treesetnode_remove_by() should return -1 when a non-existent datacont value is passed.\n");
     retval = -1;
   }
 
@@ -228,23 +228,25 @@ static int treesetnode_index_tests()
   treesetnode_add(tsn, datacont_copy(dcA));
   treesetnode_add(tsn, datacont_copy(dcC));
 
-  if (treesetnode_index(tsn, dcA) != 0)
+  int index;
+
+  if ((index = treesetnode_index(tsn, dcA)) != 0)
   {
-    printf("TEST 1: treesetnode_index() should return 0 for datacont value 'A'.\n");
+    printf("TEST 1: Unexpected value returned from treesetnode_index(): %d. Expected: 0.\n", index);
     retval = -1;
   }
 
   /* TEST 2 */
-  if (treesetnode_index(tsn, dcB) != 1)
+  if ((index = treesetnode_index(tsn, dcB)) != 1)
   {
-    printf("TEST 2: treesetnode_index() should return 1 for datacont value 'B'.\n");
+    printf("TEST 2: Unexpected value returned from treesetnode_index(): %d. Expected: 1.\n", index);
     retval = -1;
   }
 
   /* TEST 3 */
-  if (treesetnode_index(tsn, dcC) != 2)
+  if ((index = treesetnode_index(tsn, dcC)) != 2)
   {
-    printf("TEST 3: treesetnode_index() should return 2 for datacont value 'C'.\n");
+    printf("TEST 3: Unexpected value returned from treesetnode_index(): %d. Expected: 2.\n", index);
     retval = -1;
   }
 
