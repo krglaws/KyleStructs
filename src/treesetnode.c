@@ -107,7 +107,7 @@ int treesetnode_remove_by(treesetnode** tsn, const datacont* dc)
 }
 
 
-static int __treesetnode_remove_at(treesetnode** tsn, int index, int* curr_index)
+static int __treesetnode_remove_at(treesetnode** tsn, const int index, int* curr_index)
 {
   if (tsn == NULL || *tsn == NULL) return -1;
 
@@ -130,7 +130,7 @@ static int __treesetnode_remove_at(treesetnode** tsn, int index, int* curr_index
 }
 
 
-int treesetnode_remove_at(treesetnode** tsn, int index)
+int treesetnode_remove_at(treesetnode** tsn, const int index)
 {
   int curr_index;
  

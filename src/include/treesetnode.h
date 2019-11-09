@@ -124,7 +124,7 @@ int treesetnode_remove_by(treesetnode** tsn, const datacont* dc);
  * Notes:
  * See notes for treesetnode_remove_by().
  */
-int treesetnode_remove_at(treesetnode** tsn, int index);
+int treesetnode_remove_at(treesetnode** tsn, const int index);
 
 
 /* -------------------------
