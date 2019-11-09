@@ -144,7 +144,7 @@ int treesetnode_remove_at(treesetnode** tsn, int index);
  * a treesetnode*. Instead treesetnode_contains() should be used as it is a much faster
  * operation than treesetnode_index().
  */
-int treesetnode_index(treesetnode* tsn, const datacont* dc);
+int treesetnode_index(const treesetnode* tsn, const datacont* dc);
 
 
 /* --------------------------
@@ -175,7 +175,7 @@ int treesetnode_contains(const treesetnode* tsn, const datacont* dc);
  * datacont* dc - (NULL) if 'index' is OOB, or if 'tsn' is NULL.
  *              - the datacont located at 'index'.
  */
-datacont* treesetnode_get(const treesetnode* tsn, int n);
+datacont* treesetnode_get(const treesetnode* tsn, const int index);
 
 
 /* -------------------------
