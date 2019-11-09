@@ -81,7 +81,7 @@ void treesetnode_delete_all(treesetnode* tsn);
  * If 'dc' is succefully stored into the set, 'dc' should not be deleted by the user code,
  * as it will be directly stored into the tree. Otherwise a seg fault is likely to occur.
  * In the event that a value matching 'dc' is already present in the treeset, 'dc' is not 
- * stored in set. Because of this, it is up to the user code to delete 'dc' if necessary.
+ * stored in the set. Because of this, it is up to the user code to delete 'dc' if necessary.
  */
 int treesetnode_add(treesetnode* tsn, const datacont* dc);
 
