@@ -166,7 +166,7 @@ int treesetnode_index(const treesetnode* tsn, const datacont* dc)
 }
  
 
-int treesetnode_contains(const treesetnode* tsn, const datacont* dc)
+unsigned int treesetnode_contains(const treesetnode* tsn, const datacont* dc)
 {
   if (tsn == NULL || dc == NULL) return 0;
 

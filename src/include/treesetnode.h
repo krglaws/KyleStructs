@@ -156,10 +156,10 @@ int treesetnode_index(const treesetnode* tsn, const datacont* dc);
  * datacont* dc - the datacont value to look for within 'tsn'.
  *
  * Returns:
- * int result - (0) if 'dc' could not be found, or if either param is NULL.
- *            - (1) if 'dc' was found.
+ * unsigned int result - (0) if 'dc' could not be found, or if either param is NULL.
+ *                     - (1) if 'dc' was found.
  */
-int treesetnode_contains(const treesetnode* tsn, const datacont* dc);
+unsigned int treesetnode_contains(const treesetnode* tsn, const datacont* dc);
 
 
 /* ---------------------------
