@@ -122,7 +122,7 @@ int treeset_index(const treeset* ts, const datacont* dc);
  *
  * Returns:
  * unsigned int index - (0) if 'dc' could not be found, or if either param is NULL.
- *           - (1) if 'dc' was found.
+ *                    - (1) if 'dc' was found.
  */
 unsigned int treeset_contains(const treeset* ts, const datacont* dc);
 
