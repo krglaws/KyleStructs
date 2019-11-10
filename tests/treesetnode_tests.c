@@ -417,7 +417,7 @@ static int treesetnode_balance_tests()
   unsigned int height = treesetnode_height(tsn);
   if (height != 26)
   {
-    printf("TEST 1: treesetnode_height() should have returned 4. Can't continue, quitting test...\n");
+    printf("TEST 1: treesetnode_height() should have returned 26. Can't continue, quitting test...\n");
     treesetnode_delete_all(tsn);
     return -1;
   }
