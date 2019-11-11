@@ -10,7 +10,7 @@ datacont* datacont_new(const void* data, const enum dataconttype dct, const size
 {
   if (data == NULL || size == 0) return NULL;
 
-  datacont* dc = (datacont*) malloc(sizeof(datacont));
+  datacont* dc = malloc(sizeof(datacont));
   dc->type = dct;
   dc->size = size;
 
@@ -302,49 +302,51 @@ enum datacontcomp datacont_compare(const datacont* dca, const datacont* dcb)
 }
 
 
-static __uint64_t __hash(__uint64_t seed, const void* data, const size_t size)
+static uint32_t __hash(const void* data, const size_t size)
 {
+  uint32_t seed = 2147483647;
+
   for (int i = 0; i < size; i++)
   {
 	  uint8_t byte = *((uint8_t*) data + i);
-	  seed = ((seed + byte) << 4) + ((seed * byte) >> 4);
+	  seed = ((seed * byte) << 16) + ((seed * byte) >> 16);
   }
   return seed;
 }
 
 
-__uint64_t datacont_hash(__uint64_t seed, const datacont* dc)
+uint32_t datacont_hash(const datacont* dc)
 {
   switch(dc->type)
   {
     case CHAR:
     case UCHAR:
-      return __hash(seed, &dc->c, sizeof(char));
+      return __hash(&dc->c, sizeof(char));
     case SHORT:
     case USHORT:
-      return __hash(seed, &dc->s, sizeof(short));
+      return __hash(&dc->s, sizeof(short));
     case INT:
     case UINT:
-      return __hash(seed, &dc->i, sizeof(int));
+      return __hash(&dc->i, sizeof(int));
     case LL:
     case ULL:
-      return __hash(seed, &dc->ll, sizeof(long long));
+      return __hash(&dc->ll, sizeof(long long));
     case FLOAT:
-      return __hash(seed, &dc->f, sizeof(float));
+      return __hash(&dc->f, sizeof(float));
     case DOUBLE:
-      return __hash(seed, &dc->d, sizeof(double));
+      return __hash(&dc->d, sizeof(double));
     case CHARP:
-      return __hash(seed, dc->cp, sizeof(char) * dc->size);
+      return __hash(dc->cp, sizeof(char) * dc->size);
     case SHORTP:
-      return __hash(seed, dc->sp, sizeof(short) * dc->size);
+      return __hash(dc->sp, sizeof(short) * dc->size);
     case INTP:
-      return __hash(seed, dc->ip, sizeof(int) * dc->size);
+      return __hash(dc->ip, sizeof(int) * dc->size);
     case LLP:
-      return __hash(seed, dc->llp, sizeof(long long) * dc->size);
+      return __hash(dc->llp, sizeof(long long) * dc->size);
     case FLOATP:
-      return __hash(seed, dc->fp, sizeof(float) * dc->size);
+      return __hash(dc->fp, sizeof(float) * dc->size);
     case DOUBLEP:
-      return __hash(seed, dc->dp, sizeof(double) * dc->size);
+      return __hash(dc->dp, sizeof(double) * dc->size);
   }
 }
 
