@@ -3,6 +3,11 @@
 #define _DATACONT_H_
 
 
+#include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
+
+
 enum datacontcomp
 {
   LESSTHAN,

@@ -1,8 +1,8 @@
 
 #include <stdio.h>
-#include <stdint.h>
 
 #include "../src/include/datacont.h"
+
 
 static int datacont_new_tests()
 {

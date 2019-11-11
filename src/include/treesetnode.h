@@ -3,6 +3,9 @@
 #define _TREESETNODE_H_
 
 
+#include "datacont.h"
+
+
 typedef struct treesetnode treesetnode;
 
 

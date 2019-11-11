@@ -2,7 +2,14 @@
 #ifndef _TREEMAP_H_
 #define _TREEMAP_H_
 
+
+#include "datacont.h"
+#include "treemapnode.h"
+#include "listnode.h"
+
+
 typedef struct treemap treemap;
+
 
 struct treemap
 {

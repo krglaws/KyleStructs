@@ -1,10 +1,6 @@
 
-
 #include <stdio.h>
 
-#include "../src/include/datacont.h"
-#include "../src/include/listnode.h"
-#include "../src/include/treemapnode.h"
 #include "../src/include/treemap.h"
 
 

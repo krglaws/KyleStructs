@@ -3,6 +3,11 @@
 #define _HASHSET_H_
 
 
+#include "datacont.h"
+#include "treeset.h"
+#include "list.h"
+
+
 /* -----------------------
  * notes: 
  *

@@ -2,7 +2,12 @@
 #ifndef _LISTNODE_H_
 #define _LISTNODE_H_
 
+
+#include "datacont.h"
+
+
 typedef struct listnode listnode;
+
 
 struct listnode
 {

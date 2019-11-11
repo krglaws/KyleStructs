@@ -1,10 +1,6 @@
 
-
 #include <stdio.h>
 
-#include "../src/include/datacont.h"
-#include "../src/include/treesetnode.h"
-#include "../src/include/treeset.h"
 #include "../src/include/hashset.h"
 
 

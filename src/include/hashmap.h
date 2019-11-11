@@ -2,7 +2,14 @@
 #ifndef _HASHMAP_H_
 #define _HASHMAP_H_
 
+
+#include "datacont.h"
+#include "treemap.h"
+#include "listnode.h"
+
+
 typedef struct hashmap hashmap;
+
 
 struct hashmap
 {

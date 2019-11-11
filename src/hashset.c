@@ -1,12 +1,4 @@
 
-#include <stdlib.h>
-#include <stdint.h>
-
-#include "include/datacont.h"
-#include "include/treesetnode.h"
-#include "include/treeset.h"
-#include "include/listnode.h"
-#include "include/list.h"
 #include "include/hashset.h"
 
 

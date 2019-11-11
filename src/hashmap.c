@@ -1,11 +1,4 @@
 
-#include <stdlib.h>
-#include <stdint.h>
-
-#include "include/datacont.h"
-#include "include/listnode.h"
-#include "include/treemapnode.h"
-#include "include/treemap.h"
 #include "include/hashmap.h"
 
 

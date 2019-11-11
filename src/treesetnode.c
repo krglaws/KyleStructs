@@ -1,8 +1,4 @@
 
-#include <stdlib.h>
-#include <stdint.h>
-
-#include "include/datacont.h"
 #include "include/treesetnode.h"
 
 

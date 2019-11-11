@@ -3,6 +3,10 @@
 #define _QUEUE_H_
 
 
+#include "datacont.h"
+#include "listnode.h"
+
+
 typedef struct queue queue;
 
 
