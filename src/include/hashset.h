@@ -14,16 +14,14 @@
  * Since hashsets are not iterable the way a treeset is, hashset_to_list() provides a means for iterating
  * over the contents of a hashset.
  */
-
-
 typedef struct hashset hashset;
 
 
 struct hashset
 {
-  const enum dataconttype type;
+  enum dataconttype type;
 
-  const unsigned int num_buckets;
+  unsigned int num_buckets;
 
   treeset** buckets;
 };
