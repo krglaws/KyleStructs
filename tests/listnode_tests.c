@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include <stdint.h>
 
 #include "../src/include/datacont.h"
 #include "../src/include/listnode.h"
