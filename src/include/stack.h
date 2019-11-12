@@ -3,7 +3,6 @@
 #define _STACK_H_
 
 
-#include "datacont.h"
 #include "listnode.h"
 
 
