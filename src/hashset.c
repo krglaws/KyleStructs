@@ -8,6 +8,8 @@ hashset* hashset_new(const enum dataconttype type, const unsigned int num_bucket
 
   hashset* hs = calloc(1, sizeof(hashset));
 
+  hs->type = type;
+
   hs->buckets = calloc(num_buckets, sizeof(treeset*));
 
   hs->num_buckets = num_buckets;
@@ -23,6 +25,7 @@ void hashset_delete(hashset* hs)
   for (int i = 0; i < hs->num_buckets; i++)
     treeset_delete(hs->buckets[i]);
 
+  free(hs->buckets);
   free(hs);
 }
 
@@ -34,14 +37,10 @@ int hashset_add(hashset* hs, const datacont* dc)
 
   uint32_t hash = datacont_hash(dc);
 
-  if (hs->buckets[hash % hs->num_buckets])
-    return treeset_add(hs->buckets[hash % hs->num_buckets], dc);
+  if (hs->buckets[hash % hs->num_buckets] == NULL)
+    hs->buckets[hash % hs->num_buckets] = treeset_new();
 
-  treeset* ts = treeset_new();
-
-  hs->buckets[hash % hs->num_buckets] = ts;
-
-  return treeset_add(ts, dc);
+  return treeset_add(hs->buckets[hash % hs->num_buckets], dc);
 }
 
 
@@ -50,7 +49,7 @@ int hashset_remove(hashset* hs, const datacont* dc)
   if (hs == NULL || dc == NULL
       || dc->type != hs->type) return -1;
 
-  __uint64_t hash = datacont_hash(dc);
+  uint32_t hash = datacont_hash(dc);
 
   return treeset_remove_by(hs->buckets[hash % hs->num_buckets], dc);
 }
