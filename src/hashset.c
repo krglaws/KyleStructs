@@ -29,9 +29,10 @@ void hashset_delete(hashset* hs)
 
 int hashset_add(hashset* hs, const datacont* dc)
 {
-  if (hs == NULL || dc == NULL) return -1;
+  if (hs == NULL || dc == NULL 
+      || dc->type != hs->type) return -1;
 
-  __uint64_t hash = datacont_hash(dc);
+  uint32_t hash = datacont_hash(dc);
 
   if (hs->buckets[hash % hs->num_buckets])
     return treeset_add(hs->buckets[hash % hs->num_buckets], dc);
@@ -46,7 +47,8 @@ int hashset_add(hashset* hs, const datacont* dc)
 
 int hashset_remove(hashset* hs, const datacont* dc)
 {
-  if (hs == NULL || dc == NULL) return -1;
+  if (hs == NULL || dc == NULL
+      || dc->type != hs->type) return -1;
 
   __uint64_t hash = datacont_hash(dc);
 
@@ -56,9 +58,10 @@ int hashset_remove(hashset* hs, const datacont* dc)
 
 unsigned int hashset_contains(const hashset* hs, const datacont* dc)
 {
-  if (hs == NULL || dc == NULL) return 0;
+  if (hs == NULL || dc == NULL
+      || dc->type != hs->type) return 0;
 
-  __uint64_t hash = datacont_hash(dc);
+  uint32_t hash = datacont_hash(dc);
 
   if (hs->buckets[hash % hs->num_buckets] == NULL) return 0;
 
