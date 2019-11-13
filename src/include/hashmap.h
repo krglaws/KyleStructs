@@ -4,7 +4,7 @@
 
 
 #include "treemap.h"
-#include "listnode.h"
+#include "list.h"
 
 
 typedef struct hashmap hashmap;
@@ -12,8 +12,10 @@ typedef struct hashmap hashmap;
 
 struct hashmap
 {
+  enum dataconttype type;
+
   unsigned int num_buckets;
-  unsigned long long seed;
+ 
   treemap** buckets;
 };
 
@@ -23,15 +25,13 @@ struct hashmap
  * Returns a pointer to a new empty hashmap.
  *
  * inputs:
- * const unsigned int num_buckets - the number of buckets 
- * this hashmap should contain
- * const unsigned long long seed - the seed to be used when
- * hashing each new item
+ * unsigned int num_buckets - the number of buckets this hashmap should contain.
+ * enum dataconttype type - the datacont type this hashmap will store.
  *
  * returns:
- * hashmap*
+ * hashmap* hm - a new empty hashmap.
  */
-hashmap* hashmap_new(const unsigned int num_buckets, const unsigned long long seed);
+hashmap* hashmap_new(const enum dataconttype type, const unsigned int num_buckets);
 
 
 /* ----------------------------------
@@ -39,7 +39,7 @@ hashmap* hashmap_new(const unsigned int num_buckets, const unsigned long long se
  * Deletes a hashmap and all structs that it contains.
  *
  * inputs:
- * hashmap* hm - the hashmap to be deleted
+ * hashmap* hm - the hashmap to be deleted.
  *
  * returns:
  * void
@@ -57,9 +57,17 @@ void hashmap_delete(hashmap* hm);
  * datacont* value - the value that the key maps to
  *
  * returns:
- * -1 - failed to add pair
- *  0 - pair added successfully
- *  1 - pair added successfully, old key replaced
+ * int result - (-1) if any param is NULL, or if 'key's type does not match 'hm's type.
+ *            - (0) pair was added successfully.
+ *            - (1) pair added successfully, old key replaced.
+ *
+ * Notes:
+ * If this procedure returns -1, the key-value pair was not stored in 'hm', and
+ * so it is the responsibility of the client code to delete 'key' and 'value' when
+ * they are no longer needed. If 0 is returned, the client code should not delete or modify
+ * 'key' or 'value', as this could cause behavioral issues with 'hm'. If 1 is returned,
+ * 'key' was already present, and only 'value' has been placed into 'hm', while 'key'
+ * will have to be deleted by the client code.
  */
 int hashmap_add(hashmap* hm, const datacont* key, const datacont* value);
 
@@ -73,45 +81,43 @@ int hashmap_add(hashmap* hm, const datacont* key, const datacont* value);
  * datacont* key - the key to be removed
  *
  * returns:
- * 0 - pair removed successfully
- * 1 - pair not removed (e.g. could not be found)
+ * int result - (0) pair removed successfully
+ *            - (1) pair not removed (e.g. could not be found)
  */
 int hashmap_remove(hashmap* hm, const datacont* key);
 
 
 /* ---------------------------
  * hashmap_get():
- * Get the value from a hashmap by key. The returned
- * value is a copy of the datacont contained
- * within the hashmap, and can be free()'d or
- * otherwise modified.
- *
+ * Gets a value from a hashmap by key.
+ * 
  * inputs:
  * hashmap* hm - the hashmap to be operated on
  * datacont* key - the key to use to retrieve a value
  *
  * returns:
- * datacont* value - the value mapped to by the key
- * NULL - returned when the key could not be found
+ * datacont* value - (NULL) when the key could not be found.
+ *                 - the value mapped to by the key
  */
 datacont* hashmap_get(const hashmap* hm, const datacont* key);
 
 
 /* --------------------------
- * hashmap_getkeys():
- * Get a linked list of all keys contained within
- * a hashmap. These are copies of the originals
- * in the hashmap, and can be free()'d or
- * otherwise modified.
+ * hashmap_keys():
+ * Get a list of all keys contained within a hashmap. 
  *
  * inputs:
  * hashmap* hm - the hashmap to be operated on
  *
  * returns:
- * listnode* - a pointer to a list of datacont*'s
- * NULL - returned if map has no keys
+ * list* - (NULL) if 'hm' is NULL, or if 'hm' is empty.
+ *       - a list of the keys contained within 'hm'.
+ *
+ * Notes:
+ * The dataconts in the returned list are copies of the originals in the hashmap, 
+ * and can be deleted or otherwise modified.
  */
-listnode* hashmap_getkeys(const hashmap* hm);
+list* hashmap_keys(const hashmap* hm);
 
 
 /* --------------------------
@@ -128,7 +134,7 @@ listnode* hashmap_getkeys(const hashmap* hm);
  * listnode* - a pointer to a list of datacont*'s
  * NULL - returned if map has no keys
  */
-listnode* hashmap_getvalues(const hashmap* hm);
+listnode* hashmap_values(const hashmap* hm);
 
 
 /* ---------------------------------
@@ -143,5 +149,6 @@ listnode* hashmap_getvalues(const hashmap* hm);
  * unsigned int - the number of pairs found in the hashmap >=0.
  */
 unsigned int hashmap_count(const hashmap* hm);
+
 
 #endif
