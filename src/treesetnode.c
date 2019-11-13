@@ -28,13 +28,11 @@ void treesetnode_delete_all(treesetnode* tsn)
 {
   if (tsn == NULL) return;
 
-  treesetnode_delete(tsn->right);
+  treesetnode_delete_all(tsn->left);
 
-  treesetnode_delete(tsn->left);
+  treesetnode_delete_all(tsn->right);
 
-  datacont_delete(tsn->dc);
-
-  free(tsn);
+  treesetnode_delete(tsn);
 }
 
 
@@ -204,10 +202,7 @@ static datacont* __treesetnode_get(const treesetnode* tsn, const int index, int*
 
 datacont* treesetnode_get(const treesetnode* tsn, const int index)
 {
-  int curr_index;
- 
-  if (index < 0) curr_index = -1;
-  else curr_index = 0;
+  int curr_index = index < 0 ? -1 : 0;
 
   return __treesetnode_get(tsn, index, &curr_index);
 }
