@@ -7,7 +7,9 @@ treemapnode* treemapnode_new(const datacont* key, const datacont* value)
   if (key == NULL || value == NULL) return NULL;
 
   treemapnode* tmn = calloc(1, sizeof(treemapnode));
+
   tmn->key = (datacont*) key;
+
   tmn->value = (datacont*) value;
 
   return tmn;
@@ -17,20 +19,33 @@ treemapnode* treemapnode_new(const datacont* key, const datacont* value)
 void treemapnode_delete(treemapnode* tmn)
 {
   if (tmn == NULL) return;
-  treemapnode_delete(tmn->left);
-  treemapnode_delete(tmn->right);
+
   datacont_delete(tmn->key);
+ 
   datacont_delete(tmn->value);
+  
   free(tmn);
+}
+
+
+void treemapnode_delete_all(treemapnode* tmn)
+{
+  if (tmn == NULL) return;
+
+  treemapnode_delete_all(tmn->left);
+
+  treemapnode_delete_all(tmn->right);
+
+  treemapnode_delete(tmn);
 }
 
 
 int treemapnode_add(treemapnode* tmn, const datacont* key, const datacont* value)
 {
   if (tmn == NULL || key == NULL || value == NULL) return -1;
-  
+ 
   enum datacontcomp result = datacont_compare(key, tmn->key);
-  
+ 
   if (result == CANTCOMPARE) return -1;
 
   if (result == EQUAL)
@@ -110,56 +125,92 @@ datacont* treemapnode_get(const treemapnode* tmn, const datacont* key)
 
   if (result == EQUAL)
     return datacont_copy(tmn->value);
+
   else if (result == LESSTHAN)
     return treemapnode_get(tmn->left, key);
+
   else if (result == GREATERTHAN)
     return treemapnode_get(tmn->right, key);
+
   return NULL;
 }
 
 
-listnode* treemapnode_getkeys(const treemapnode* tmn)
+static datacont* __treemapnode_get_key(const treemapnode* tmn, int index, int* curr_index)
 {
   if (tmn == NULL) return NULL;
-  
-  listnode* ln = treemapnode_getkeys(tmn->left);
-  
-  if (ln == NULL)
+
+  datacont* dc;
+
+  if (index < 0 &&
+        (dc = __treemapnode_get_key(tmn->right, index, curr_index)) != NULL)
+    return dc;
+
+  else if ((dc = __treemapnode_get_key(tmn->left, index, curr_index)) != NULL)
+    return dc;
+
+  if (*curr_index == index)
+    return datacont_copy(tmn->key);
+
+  index < 0 ? (*curr_index)-- : (*curr_index)++;
+
+  if (index < 0)
+    return __treemapnode_get_key(tmn->left, index, curr_index);
+
+  return __treemapnode_get_key(tmn->right, index, curr_index);
+}
+
+
+datacont* treemapnode_get_key(const treemapnode* tmn, int index)
+{
+  int curr_index = index < 0 ? -1 : 0;
+
+  return __treemapnode_get_key(tmn, index, &curr_index);
+}
+
+
+listnode* treemapnode_keys(const treemapnode* tmn)
+{
+  if (tmn == NULL) return NULL;
+ 
+  listnode* lsn = treemapnode_keys(tmn->left);
+ 
+  if (lsn == NULL)
   {
-    ln = listnode_new(datacont_copy(tmn->key));
-    ln->next = treemapnode_getkeys(tmn->right);
-    return ln;
+    lsn = listnode_new(datacont_copy(tmn->key));
+    lsn->next = treemapnode_keys(tmn->right);
+    return lsn;
   }
   else
   {
-    listnode* end = ln;
+    listnode* end = lsn;
     while (end->next) end = end->next;
     end->next = listnode_new(datacont_copy(tmn->key));
-    end->next->next = treemapnode_getkeys(tmn->right);
-    return ln;
+    end->next->next = treemapnode_keys(tmn->right);
+    return lsn;
   }
 }
 
 
-listnode* treemapnode_getvalues(const treemapnode* tmn)
+listnode* treemapnode_values(const treemapnode* tmn)
 {
   if (tmn == NULL) return NULL;
 
-  listnode* ln = treemapnode_getvalues(tmn->left);
+  listnode* lsn = treemapnode_values(tmn->left);
 
-  if (ln == NULL)
+  if (lsn == NULL)
   {
-    ln = listnode_new(datacont_copy(tmn->value));
-    ln->next = treemapnode_getvalues(tmn->right);
-    return ln;
+    lsn = listnode_new(datacont_copy(tmn->value));
+    lsn->next = treemapnode_values(tmn->right);
+    return lsn;
   }
   else
   {
-    listnode* end = ln;
+    listnode* end = lsn;
     while (end->next) end = end->next;
     end->next = listnode_new(datacont_copy(tmn->value));
-    end->next->next = treemapnode_getvalues(tmn->right);
-    return ln;
+    end->next->next = treemapnode_values(tmn->right);
+    return lsn;
   }
 }
 
@@ -168,16 +219,55 @@ unsigned int treemapnode_count(const treemapnode* tmn)
 {
   if (tmn == NULL) return 0;
 
-  return 1 + treemapnode_count(tmn->left) + treemapnode_count(tmn->right);
+  return 1 + treemapnode_count(tmn->left) + 
+    treemapnode_count(tmn->right);
 }
 
 
 unsigned int treemapnode_height(const treemapnode* tmn)
 {
   if (tmn == NULL) return 0;
-  int left_h = treemapnode_height(tmn->left);
-  int right_h = treemapnode_height(tmn->right);
-  return left_h > right_h ? left_h + 1 : right_h + 1;
+
+  unsigned int left_height = treemapnode_height(tmn->left);
+
+  unsigned int right_height = treemapnode_height(tmn->right);
+
+  return 1 + (left_height > right_height ? left_height : right_height);
 }
 
+
+void treemapnode_balance(treemapnode** tmn)
+{
+  if (tmn == NULL || *tmn == NULL) return;
+
+  float prev, curr;
+  int count, temp, added, log, rowlen;
+
+  count = temp = treemapnode_count(*tmn);
+  added = 0; log = 1; rowlen = 1; prev = 1.0; curr = 0.5;
+
+  datacont* key = treemapnode_get_key(*tmn, count/2);
+  datacont* value = treemapnode_get(*tmn, key);
+  treemapnode* new_tree = treemapnode_new(key, value);
+ 
+  while (temp /= 2) log++;
+
+  for (int i = 0; i < log + 1 && added < count; i++)
+  {
+    for (int j = 0; j < rowlen && added < count; j++)
+    {
+      key = treemapnode_get_key(*tmn, (int) (count * (curr + (j * prev))));
+      value = treemapnode_get(*tmn, key);
+      treemapnode_add(new_tree, key, value);
+      added++;
+    }
+    prev = curr;
+    curr /= 2;
+    rowlen *= 2;
+  }
+
+  treemapnode_delete_all(*tmn);
+
+  *tmn = new_tree;
+}
 
