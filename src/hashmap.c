@@ -2,15 +2,18 @@
 #include "include/hashmap.h"
 
 
-hashmap* hashmap_new(const unsigned int num_buckets, const unsigned long long seed)
+hashmap* hashmap_new(const enum dataconttype type, const unsigned int num_buckets)
 {
+  if (num_buckets == 0) return NULL;
+
   hashmap* hm = calloc(1, sizeof(hashmap));
-  hm->seed = seed;
+
+  hm->type = type;
+
+  hm->buckets = calloc(num_buckets, sizeof(treemap*));
+ 
   hm->num_buckets = num_buckets;
   
-  if (num_buckets > 0)
-    hm->buckets = calloc(num_buckets, sizeof(treemap*));
-
   return hm;
 }
 
@@ -18,8 +21,10 @@ hashmap* hashmap_new(const unsigned int num_buckets, const unsigned long long se
 void hashmap_delete(hashmap* hm)
 {
   if (hm == NULL) return;
+
   for (int i = 0; i < hm->num_buckets; i++)
     treemap_delete(hm->buckets[i]);
+
   free(hm->buckets);
   free(hm);
 }
@@ -27,46 +32,46 @@ void hashmap_delete(hashmap* hm)
 
 int hashmap_add(hashmap* hm, const datacont* key, const datacont* value)
 {
-  if (hm == NULL || key == NULL || value == NULL)
+  if (hm == NULL || key == NULL || value == NULL
+      || key->type != hm->type)
     return -1;
 
-  unsigned long long hashval = datacont_hash(hm->seed, key);
+  uint32_t hash = datacont_hash(key);
 
-  if (hm->buckets[hashval % hm->num_buckets] == NULL)
-    hm->buckets[hashval % hm->num_buckets] = treemap_new();
+  if (hm->buckets[hash % hm->num_buckets] == NULL)
+    hm->buckets[hash % hm->num_buckets] = treemap_new();
 
-  return treemap_add(hm->buckets[hashval % hm->num_buckets], key, value);
+  return treemap_add(hm->buckets[hash % hm->num_buckets], key, value);
 }
 
 
 int hashmap_remove(hashmap* hm, const datacont* key)
 {
-  if (hm == NULL || hm->buckets == NULL || key == NULL) 
-    return 1;
+  if (hm == NULL || hm->buckets == NULL || key == NULL
+      || key->type != hm->type) 
+    return -1;
 
-  unsigned long long hashval = datacont_hash(hm->seed, key);
+  uint32_t hash = datacont_hash(key);
 
-  if (hm->buckets[hashval % hm->num_buckets] == NULL)
-    return 1;
-
-  return treemap_remove(hm->buckets[hashval % hm->num_buckets], key);
+  return treemap_remove(hm->buckets[hash % hm->num_buckets], key);
 }
 
 
 datacont* hashmap_get(const hashmap* hm, const datacont* key)
 {
-  if (hm == NULL || key == NULL)
+  if (hm == NULL || key == NULL
+      || key->type != hm->type)
     return NULL;
 
-  unsigned long long hashval = datacont_hash(hm->seed, key);
+  uint32_t hash = datacont_hash(key);
 
-  return treemap_get(hm->buckets[hashval % hm->num_buckets], key);
+  return treemap_get(hm->buckets[hash % hm->num_buckets], key);
 }
 
 
-listnode* hashmap_getkeys(const hashmap* hm)
+listnode* hashmap_keys(const hashmap* hm)
 {
-  if (hm == NULL || hm->buckets == NULL || hm->num_buckets == 0)
+  if (hm == NULL || hm->buckets == NULL)
     return NULL;
 
   listnode* ln = NULL;
@@ -88,9 +93,9 @@ listnode* hashmap_getkeys(const hashmap* hm)
 }
 
 
-listnode* hashmap_getvalues(const hashmap* hm)
+listnode* hashmap_values(const hashmap* hm)
 {
-  if (hm == NULL || hm->buckets == NULL || hm->num_buckets == 0)
+  if (hm == NULL || hm->buckets == NULL)
     return NULL;
 
   listnode* ln = NULL;
