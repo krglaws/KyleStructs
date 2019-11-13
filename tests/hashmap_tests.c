@@ -9,19 +9,19 @@ static int hashmap_new_tests()
   int retval = 0;
 
   /* TEST 1 */
-  hashmap* hm = hashmap_new(10, 0x12345678);
+  hashmap* hm = hashmap_new(INT, 10);
+
+  if (hm->type != INT)
+  {
+    printf("TEST 1: Unexpected type value: %d. Expected %d.\n", hm->type, INT);
+    retval = -1;
+  }
 
   if (hm->num_buckets != 10)
   {
     printf("TEST 1: Unexpected num_buckets value: %d. Expected: 10.\n", hm->num_buckets);
     retval = -1;
   }
-  if (hm->seed != 0x12345678)
-  {
-    printf("TEST 1: Unexpected seed value: %llX. Expected 0x12345678.\n", hm->seed);
-    retval = -1;
-  }
-
   hashmap_delete(hm);
 
   return retval;
@@ -33,7 +33,7 @@ static int hashmap_add_tests()
   int retval = 0;
 
   /* TEST 1 */
-  hashmap* hm = hashmap_new(10, 0x12345678);
+  hashmap* hm = hashmap_new(CHAR, 10);
   
   int one = 1;
   datacont* key = datacont_new(&one, INT, 1);
