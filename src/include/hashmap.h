@@ -4,7 +4,6 @@
 
 
 #include "treemap.h"
-#include "list.h"
 
 
 typedef struct hashmap hashmap;
@@ -22,13 +21,13 @@ struct hashmap
 
 /* ------------------------------------
  * hashmap_new():
- * Returns a pointer to a new empty hashmap.
+ * Creates a new empty hashmap.
  *
- * inputs:
+ * Inputs:
  * unsigned int num_buckets - the number of buckets this hashmap should contain.
  * enum dataconttype type - the datacont type this hashmap will store.
  *
- * returns:
+ * Returns:
  * hashmap* hm - a new empty hashmap.
  */
 hashmap* hashmap_new(const enum dataconttype type, const unsigned int num_buckets);
@@ -36,12 +35,12 @@ hashmap* hashmap_new(const enum dataconttype type, const unsigned int num_bucket
 
 /* ----------------------------------
  * hashmap_delete():
- * Deletes a hashmap and all structs that it contains.
+ * Deletes a hashmap and all of its contents.
  *
- * inputs:
+ * Inputs:
  * hashmap* hm - the hashmap to be deleted.
  *
- * returns:
+ * Returns:
  * void
  */
 void hashmap_delete(hashmap* hm);
@@ -51,12 +50,12 @@ void hashmap_delete(hashmap* hm);
  * hashmap_add():
  * Add a key/value pair to a hashmap.
  *
- * inputs:
+ * Inputs:
  * hashmap* hm - the hashmap to be added to
  * datacont* key - the key
  * datacont* value - the value that the key maps to
  *
- * returns:
+ * Returns:
  * int result - (-1) if any param is NULL, or if 'key's type does not match 'hm's type.
  *            - (0) pair was added successfully.
  *            - (1) pair added successfully, old key replaced.
@@ -76,13 +75,17 @@ int hashmap_add(hashmap* hm, const datacont* key, const datacont* value);
  * hashmap_remove():
  * Find key/value pare and delete it.
  *
- * inputs:
+ * Inputs:
  * hashmap* hm - the hashmap to be operated on
  * datacont* key - the key to be removed
  *
- * returns:
- * int result - (0) pair removed successfully
- *            - (1) pair not removed (e.g. could not be found)
+ * Returns:
+ * int result - (-1) if either param is NULL, or if 'key' could not be found. 
+ *            - (0) pair removed successfully.
+ *
+ * Notes:
+ * this procedure does not consume 'key'. It is the client code's responsibility
+ * to delete 'key' when it is no longer needed.
  */
 int hashmap_remove(hashmap* hm, const datacont* key);
 
@@ -91,13 +94,16 @@ int hashmap_remove(hashmap* hm, const datacont* key);
  * hashmap_get():
  * Gets a value from a hashmap by key.
  * 
- * inputs:
+ * Inputs:
  * hashmap* hm - the hashmap to be operated on
  * datacont* key - the key to use to retrieve a value
  *
- * returns:
+ * Returns:
  * datacont* value - (NULL) when the key could not be found.
- *                 - the value mapped to by the key
+ *                 - the value mapped to by the key.
+ *
+ * Notes:
+ * See notes on hashmap_remove().
  */
 datacont* hashmap_get(const hashmap* hm, const datacont* key);
 
@@ -106,12 +112,12 @@ datacont* hashmap_get(const hashmap* hm, const datacont* key);
  * hashmap_keys():
  * Get a list of all keys contained within a hashmap. 
  *
- * inputs:
+ * Inputs:
  * hashmap* hm - the hashmap to be operated on
  *
- * returns:
- * list* - (NULL) if 'hm' is NULL, or if 'hm' is empty.
- *       - a list of the keys contained within 'hm'.
+ * Returns:
+ * list* ls - (NULL) if 'hm' is NULL, or if 'hm' is empty.
+ *          - a list of the keys contained within 'hm'.
  *
  * Notes:
  * The dataconts in the returned list are copies of the originals in the hashmap, 
@@ -121,20 +127,23 @@ list* hashmap_keys(const hashmap* hm);
 
 
 /* --------------------------
- * hashmap_getvals():
+ * hashmap_values():
  * Get a linked list of all values contained within
  * a hashmap. These are copies of the originals
  * in the hashmap, and can be free()'d or
  * otherwise modified.
  *
- * inputs:
+ * Inputs:
  * hashmap* hm - the hashmap to be operated on
  *
- * returns:
- * listnode* - a pointer to a list of datacont*'s
- * NULL - returned if map has no keys
+ * Returns:
+ * list* ls - (NULL) if 'hm' is NULL or empty.
+ *          - a list of the values contained in 'hm'.
+ *
+ * Notes:
+ * See notes on hashmap_keys().
  */
-listnode* hashmap_values(const hashmap* hm);
+list* hashmap_values(const hashmap* hm);
 
 
 /* ---------------------------------
@@ -142,13 +151,27 @@ listnode* hashmap_values(const hashmap* hm);
  * Count the number of key/value pairs stored within
  * a hashmap.
  *
- * inputs:
+ * Inputs:
  * hashmap* hm - the hashmap to be operated on
  *
- * returns:
- * unsigned int - the number of pairs found in the hashmap >=0.
+ * Returns:
+ * unsigned int count - >= (0) the number of pairs found in the hashmap, (0) if 'hm' is NULL.
  */
 unsigned int hashmap_count(const hashmap* hm);
 
 
+/* ----------------------------
+ * hashmap_optimize():
+ * Balances all of the treemap buckets in a hashmap to ensure O(log(N)) search time.
+ *
+ * Inputs:
+ * hashmap* hm - the hashmap being optimized.
+ *
+ * Returns:
+ * void
+ */
+void hashmap_optimize(hashmap* hm);
+
+
 #endif
+
