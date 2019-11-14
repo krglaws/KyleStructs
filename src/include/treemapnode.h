@@ -154,8 +154,8 @@ datacont* treemapnode_get_key(const treemapnode* tmn, int index);
  * treemapnode* tmn - the treemapnode to be operated on
  *
  * Returns:
- * listnode* lsn - (NULL) if 'tmn' is NULL, or if 'tmn' is empty.
- *               - a list of the keys contained int 'tmn'.
+ * listnode* lsn - (NULL) if 'tmn' is NULL.
+ *               - a list of the keys contained in 'tmn'.
  *
  * Notes:
  * 'lsn' contains copies of the original 'key' dataconts in 'tmn' which can be
