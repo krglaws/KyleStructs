@@ -70,7 +70,7 @@ int treemapnode_add(treemapnode* tmn, const datacont* key, const datacont* value
 
 int treemapnode_remove(treemapnode** tmn, const datacont* key)
 {
-  if (tmn == NULL || *tmn == NULL || key == NULL) return 1;
+  if (tmn == NULL || *tmn == NULL || key == NULL) return -1;
 
   enum datacontcomp result = datacont_compare(key, (*tmn)->key);
 
