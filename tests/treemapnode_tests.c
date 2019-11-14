@@ -131,9 +131,9 @@ static int treemapnode_remove_tests()
   }
 
   /* TEST 2 */
-  if (treemapnode_remove(&root, key2) != 1)
+  if (treemapnode_remove(&root, key2) != -1)
   {
-    printf("TEST 2: treemap_remove() should return 1 when removing not-present node key.\n");
+    printf("TEST 2: treemap_remove() should return -1 when removing not-present node key.\n");
     retval = -1;
   }
 
