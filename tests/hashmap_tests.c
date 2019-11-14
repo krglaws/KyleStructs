@@ -33,11 +33,13 @@ static int hashmap_add_tests()
   int retval = 0;
 
   /* TEST 1 */
-  hashmap* hm = hashmap_new(CHAR, 10);
+  hashmap* hm = hashmap_new(INT, 10);
   
   int one = 1;
   datacont* key = datacont_new(&one, INT, 1);
   datacont* val = datacont_new("A", CHAR, 1);
+  datacont* key_copy = datacont_copy(key);
+  datacont* val2 = datacont_new("C", CHAR, 1);
 
   if (hashmap_add(hm, key, val) != 0)
   {
@@ -46,12 +48,13 @@ static int hashmap_add_tests()
   }
   
   /* TEST 2 */
-  if (hashmap_add(hm, key, val) != 1)
+  if (hashmap_add(hm, key_copy, val2) != 1)
   {
     printf("TEST 2: hashmap_add() should return 1 when replacing an existing pair.\n");
     retval = -1;
   }
 
+  datacont_delete(key_copy);
   hashmap_delete(hm);
 
   return retval;
@@ -63,7 +66,7 @@ static int hashmap_remove_tests()
   int retval = 0;
 
   /* TEST 1 */
-  hashmap* hm = hashmap_new(10, 0x12345678);
+  hashmap* hm = hashmap_new(INT, 20);
 
   int one = 1;
   datacont* key = datacont_new(&one, INT, 1);
@@ -77,9 +80,9 @@ static int hashmap_remove_tests()
     printf("TEST 1: hashmap_remove() should return 0 on removal of existing pair.\n");
     retval = -1;
   }
-  if (hashmap_remove(hm, key_copy) != 1)
+  if (hashmap_remove(hm, key_copy) != -1)
   {
-    printf("TEST 2: hashmap_remove() should return 1 when removing not-present pair.\n");
+    printf("TEST 2: hashmap_remove() should return -1 when removing not-present pair.\n");
     retval = -1;
   }
 
@@ -95,7 +98,7 @@ static int hashmap_get_tests()
   int retval = 0;
 
   /* TEST 1 */
-  hashmap* hm = hashmap_new(10, 0x12345678);
+  hashmap* hm = hashmap_new(INT, 10);
   
   int one = 1;
   datacont* key = datacont_new(&one, INT, 1);
@@ -118,48 +121,48 @@ static int hashmap_get_tests()
 }
 
 
-static int hashmap_getkeys_tests()
+static int hashmap_keys_tests()
 {
   int retval = 0;
 
   /* TEST 1 */
-  hashmap* hm = hashmap_new(10, 0x12345678);
+  hashmap* hm = hashmap_new(INT, 10);
 
   int one = 1;
   hashmap_add(hm, datacont_new(&one, INT, 1), datacont_new("A", CHAR, 1));
 
-  listnode* ln = hashmap_getkeys(hm);
-  if (ln->dc->i != 1)
+  list* ls = hashmap_keys(hm);
+  if (ls->head->dc->i != 1)
   {
-    printf("TEST 1: Unexpected listnode item value: %d. Expected 1.\n", ln->dc->i);
+    printf("TEST 1: Unexpected listnode item value: %d. Expected 1.\n", ls->head->dc->i);
     retval = -1;
   }
 
-  listnode_delete(ln);
+  list_delete(ls);
   hashmap_delete(hm);
 
   return retval;
 }
 
 
-static int hashmap_getvalues_tests()
+static int hashmap_values_tests()
 {
   int retval = 0;
 
   /* TEST 1 */
-  hashmap* hm = hashmap_new(10, 0x12345678);
+  hashmap* hm = hashmap_new(INT, 10);
 
   int one = 1;
   hashmap_add(hm, datacont_new(&one, INT, 1), datacont_new("A", CHAR, 1));
 
-  listnode* ln = hashmap_getvalues(hm);
-  if (ln->dc->c != 'A')
+  list* ls = hashmap_values(hm);
+  if (ls->head->dc->c != 'A')
   {
-    printf("TEST 1: Unexpected listnode item value: %c. Expected 'A'.\n", ln->dc->c);
+    printf("TEST 1: Unexpected listnode item value: %c. Expected 'A'.\n", ls->head->dc->c);
     retval = -1;
   }
 
-  listnode_delete(ln);
+  list_delete(ls);
   hashmap_delete(hm);
 
   return retval;
@@ -171,7 +174,7 @@ static int hashmap_count_tests()
   int retval = 0;
 
   /* TEST 1 */
-  hashmap* hm = hashmap_new(10, 0x12345678);
+  hashmap* hm = hashmap_new(INT, 10);
 
   int one = 1;
   hashmap_add(hm, datacont_new(&one, INT, 1), datacont_new("A", CHAR, 1));
@@ -214,14 +217,20 @@ int main()
   printf("==-----------------------------------==\n\n");
 
   printf("==-----------------------------------==\n");
-  printf("Running hashmap_getkeys_tests()...\n");
-  if (hashmap_getkeys_tests()) retval = -1;
+  printf("Running hashmap_get_tests()...\n");
+  if (hashmap_get_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running hashmap_keys_tests()...\n");
+  if (hashmap_keys_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 
   printf("==-----------------------------------==\n");
   printf("Running hashmap_getvals_tests()...\n");
-  if (hashmap_getvalues_tests()) retval = -1;
+  if (hashmap_values_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
   
