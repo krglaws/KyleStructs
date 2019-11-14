@@ -69,60 +69,82 @@ datacont* hashmap_get(const hashmap* hm, const datacont* key)
 }
 
 
-listnode* hashmap_keys(const hashmap* hm)
+list* hashmap_keys(const hashmap* hm)
 {
   if (hm == NULL || hm->buckets == NULL)
     return NULL;
 
-  listnode* ln = NULL;
+  list* ls = list_new();
+  list* temp = NULL;
+  listnode* end = NULL;
 
   for (int i = 0; i < hm->num_buckets; i++)
   {
-    listnode* temp = treemap_getkeys(hm->buckets[i]);
+    if ((temp = treemap_keys(hm->buckets[i])) == NULL)
+      continue;
 
-    if (temp == NULL) continue;
-
-    if (ln == NULL) ln = temp;
-    else {
-      listnode* end = ln;
-      while(end->next) end = end->next;
-      end->next = temp;
+    if (ls->head == NULL)
+    {
+      ls->head = end = temp->head;
+      free(temp);
+    }
+    else
+    {
+      while (end->next) end = end->next;
+      end->next = temp->head;
     }
   }
-  return ln;
+  return ls;
 }
 
 
-listnode* hashmap_values(const hashmap* hm)
+list* hashmap_values(const hashmap* hm)
 {
   if (hm == NULL || hm->buckets == NULL)
     return NULL;
 
-  listnode* ln = NULL;
+  list* ls = list_new();
+  list* temp = NULL;
+  listnode* end = NULL;
 
   for (int i = 0; i < hm->num_buckets; i++)
   {
-    listnode* temp = treemap_getvalues(hm->buckets[i]);
+    if ((temp = treemap_values(hm->buckets[i])) == NULL)
+      continue;
 
-    if (temp == NULL) continue;
-
-    if (ln == NULL) ln = temp;
-    else {
-      listnode* end = ln;
-      while(end->next) end = end->next;
-      end->next = temp;
+    if (ls->head == NULL)
+    {
+      ls->head = end = temp->head;
+      free(temp);
+    }
+    else
+    {
+      while (end->next) end = end->next;
+      end->next = temp->head;
     }
   }
-  return ln;
+  return ls;
 }
 
 
 unsigned int hashmap_count(const hashmap* hm)
 {
   if (hm == NULL) return 0;
-  unsigned int sum = 0;
+  
+  int count = 0;
+ 
   for (int i = 0; i < hm->num_buckets; i++)
-    sum += treemap_count(hm->buckets[i]);
-  return sum;
+    count += treemap_count(hm->buckets[i]);
+
+  return count;
+}
+
+
+void hashmap_optimize(hashmap* hm)
+{
+  if (hm == NULL) return;
+
+  for (int i = 0; i < hm->num_buckets; i++)
+    treemap_balance(hm->buckets[i]);
 }
 
