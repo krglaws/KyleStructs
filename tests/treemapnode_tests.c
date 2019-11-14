@@ -1,8 +1,6 @@
 
 #include <stdio.h>
 
-#include "../src/include/datacont.h"
-#include "../src/include/listnode.h"
 #include "../src/include/treemapnode.h"
 
 
@@ -36,7 +34,7 @@ static int treemapnode_new_tests()
     printf("TEST 1: treemapnode right should be NULL.\n");
     retval = -1;
   }
-  treemapnode_delete(tmn);
+  treemapnode_delete_all(tmn);
 
   return retval;
 }
@@ -84,7 +82,7 @@ static int treemapnode_add_tests()
     retval = -1;
   }
 
-  treemapnode_delete(root);
+  treemapnode_delete_all(root);
 
   return retval;
 }
@@ -133,9 +131,9 @@ static int treemapnode_remove_tests()
   }
 
   /* TEST 2 */
-  if (treemapnode_remove(&root, key2) != 1)
+  if (treemapnode_remove(&root, key2) != -1)
   {
-    printf("TEST 2: treemap_remove() should return 1 when removing not-present node key.\n");
+    printf("TEST 2: treemap_remove() should return -1 when removing not-present node key.\n");
     retval = -1;
   }
 
@@ -188,22 +186,108 @@ static int treemapnode_get_tests()
   datacont* key3 = datacont_new(&three, INT, 1);
   datacont* val3 = datacont_new("C", CHAR, 1);
 
+  int four = 4;
+  datacont* not_there = datacont_new(&four, INT, 1);
+
   treemapnode* root = treemapnode_new(key2, val2);
+  treemapnode_add(root, key1, val1);
+  treemapnode_add(root, key3, val3);
   
   datacont* val = treemapnode_get(root, key2);
-  if (val != val2)
+  if (val->c != val2->c)
   {
-    printf("Unexpected datacont value: %c. Expected: %c.\n", val->c, val2->c);
+    printf("TEST 1: Unexpected datacont value: %c. Expected: %c.\n", val->c, val2->c);
     retval = -1;
   }
-  
-  treemapnode_delete(root);
+  datacont_delete(val); 
+
+  /* TEST 2 */
+  val = treemapnode_get(root, key1);
+  if (val->c != val1->c)
+  {
+    printf("TEST 2: Unexpected datacont value: %c. Expected: %c.\n", val->c, val1->c);
+    retval = -1;
+  }
+  datacont_delete(val);
+
+  /* TEST 3 */
+  val = treemapnode_get(root, not_there);
+  if (val != NULL)
+  {
+    printf("TEST 3: treemapnode_get() should return NULL on not-present key value.\n");
+    retval = -1;
+  }
+
+  treemapnode_delete_all(root);
+  datacont_delete(not_there);
 
   return retval;
 }
 
 
-static int treemapnode_getkeys_tests()
+static int treemapnode_get_key_tests()
+{
+  int retval = 0;
+
+  /* TEST 1 */
+  int one = 1;
+  datacont* key1 = datacont_new(&one, INT, 1);
+  datacont* val1 = datacont_new("A", CHAR, 1);
+
+  int two = 2;
+  datacont* key2 = datacont_new(&two, INT, 1);
+  datacont* val2 = datacont_new("B", CHAR, 1);
+
+  int three = 3;
+  datacont* key3 = datacont_new(&three, INT, 1);
+  datacont* val3 = datacont_new("C", CHAR, 1);
+
+  treemapnode* root = treemapnode_new(key2, val2);
+  treemapnode_add(root, key1, val1);
+  treemapnode_add(root, key3, val3);
+ 
+  datacont* get_dc = treemapnode_get_key(root, 0);
+  if (get_dc->i != 1)
+  {
+    printf("TEST 1: Unexpected datacont value: %d. Expected 1.\n", get_dc->i);
+    retval = -1;
+  }
+  datacont_delete(get_dc);
+
+  /* TEST 2 */
+  get_dc = treemapnode_get_key(root, 1);
+  if (get_dc->i != 2)
+  {
+    printf("TEST 2: Unexpected datacont value: %d. Expected 2.\n", get_dc->i);
+    retval = -1;
+  }
+  datacont_delete(get_dc);
+
+  /* TEST 3 */
+  get_dc = treemapnode_get_key(root, 2);
+  if (get_dc->i != 3)
+  {
+    printf("TEST 3: Unexpected datacont value: %d. Expected 3.\n", get_dc->i);
+    retval = -1;
+  }
+  datacont_delete(get_dc);
+
+  /* TEST 4 */
+  get_dc = treemapnode_get_key(root, 3);
+  if (get_dc != NULL)
+  {
+    printf("TEST 4: Expected OOB call to treemapnode_get_key() to return NULL.\n");
+    retval = -1;
+  }
+  datacont_delete(get_dc); 
+
+  treemapnode_delete_all(root);
+
+  return retval;
+}
+
+
+static int treemapnode_keys_tests()
 {
   int retval = 0;
 
@@ -224,10 +308,10 @@ static int treemapnode_getkeys_tests()
   treemapnode_add(root, key1, val1);
   treemapnode_add(root, key3, val3);
 
-  listnode* keys = treemapnode_getkeys(root);
+  listnode* keys = treemapnode_keys(root);
   if (keys == NULL)
   {
-    printf("TEST 1: treemapnode_getkeys() should not return NULL on not-empty treemapnode.\n");
+    printf("TEST 1: treemapnode_keys() should not return NULL on not-empty treemapnode.\n");
     return -1; // can't continue
   }
   if (listnode_length(keys) != 3)
@@ -265,14 +349,14 @@ static int treemapnode_getkeys_tests()
     retval = -1;
   }
 
-  treemapnode_delete(root);
-  listnode_delete(keys);
+  treemapnode_delete_all(root);
+  listnode_delete_all(keys);
 
   return retval;
 }
 
 
-static int treemapnode_getvalues_tests()
+static int treemapnode_values_tests()
 {
   int retval = 0;
 
@@ -293,10 +377,10 @@ static int treemapnode_getvalues_tests()
   treemapnode_add(root, key1, val1);
   treemapnode_add(root, key3, val3);
 
-  listnode* vals = treemapnode_getvalues(root);
+  listnode* vals = treemapnode_values(root);
   if (vals == NULL)
   {
-    printf("TEST 1: treemapnode_getvalues() should not return NULL on not-empty treemapnode.\n");
+    printf("TEST 1: treemapnode_values() should not return NULL on not-empty treemapnode.\n");
     return -1; // can't continue
   }
   if (listnode_length(vals) != 3)
@@ -334,10 +418,10 @@ static int treemapnode_getvalues_tests()
     retval = -1;
   }
 
-  treemapnode_delete(root);
-  listnode_delete(vals);
+  treemapnode_delete_all(root);
+  listnode_delete_all(vals);
 
-  return retval;  
+  return retval;
 }
 
 
@@ -382,7 +466,7 @@ static int treemapnode_count_tests()
     retval = -1;
   }
 
-  treemapnode_delete(root);
+  treemapnode_delete_all(root);
 
   return retval;
 }
@@ -426,10 +510,45 @@ static int treemapnode_height_tests()
   if (height != 0)
   {
     printf("TEST 2: Unexpected treemapnode_height() return value: %d. Expected: 0.\n", height);
-   retval = -1; 
+    retval = -1; 
   }
 
-  treemapnode_delete(root);
+  treemapnode_delete_all(root);
+
+  return retval;
+}
+
+
+static int treemapnode_balance_tests()
+{
+  int retval = 0;
+
+  /* TEST 1 */
+  char c = 'A';
+  int i = 0;
+  treemapnode* tmn = treemapnode_new(datacont_new(&i, INT, 1), 
+                                     datacont_new(&c, CHAR, 1));
+  for (int i = 0; i < 26; i++, c++)
+    treemapnode_add(tmn, datacont_new(&i, INT, 1), 
+                         datacont_new(&c, CHAR, 1));
+
+  unsigned int height = treemapnode_height(tmn);
+  if (height != 26)
+  {
+    printf("TEST 1: treemapnode_height() should have returned 26. Can't continue, quitting test...\n");
+    treemapnode_delete_all(tmn);
+    return -1;
+  }
+
+  treemapnode_balance(&tmn);
+  height = treemapnode_height(tmn);
+  if (height != 5)
+  {
+    printf("TEST 1: Unexpected tree height after treemapnode_balance(): %d. Expected: 5.\n", height);
+    retval = -1;
+  }
+
+  treemapnode_delete_all(tmn);
 
   return retval;
 }
@@ -460,14 +579,26 @@ int main()
   printf("==-----------------------------------==\n\n");
 
   printf("==-----------------------------------==\n");
-  printf("Running treemapnode_getkeys_tests()...\n");
-  if (treemapnode_getkeys_tests()) retval = -1;
+  printf("Running treemapnode_get_tests()...\n");
+  if (treemapnode_get_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 
   printf("==-----------------------------------==\n");
-  printf("Running treemapnode_getvalues_tests()...\n");
-  if (treemapnode_getvalues_tests()) retval = -1;
+  printf("Running treemapnode_get_key_tests()...\n");
+  if (treemapnode_get_key_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running treemapnode_keys_tests()...\n");
+  if (treemapnode_keys_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running treemapnode_values_tests()...\n");
+  if (treemapnode_values_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 
@@ -480,6 +611,12 @@ int main()
   printf("==-----------------------------------==\n");
   printf("Running treemapnode_height_tests()...\n");
   if (treemapnode_height_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running treemapnode_balance_tests()...\n");
+  if (treemapnode_balance_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 

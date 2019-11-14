@@ -1,8 +1,6 @@
 
 #include <stdio.h>
 
-#include "../src/include/datacont.h"
-#include "../src/include/listnode.h"
 #include "../src/include/stack.h"
 
 

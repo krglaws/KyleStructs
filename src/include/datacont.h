@@ -3,6 +3,11 @@
 #define _DATACONT_H_
 
 
+#include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
+
+
 enum datacontcomp
 {
   LESSTHAN,
@@ -149,16 +154,16 @@ enum datacontcomp datacont_compare(const datacont* dca, const datacont* dcb);
 /* ---------------------------
  * datacont_hash():
  * Hashes the data contained within a datacont and returns the result as an unsigned
- * 64-bit integer.
+ * 32-bit integer.
  * 
  * Inputs:
- * uint64_t seed - the seed used in the hashing algorithm.
  * datacont* dc - the datacont being hashed.
  *
  * Returns:
- * uint64_t hash - the hash of the data contained in the datacont.
+ * uint32_t hash - the hash of the data contained in the datacont.
  */
-__uint64_t datacont_hash(__uint64_t seed, const datacont* dc);
+uint32_t datacont_hash(const datacont* dc);
 
 
 #endif
+

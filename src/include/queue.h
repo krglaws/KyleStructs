@@ -3,6 +3,9 @@
 #define _QUEUE_H_
 
 
+#include "listnode.h"
+
+
 typedef struct queue queue;
 
 

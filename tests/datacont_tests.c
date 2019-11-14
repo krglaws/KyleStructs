@@ -1,6 +1,8 @@
+
 #include <stdio.h>
 
 #include "../src/include/datacont.h"
+
 
 static int datacont_new_tests()
 {
@@ -147,16 +149,17 @@ static int datacont_hash_tests()
    * same value are equal.
    */
   int retval = 0;
-  datacont* dca = datacont_new("abcd", CHARP, 5);
-  unsigned long long seed = 1234;
-  unsigned long long hash1 = datacont_hash(seed, dca);
-  unsigned long long hash2 = datacont_hash(seed, dca);
+  datacont* dc1 = datacont_new("abcd", CHARP, 5);
+  datacont* dc2 = datacont_new("abcd", CHARP, 5);
+  unsigned int hash1 = datacont_hash(dc1);
+  unsigned int hash2 = datacont_hash(dc2);
   if (hash1 != hash2)
   {
-    printf("TEST 1: Unexpected hash result: %llX. Expected: %llX\n", hash2, hash1);
+    printf("TEST 1: Unexpected hash result: %X. Expected: %X\n", hash2, hash1);
     retval = -1;
   }
-  datacont_delete(dca);
+  datacont_delete(dc1);
+  datacont_delete(dc2);
   return retval;
 }
 

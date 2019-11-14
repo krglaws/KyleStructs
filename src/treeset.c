@@ -1,24 +1,19 @@
 
-#include <stdlib.h>
-
-#include "include/datacont.h"
-#include "include/treesetnode.h"
 #include "include/treeset.h"
 
 
 treeset* treeset_new()
 {
-  treeset* ts = (treeset*) malloc(sizeof(treesetnode));
-  ts->num_nodes = 0;
-  ts->root = NULL;
-  return ts;
+  return calloc(1, sizeof(treesetnode));
 }
 
 
 void treeset_delete(treeset* ts)
 {
   if (ts == NULL) return;
-  treesetnode_delete(ts->root);
+
+  treesetnode_delete_all(ts->root);
+
   free(ts);
 }
 
@@ -27,53 +22,75 @@ int treeset_add(treeset* ts, const datacont* dc)
 {
   if (ts == NULL || dc == NULL) return -1;
 
-  int retval;
-
   if (ts->root == NULL)
   {
     ts->root = treesetnode_new(dc);
-    retval = 0;
+    return 0;
   }
-  else retval = treesetnode_add(ts->root, dc);
-
-  if (retval == 0) ts->num_nodes++;
-
-  return retval;
+  return treesetnode_add(ts->root, dc);
 }
 
 
-int treeset_remove(treeset* ts, const datacont* dc)
+int treeset_remove_by(treeset* ts, const datacont* dc)
 {
-  if (ts == NULL) return 1;
-  int retval = treesetnode_remove(&ts->root, dc);
+  if (ts == NULL || dc == NULL) return -1;
 
-  if (retval == 0)
-    ts->num_nodes--;
-
-  if (ts->num_nodes < 1)
-    ts->root = NULL;
-
-  return retval;
+  return treesetnode_remove_by(&ts->root, dc);
 }
 
 
-int treeset_contains(const treeset* ts, const datacont* dc)
+int treeset_remove_at(treeset* ts, const int index)
+{
+  if (ts == NULL) return -1;
+
+  return treesetnode_remove_at(&ts->root, index);
+}
+
+
+int treeset_index(const treeset* ts, const datacont* dc)
+{
+  if (ts == NULL || dc == NULL) return -1;
+
+  return treesetnode_index(ts->root, dc);
+}
+
+
+unsigned int treeset_contains(const treeset* ts, const datacont* dc)
 {
   if (ts == NULL || dc == NULL) return 0;
+
   return treesetnode_contains(ts->root, dc);
 }
 
 
-datacont* treemap_get_nth(const treeset* ts, int n)
+datacont* treeset_get(const treeset* ts, int index)
 {
-  if (ts == NULL || n < 0) return NULL;
-  return treesetnode_get_nth(ts->root, n);
+  if (ts == NULL) return NULL;
+
+  return treesetnode_get(ts->root, index);
+}
+
+
+unsigned int treeset_count(const treeset* ts)
+{
+  if (ts == NULL) return 0;
+
+  return treesetnode_count(ts->root);
 }
 
 
 unsigned int treeset_height(const treeset* ts)
 {
   if (ts == NULL) return 0;
+
   return treesetnode_height(ts->root);
+}
+
+
+void treeset_balance(treeset* ts)
+{
+  if (ts == NULL) return;
+
+  treesetnode_balance(&ts->root);
 }
 

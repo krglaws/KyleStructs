@@ -3,6 +3,9 @@
 #define _STACK_H_
 
 
+#include "listnode.h"
+
+
 typedef struct stack stack;
 
 

@@ -3,6 +3,9 @@
 #define _LIST_H_
 
 
+#include "listnode.h"
+
+
 typedef struct list list;
 
 
