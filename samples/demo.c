@@ -21,11 +21,11 @@ int main()
     datacont* number_dc = datacont_new(number, CHARP, strlen(number)+1);
     datacont* name_dc = datacont_new(name, CHARP, strlen(name)+1);
 
-    memset(number, 0, 30);
-    memset(name, 0, 30);
-
     if (hashmap_add(phonebook, number_dc, name_dc) == 1)
       printf("Replaced existing number %s.\n", number);
+
+    memset(number, 0, 30);
+    memset(name, 0, 30);
   }
 
   int count = hashmap_count(phonebook);
