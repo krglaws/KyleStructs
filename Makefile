@@ -231,10 +231,10 @@ install: $(STATICLIB) $(DYNAMICLIB)
 
 .PHONY: uninstall
 uninstall:
-	if [ -d "$(INCLOC)" ]; then rm -r $(INCLOC); fi;
-	if [ -f "$(INCLOC)/../kylestructs.h" ]; then rm -r $(INCLOC)/../kylestructs.h" ]; fi;
-	if [ -f "$(LIBLOC)/$(STATICLIB)" ]; then rm $(LIBLOC)/$(STATICLIB); fi;
-	if [ -f "$(LIBLOC)/$(DYNAMICLIB)" ]; then rm $(LIBLOC)/$(DYNAMICLIB); fi;
+	if [ -d $(INCLOC) ]; then rm -r $(INCLOC); fi;
+	if [ -f $(INCLOC)/../kylestructs.h ]; then rm -r $(INCLOC)/../kylestructs.h ]; fi;
+	if [ -f $(LIBLOC)/$(STATICLIB) ]; then rm $(LIBLOC)/$(STATICLIB); fi;
+	if [ -f $(LIBLOC)/$(DYNAMICLIB) ]; then rm $(LIBLOC)/$(DYNAMICLIB); fi;
 
 
 .PHONY: clean
