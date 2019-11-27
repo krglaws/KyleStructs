@@ -77,6 +77,9 @@ If you would like to contribute, feel free to fork this repository and submit a 
 
 _Images generated using [Graphviz](https://www.graphviz.org/)_
 ## To Do:
+- `datacont.cp` should automatically have a '\0' appended to it, but without incrementing `datacont.size`
+- returned `datacont` values from within any stucture should not be a copy, but a pointer to the original. If user code wants to copy, they should do so explicitly using `datacont\_copy()`
 - write toString functions for each structure
 - write toDotFile functions for each structure
 - write set operation functions (e.g. union, intersection, difference, comparison, etc.)
+
