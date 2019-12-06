@@ -280,7 +280,6 @@ static int listnode_replace_by_tests()
     printf("TEST 1: Unexpected datacont value at 2nd listnode following listnode_replace_by(): %c. Expected Z\n", get_dc->c);
     retval = -1;
   }
-  datacont_delete(get_dc);
 
   /* TEST 2 */
   if (listnode_replace_by(ln, dcB, dcB) != -1)
@@ -331,7 +330,6 @@ static int listnode_replace_at_tests()
     printf("TEST 1: Unexpected datacont value at 2nd listnode following listnode_replace_at(): %c. Expected Z\n", get_dc->c);
     retval = -1;
   }
-  datacont_delete(get_dc);
 
   /* TEST 2 */
   if (listnode_replace_at(ln, dcB, 10) != -1)
@@ -393,7 +391,6 @@ static int listnode_replace_all_tests()
   }
 
   listnode_delete_all(ln);
-  datacont_delete(get_dc);
   datacont_delete(dcA);
   datacont_delete(dcB);
   datacont_delete(dcC);
