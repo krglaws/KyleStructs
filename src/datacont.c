@@ -43,7 +43,7 @@ datacont* datacont_new(const void* data, const enum dataconttype dct, const size
       dc->ull = *((unsigned long long*) data);
       break;
     case CHARP:
-      dc->cp = malloc(sizeof(char) * size);
+      dc->cp = malloc(sizeof(char) * size + 1);
       memcpy(dc->cp, data, sizeof(char) * size);
       break;
     case SHORTP:
@@ -304,8 +304,8 @@ static uint32_t __hash(const void* data, const size_t size)
 
   for (int i = 0; i < size; i++)
   {
-	  uint8_t byte = *((uint8_t*) data + i);
-	  seed = ((seed * byte) << 16) + ((seed * byte) >> 16);
+    uint8_t byte = *((uint8_t*) data + i);
+    seed = ((seed * byte) << 16) + ((seed * byte) >> 16);
   }
   return seed;
 }
