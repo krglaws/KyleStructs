@@ -177,6 +177,9 @@ unsigned int treesetnode_contains(const treesetnode* tsn, const datacont* dc);
  * Returns:
  * datacont* dc - (NULL) if 'index' is OOB, or if 'tsn' is NULL.
  *              - the datacont located at 'index'.
+ * Notes:
+ * The datacont returned by this function is a pointer to the original contained within 
+ * the treeset, so it should not be deleted or modified by client code.
  */
 datacont* treesetnode_get(const treesetnode* tsn, const int index);
 

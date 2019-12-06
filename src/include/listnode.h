@@ -243,7 +243,7 @@ int listnode_index(const listnode* ln, const datacont* dc);
 
 /* -------------------------
  * listnode_get():
- * Returns a copy of the datacnt contained within a listnode that is a specified number of nodes down the chain from 'ln'.
+ * Returns a pointer to a datacont contained within a listnode that is a specified number of nodes down the chain from 'ln'.
  *
  * Inputs:
  * listnode* ln - the listnode being operated on.
@@ -252,11 +252,11 @@ int listnode_index(const listnode* ln, const datacont* dc);
  *
  * Returns:
  * datacont* dc - (NULL) if the 'index' is OOB, or if either param is NULL.
- *              - a copy of the datacont located at 'index'.
+ *              - a pointer to the datacont located at 'index'.
  *
  * Notes:
- * The datacont returned by this function is a COPY of the original from the list. It is the responsibility
- * of the user code to use datacont_delete() on it to avoid memory leaks.
+ * The datacont returned by this function is a pointer to the original contained within the list, so it should not
+ * be deleted or modified by client code.
  */
 datacont* listnode_get(const listnode* ln, int index);
 
