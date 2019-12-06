@@ -202,7 +202,7 @@ datacont* listnode_get(const listnode* ln, int index)
       index < 0 && (index = listnode_length(ln) + index) < 0)
     return NULL;
 
-  if (index == 0) return datacont_copy(ln->dc);
+  if (index == 0) return ln->dc;
   
   return listnode_get(ln->next, index-1);
 }
