@@ -25,7 +25,7 @@ echo ==============================
 if [ "$FAILED" != "" ]
 then
 	echo $ERRTITLE
-	echo $FAILED
+	printf $FAILED
 	exit 1
 fi
 
