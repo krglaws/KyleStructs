@@ -43,7 +43,7 @@ datacont* datacont_new(const void* data, const enum dataconttype dct, const size
       dc->ull = *((unsigned long long*) data);
       break;
     case CHARP:
-      dc->cp = malloc(sizeof(char) * size + 1);
+      dc->cp = calloc(1, (sizeof(char) * size) + 1);
       memcpy(dc->cp, data, sizeof(char) * size);
       break;
     case SHORTP:
