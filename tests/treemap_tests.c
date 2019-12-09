@@ -207,7 +207,6 @@ static int treemap_get_tests()
     printf("TEST 1: Unexpected datacont value: %c. Expected: %c.\n", val->c, val2->c);
     retval = -1;
   }
-  datacont_delete(val); 
 
   /* TEST 2 */
   val = treemap_get(tm, key1);
@@ -216,7 +215,6 @@ static int treemap_get_tests()
     printf("TEST 2: Unexpected datacont value: %c. Expected: %c.\n", val->c, val1->c);
     retval = -1;
   }
-  datacont_delete(val);
 
   /* TEST 3 */
   val = treemap_get(tm, not_there);
@@ -261,7 +259,6 @@ static int treemap_get_key_tests()
     printf("TEST 1: Unexpected datacont value: %d. Expected 1.\n", get_dc->i);
     retval = -1;
   }
-  datacont_delete(get_dc);
 
   /* TEST 2 */
   get_dc = treemap_get_key(tm, 1);
@@ -270,7 +267,6 @@ static int treemap_get_key_tests()
     printf("TEST 2: Unexpected datacont value: %d. Expected 2.\n", get_dc->i);
     retval = -1;
   }
-  datacont_delete(get_dc);
 
   /* TEST 3 */
   get_dc = treemap_get_key(tm, 2);
@@ -279,7 +275,6 @@ static int treemap_get_key_tests()
     printf("TEST 3: Unexpected datacont value: %d. Expected 3.\n", get_dc->i);
     retval = -1;
   }
-  datacont_delete(get_dc);
 
   /* TEST 4 */
   get_dc = treemap_get_key(tm, 3);
@@ -288,7 +283,6 @@ static int treemap_get_key_tests()
     printf("TEST 4: Expected OOB call to treemap_get_key() to return NULL.\n");
     retval = -1;
   }
-  datacont_delete(get_dc); 
 
   treemap_delete(tm);
 

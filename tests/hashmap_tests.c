@@ -107,14 +107,12 @@ static int hashmap_get_tests()
   hashmap_add(hm, key, val);
 
   datacont* ret = hashmap_get(hm, key);
-  
   if (datacont_compare(val, ret) != EQUAL)
   {
     printf("TEST 1: unexpected datacont value: %c. Expected: A.\n", ret->c);
     retval = -1;
   }
 
-  datacont_delete(ret);
   hashmap_delete(hm);
 
   return retval;
