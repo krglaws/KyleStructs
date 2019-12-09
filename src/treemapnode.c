@@ -124,7 +124,7 @@ datacont* treemapnode_get(const treemapnode* tmn, const datacont* key)
   enum datacontcomp result = datacont_compare(key, tmn->key);
 
   if (result == EQUAL)
-    return datacont_copy(tmn->value);
+    return tmn->value;
 
   else if (result == LESSTHAN)
     return treemapnode_get(tmn->left, key);
@@ -150,7 +150,7 @@ static datacont* __treemapnode_get_key(const treemapnode* tmn, int index, int* c
     return dc;
 
   if (*curr_index == index)
-    return datacont_copy(tmn->key);
+    return tmn->key;
 
   index < 0 ? (*curr_index)-- : (*curr_index)++;
 
@@ -246,8 +246,8 @@ void treemapnode_balance(treemapnode** tmn)
   count = temp = treemapnode_count(*tmn);
   added = 0; log = 1; rowlen = 1; prev = 1.0; curr = 0.5;
 
-  datacont* key = treemapnode_get_key(*tmn, count/2);
-  datacont* value = treemapnode_get(*tmn, key);
+  datacont* key = datacont_copy(treemapnode_get_key(*tmn, count/2));
+  datacont* value = datacont_copy(treemapnode_get(*tmn, key));
   treemapnode* new_tree = treemapnode_new(key, value);
  
   while (temp /= 2) log++;
@@ -256,8 +256,9 @@ void treemapnode_balance(treemapnode** tmn)
   {
     for (int j = 0; j < rowlen && added < count; j++)
     {
-      key = treemapnode_get_key(*tmn, (int) (count * (curr + (j * prev))));
-      value = treemapnode_get(*tmn, key);
+      key = datacont_copy(
+		treemapnode_get_key(*tmn, (int) (count * (curr + (j * prev)))));
+      value = datacont_copy(treemapnode_get(*tmn, key));
       treemapnode_add(new_tree, key, value);
       added++;
     }
