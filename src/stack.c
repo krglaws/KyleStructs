@@ -34,7 +34,8 @@ datacont* stack_pop(stack* s)
 {
   if (s == NULL) return NULL;
 
-  datacont* dc = listnode_get(s->top, 0);
+  datacont* dc = datacont_copy(
+		  listnode_get(s->top, 0));
 
   listnode_remove_at(&(s->top), 0);
 
