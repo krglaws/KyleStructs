@@ -12,6 +12,7 @@ Here is a quick example of how KyleStructs might be used:
 #include <stdio.h>
 #include <kylestructs.h>
 
+
 int main()
 {
   hashmap* phonebook = hashmap_new(CHARP, 10);
@@ -23,16 +24,14 @@ int main()
   
   printf("Enter a name followed by a 10-digit phone number:\n");
 
-  while (1) {
-    if (scanf("%s %s", name, number) == -1)
-      break;
+  while (scanf("%s %s", name, number) != -1) {
 
-    datacont* number_dc = datacont_new(number, CHARP, strlen(number)+1);
-    datacont* name_dc = datacont_new(name, CHARP, strlen(name)+1);
+    datacont* number_dc = datacont_new(number, CHARP, strlen(number));
+    datacont* name_dc = datacont_new(name, CHARP, strlen(name));
 
     if (hashmap_add(phonebook, number_dc, name_dc) == 1)
       printf("Replaced existing number %s.\n", number);
-      
+
     memset(number, 0, 30);
     memset(name, 0, 30);
   }
@@ -48,15 +47,13 @@ int main()
     name_dc = list_get(names, i);
 
     printf("%s => %s\n", number_dc->cp, name_dc->cp);
-
-    datacont_delete(number_dc);
-    datacont_delete(name_dc);
   }
 
   hashmap_delete(phonebook);
   list_delete(numbers);
   list_delete(names);
 }
+
 ```
 
 ## Library Overview
@@ -77,8 +74,6 @@ If you would like to contribute, feel free to fork this repository and submit a 
 
 _Images generated using [Graphviz](https://www.graphviz.org/)_
 ## To Do:
-- `datacont.cp` should automatically have a '\0' appended to it, but without incrementing `datacont.size`
-- returned `datacont` values from within any stucture should not be a copy, but a pointer to the original. If user code wants to copy, they should do so explicitly using `datacont_copy()`
 - write toString functions for each structure
 - write toDotFile functions for each structure
 - write set operation functions (e.g. union, intersection, difference, comparison, etc.)

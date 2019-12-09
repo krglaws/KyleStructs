@@ -98,6 +98,9 @@ struct datacont
  * Notes:
  * The data pointed to by 'data' is COPIED into the new datacont structure. This way,
  * the user code is able to simply allocate whatever data is being used onto the stack.
+ *
+ * When the new datacont is to be of type CHARP, a null terminating character '\0' is
+ * appended to the end of the string so that calls like strlen(dc->cp) won't cause a seg fault.
  */
 datacont* datacont_new(const void* data, const enum dataconttype dct, const size_t size);
 

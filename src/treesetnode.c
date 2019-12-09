@@ -189,7 +189,7 @@ static datacont* __treesetnode_get(const treesetnode* tsn, const int index, int*
     return dc;
 
   if (*curr_index == index)
-    return datacont_copy(tsn->dc);
+    return tsn->dc;
 
   index < 0 ? (*curr_index)-- : (*curr_index)++;
 
@@ -222,9 +222,9 @@ unsigned int treesetnode_height(const treesetnode* tsn)
   if (tsn == NULL) return 0;
 
   unsigned int left_height = treesetnode_height(tsn->left);
-    
+
   unsigned int right_height = treesetnode_height(tsn->right);
-    
+
   return 1 + (left_height > right_height ? left_height : right_height);
 }
 
@@ -240,7 +240,8 @@ void treesetnode_balance(treesetnode** tsn)
   added = 0; log = 1; rowlen = 1; prev = 1.0; curr = 0.5;
 
   treesetnode* new_tree = treesetnode_new(
-                            treesetnode_get(*tsn, count/2));
+                            datacont_copy(
+			    treesetnode_get(*tsn, count/2)));
  
   while (temp /= 2) log++;
 
@@ -249,7 +250,8 @@ void treesetnode_balance(treesetnode** tsn)
     for (int j = 0; j < rowlen && added < count; j++)
     {
       treesetnode_add(new_tree,
-        treesetnode_get(*tsn, (int) (count * (curr + (j * prev)))));
+        datacont_copy(
+	treesetnode_get(*tsn, (int) (count * (curr + (j * prev))))));
       added++;
     }
     prev = curr;
@@ -258,7 +260,7 @@ void treesetnode_balance(treesetnode** tsn)
   }
 
   treesetnode_delete_all(*tsn);
-  
+
   *tsn = new_tree;
 }
 

@@ -280,7 +280,6 @@ static int listnode_replace_by_tests()
     printf("TEST 1: Unexpected datacont value at 2nd listnode following listnode_replace_by(): %c. Expected Z\n", get_dc->c);
     retval = -1;
   }
-  datacont_delete(get_dc);
 
   /* TEST 2 */
   if (listnode_replace_by(ln, dcB, dcB) != -1)
@@ -331,7 +330,6 @@ static int listnode_replace_at_tests()
     printf("TEST 1: Unexpected datacont value at 2nd listnode following listnode_replace_at(): %c. Expected Z\n", get_dc->c);
     retval = -1;
   }
-  datacont_delete(get_dc);
 
   /* TEST 2 */
   if (listnode_replace_at(ln, dcB, 10) != -1)
@@ -393,7 +391,6 @@ static int listnode_replace_all_tests()
   }
 
   listnode_delete_all(ln);
-  datacont_delete(get_dc);
   datacont_delete(dcA);
   datacont_delete(dcB);
   datacont_delete(dcC);
@@ -411,6 +408,7 @@ static int listnode_insert_tests()
   datacont* dcB = datacont_new("B", CHAR, 1);
   datacont* dcC = datacont_new("C", CHAR, 1);
   datacont* get_dc;
+  
   listnode* ln = listnode_new(datacont_copy(dcA));
   listnode_add(ln, datacont_copy(dcC));
 
@@ -426,7 +424,6 @@ static int listnode_insert_tests()
     printf("TEST 1: Unexpected datacont value at first listnode after listnode_insert(): %c. Expected B\n", get_dc->c);
     retval = -1;
   }
-  datacont_delete(get_dc);
 
   /* TEST 2 */
   if (listnode_insert(&ln, datacont_copy(dcB), -1) != 0)
@@ -441,7 +438,6 @@ static int listnode_insert_tests()
     printf("TEST 2: Unexpected datacont value at 2nd to last listnode after listnode_insert(): %d. Expected: B\n", get_dc->c);
     retval = -1;
   }
-  datacont_delete(get_dc); 
 
   /* TEST 3 */
   if (listnode_insert(&ln, NULL, 2) != -1)
@@ -532,11 +528,8 @@ static int listnode_get_tests()
     printf("TEST 3: Unexpected return value: %c. Expected: B\n", dcB->c);
     retval = -1;
   }
-
+  
   listnode_delete_all(ln);
-  datacont_delete(dcA);
-  datacont_delete(dcB);
-  datacont_delete(dcC);
 
   return retval;
 }
@@ -549,6 +542,7 @@ static int listnode_count_tests()
   /* TEST 1 */
   datacont* dcA = datacont_new("A", CHAR, 1);
   datacont* dcB = datacont_new("B", CHAR, 1);
+
   listnode* ln = listnode_new(datacont_copy(dcA));
   listnode_add(ln, datacont_copy(dcA));
   listnode_add(ln, datacont_copy(dcB));

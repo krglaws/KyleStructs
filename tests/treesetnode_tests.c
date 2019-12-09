@@ -310,7 +310,6 @@ static int treesetnode_get_tests()
     printf("TEST 1: Unexpected datacont value after treesetnode_get(): %c. Expected: C.\n", get_dc->c);
     retval = -1;
   }
-  datacont_delete(get_dc);
 
   /* TEST 2 */
   get_dc = treesetnode_get(tsn, 1);
@@ -319,7 +318,6 @@ static int treesetnode_get_tests()
     printf("TEST 2: Unexpected datacont value after treesetnode_get(): %c. Expected: B.\n", get_dc->c);
     retval = -1;
   }
-  datacont_delete(get_dc);
 
   /* TEST 3 */
   get_dc = treesetnode_get(tsn, 1234);

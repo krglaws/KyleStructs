@@ -103,6 +103,8 @@ int hashmap_remove(hashmap* hm, const datacont* key);
  *                 - the value mapped to by the key.
  *
  * Notes:
+ * The datacont returned by this function is a pointer to the original contained within the hashmap,
+ * so it should not be deleted or modified by client code.
  * See notes on hashmap_remove().
  */
 datacont* hashmap_get(const hashmap* hm, const datacont* key);

@@ -190,7 +190,7 @@ int list_index(const list* ls, const datacont* dc);
 
 /* -------------------------
  * list_get():
- * Returns a copy of the datacont contained within a list that is located at 'index'.
+ * Returns a pointer to a datacont contained within a list that is located at 'index'.
  *
  * Inputs:
  * list* ls - the list being operated on.
@@ -202,8 +202,8 @@ int list_index(const list* ls, const datacont* dc);
  *              - a copy of the datacont located at 'index'.
  *
  * Notes:
- * The datacont returned by this function is a COPY of the original from the list. It is the responsibility
- * of the user code to use datacont_delete() on it to avoid memory leaks.
+ * The datacont returned by this function is a pointer to the original contained within the list, so it should not
+ * be deleted or modified by client code.
  */
 datacont* list_get(const list* ls, int index);
 

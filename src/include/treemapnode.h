@@ -119,8 +119,8 @@ int treemapnode_remove(treemapnode** tmn, const datacont* key);
  *                 - the value mapped to by the key.
  *
  * Notes:
- * The datacont 'value' returned by this function is a copy of the original which can
- * be safely deleted or modified without affecting the original inside of 'tmn'. Also:
+ * The datacont returned by this function is a pointer to the original contained within 
+ * the treemap, so it should not be deleted or modified by client code. Also:
  * 'key' is not consumed by this procedure, it is only used to locate another datacont
  * containing the same data.
  */
@@ -140,8 +140,8 @@ datacont* treemapnode_get(const treemapnode* tmn, const datacont* key);
  * datacont* key - (NULL) if 'index' is OOB, or if 'tmn' is NULL.
  *               - the key located at 'index'.
  * Notes:
- * The datacont 'key' returned by this function is a copy of the original which can
- * be safely deleted or modified without affecting the original inside of 'tmn'.
+ * The datacont returned by this function is a pointer to the original contained within 
+ * the list, so it should not be deleted or modified by client code.
  */
 datacont* treemapnode_get_key(const treemapnode* tmn, int index);
 

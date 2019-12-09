@@ -253,6 +253,8 @@ static int list_remove_all_tests()
   datacont_delete(dcB);
   datacont_delete(dcC);
 
+  list_delete(ls);
+
   return retval;
 }
 
@@ -284,7 +286,6 @@ static int list_replace_by_tests()
     printf("TEST 1: Unexpected datacont value at 2nd list following list_replace_by(): %c. Expected Z\n", get_dc->c);
     retval = -1;
   }
-  datacont_delete(get_dc);
 
   /* TEST 2 */
   if (list_replace_by(ls, dcB, dcB) != -1)
@@ -335,7 +336,6 @@ static int list_replace_at_tests()
     printf("TEST 1: Unexpected datacont value at 2nd list following list_replace_at(): %c. Expected Z\n", get_dc->c);
     retval = -1;
   }
-  datacont_delete(get_dc);
 
   /* TEST 2 */
   if (list_replace_at(ls, dcB, 10) != -1)
@@ -398,7 +398,6 @@ static int list_replace_all_tests()
   }
 
   list_delete(ls);
-  datacont_delete(get_dc);
   datacont_delete(dcA);
   datacont_delete(dcB);
   datacont_delete(dcC);
@@ -432,7 +431,6 @@ static int list_insert_tests()
     printf("TEST 1: Unexpected datacont value at first list after list_insert(): %c. Expected B\n", get_dc->c);
     retval = -1;
   }
-  datacont_delete(get_dc);
 
   /* TEST 2 */
   if (list_insert(ls, datacont_copy(dcB), -1) != 0)
@@ -447,7 +445,6 @@ static int list_insert_tests()
     printf("TEST 2: Unexpected datacont value at 2nd to last list after list_insert(): %d. Expected: B\n", get_dc->c);
     retval = -1;
   }
-  datacont_delete(get_dc); 
 
   /* TEST 3 */
   if (list_insert(ls, NULL, 2) != -1)
@@ -542,9 +539,6 @@ static int list_get_tests()
   }
 
   list_delete(ls);
-  datacont_delete(dcA);
-  datacont_delete(dcB);
-  datacont_delete(dcC);
 
   return retval;
 }

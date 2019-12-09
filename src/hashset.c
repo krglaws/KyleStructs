@@ -88,7 +88,7 @@ list* hashset_to_list(const hashset* hs)
   list* ls = list_new();
 
   for (int i = 0, j = 0; i < hs->num_buckets; i++, j = 0)
-    while (list_add(ls, treeset_get(hs->buckets[i], j++)) != -1);
+    while (list_add(ls, datacont_copy(treeset_get(hs->buckets[i], j++))) != -1);
 
   return ls;
 }

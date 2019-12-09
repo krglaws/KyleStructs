@@ -14,12 +14,10 @@ int main()
   
   printf("Enter a name followed by a 10-digit phone number:\n");
 
-  while (1) {
-    if (scanf("%s %s", name, number) == -1)
-      break;
+  while (scanf("%s %s", name, number) != -1) {
 
-    datacont* number_dc = datacont_new(number, CHARP, strlen(number)+1);
-    datacont* name_dc = datacont_new(name, CHARP, strlen(name)+1);
+    datacont* number_dc = datacont_new(number, CHARP, strlen(number));
+    datacont* name_dc = datacont_new(name, CHARP, strlen(name));
 
     if (hashmap_add(phonebook, number_dc, name_dc) == 1)
       printf("Replaced existing number %s.\n", number);
@@ -39,9 +37,6 @@ int main()
     name_dc = list_get(names, i);
 
     printf("%s => %s\n", number_dc->cp, name_dc->cp);
-
-    datacont_delete(number_dc);
-    datacont_delete(name_dc);
   }
 
   hashmap_delete(phonebook);

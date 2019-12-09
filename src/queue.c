@@ -38,7 +38,8 @@ datacont* queue_dequeue(queue* q)
 {
   if (q == NULL) return NULL;
   
-  datacont* dc = listnode_get(q->head, -1);
+  datacont* dc = datacont_copy(
+		  listnode_get(q->head, -1));
 
   listnode_remove_at(&(q->head), -1);
 
