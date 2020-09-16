@@ -54,7 +54,6 @@ static int hashmap_add_tests()
     retval = -1;
   }
 
-  datacont_delete(key_copy);
   hashmap_delete(hm);
 
   return retval;

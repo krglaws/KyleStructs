@@ -34,6 +34,7 @@ static int treemap_add_tests()
   int three = 3;
   datacont* key3 = datacont_new(&three, INT, 1);
   datacont* val3 = datacont_new("C", CHAR, 1);
+
   datacont* val4 = datacont_new("D", CHAR, 1);
 
   treemap* tm = treemap_new();
@@ -67,7 +68,7 @@ static int treemap_add_tests()
   }
 
   /* TEST 3 */
-  if (treemap_add(tm, key2, val4) != 1)
+  if (treemap_add(tm, datacont_copy(key2), val4) != 1)
   {
     printf("TEST 3: treemap_add() should return 1 when replacing existing pair.\n");
     retval = -1;
@@ -547,9 +548,9 @@ static int treemap_balance_tests()
 
   treemap_balance(tm);
   height = treemap_height(tm);
-  if (height != 5)
+  if (height != 7)
   {
-    printf("TEST 1: Unexpected tree height after treemap_balance(): %d. Expected: 5.\n", height);
+    printf("TEST 1: Unexpected tree height after treemap_balance(): %d. Expected: 7.\n", height);
     retval = -1;
   }
 

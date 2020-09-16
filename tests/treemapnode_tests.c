@@ -319,25 +319,23 @@ static int treemapnode_keys_tests()
     retval = -1;
   }
 
-  keys = keys->next;
-  if (keys == NULL)
+  if (keys->next == NULL)
   {
     printf("TEST 1: listnode missing 2nd item.\n");
     return -1; // can't continue
   }
-  if (keys->dc->i != 2)
+  if (keys->next->dc->i != 2)
   {
     printf("TEST 1: unexpected datacont value at 2nd listnode: %d. Expected 2.\n", keys->dc->i);
     retval = -1;
   }
 
-  keys = keys->next;
-  if (keys == NULL)
+  if (keys->next->next == NULL)
   {
     printf("TEST 1: listnode missing 3rd item.\n");
     return -1; // can't continue
   }
-  if (keys->dc->i != 3)
+  if (keys->next->next->dc->i != 3)
   {
     printf("TEST 1: unexpected datacont value at 3rd listnode: %d. Expected 3.\n", keys->dc->i);
     retval = -1;
@@ -388,25 +386,23 @@ static int treemapnode_values_tests()
     retval = -1;
   }
 
-  vals = vals->next;
-  if (vals == NULL)
+  if (vals->next == NULL)
   {
     printf("TEST 1: listnode missing 2nd item.\n");
     return -1; // can't continue
   }
-  if (vals->dc->c != 'B')
+  if (vals->next->dc->c != 'B')
   {
     printf("TEST 1: unexpected datacont value at 2nd listnode: %c. Expected B.\n", vals->dc->c);
     retval = -1;
   }
 
-  vals = vals->next;
-  if (vals == NULL)
+  if (vals->next->next == NULL)
   {
     printf("TEST 1: listnode missing 3rd item.\n");
     return -1; // can't continue
   }
-  if (vals->dc->c != 'C')
+  if (vals->next->next->dc->c != 'C')
   {
     printf("TEST 1: unexpected datacont value at 3rd listnode: %c. Expected C.\n", vals->dc->c);
     retval = -1;
@@ -536,9 +532,9 @@ static int treemapnode_balance_tests()
 
   treemapnode_balance(&tmn);
   height = treemapnode_height(tmn);
-  if (height != 5)
+  if (height != 7)
   {
-    printf("TEST 1: Unexpected tree height after treemapnode_balance(): %d. Expected: 5.\n", height);
+    printf("TEST 1: Unexpected tree height after treemapnode_balance(): %d. Expected: 7.\n", height);
     retval = -1;
   }
 

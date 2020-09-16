@@ -408,13 +408,13 @@ static int treesetnode_balance_tests()
   /* TEST 1 */
   char c = 'A';
   treesetnode* tsn = treesetnode_new(datacont_new(&c, CHAR, 1));
-  for (int i = 0; i < 26; i++, c++)
+  for (int i = 1, c = 'B'; i < 26; i++, c++)
     treesetnode_add(tsn, datacont_new(&c, CHAR, 1));
 
   unsigned int height = treesetnode_height(tsn);
   if (height != 26)
   {
-    printf("TEST 1: treesetnode_height() should have returned 26. Can't continue, quitting test...\n");
+    printf("TEST 1: treesetnode_height() should have returned 16. Returned: %d. Can't continue, quitting test...\n", height);
     treesetnode_delete_all(tsn);
     return -1;
   }

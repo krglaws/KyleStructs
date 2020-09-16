@@ -320,7 +320,8 @@ static int list_replace_at_tests()
   datacont* dcB = datacont_new("B", CHAR, 1);
   datacont* dcC = datacont_new("C", CHAR, 1);
 
-  list* ls = list_new(datacont_copy(dcA));
+  list* ls = list_new();
+  list_add(ls, datacont_copy(dcA));
   list_add(ls, datacont_copy(dcB));
   list_add(ls, datacont_copy(dcC));
 

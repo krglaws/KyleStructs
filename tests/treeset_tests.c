@@ -323,7 +323,7 @@ static int treeset_height_tests()
 
   /* Test 1 */
   treeset* ts = treeset_new();
-  treeset_new(ts, datacont_new("B", CHAR, 1));
+  treeset_add(ts, datacont_new("B", CHAR, 1));
   treeset_add(ts, datacont_new("A", CHAR, 1));
   treeset_add(ts, datacont_new("C", CHAR, 1));
 

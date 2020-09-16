@@ -12,7 +12,7 @@ void treemap_delete(treemap* tm)
 {
   if (tm == NULL) return;
 
-  treemapnode_delete(tm->root);
+  treemapnode_delete_all(tm->root);
 
   free(tm);
 }

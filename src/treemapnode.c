@@ -240,35 +240,48 @@ void treemapnode_balance(treemapnode** tmn)
 {
   if (tmn == NULL || *tmn == NULL) return;
 
-  float prev, curr;
-  int count, temp, added, log, rowlen;
+  int count = treemapnode_count(*tmn);
 
-  count = temp = treemapnode_count(*tmn);
-  added = 0; log = 1; rowlen = 1; prev = 1.0; curr = 0.5;
+  if (count < 3) return;
 
-  datacont* key = datacont_copy(treemapnode_get_key(*tmn, count/2));
-  datacont* value = datacont_copy(treemapnode_get(*tmn, key));
-  treemapnode* new_tree = treemapnode_new(key, value);
- 
-  while (temp /= 2) log++;
-
-  for (int i = 0; i < log + 1 && added < count; i++)
+  int temp = count, rowlen = 2, nrows = 1, fulltree = 1;
+  while (temp /= 2)
   {
-    for (int j = 0; j < rowlen && added < count; j++)
-    {
-      key = datacont_copy(
-		treemapnode_get_key(*tmn, (int) (count * (curr + (j * prev)))));
-      value = datacont_copy(treemapnode_get(*tmn, key));
-      treemapnode_add(new_tree, key, value);
-      added++;
-    }
-    prev = curr;
-    curr /= 2;
+    nrows++;
+    fulltree += rowlen;
     rowlen *= 2;
   }
 
-  treemapnode_delete_all(*tmn);
+  int rootindex = fulltree / 2;
+  datacont* key = datacont_copy(treemapnode_get_key(*tmn, rootindex));
+  datacont* value = datacont_copy(treemapnode_get(*tmn, key));
+  treemapnode* new_tree = treemapnode_new(key, value);
 
+  rowlen = 2;
+  int added = 1;
+  float prev = 0.5, curr = 0.25;
+
+  for (int i = 1; i < nrows && added < count; i++)
+  {
+    for (int j = 0; j < rowlen && added < count; j++)
+    {
+      int index = (int) (fulltree * (curr + (j * prev)));
+
+      if (index < count)
+      {
+        key = datacont_copy(treemapnode_get_key(*tmn, index));
+        value = datacont_copy(treemapnode_get(*tmn, key));
+        treemapnode_add(new_tree, key, value);
+        added++;
+      }
+
+      prev = curr;
+      curr /= 2;
+      rowlen *= 2;
+    }
+  }
+
+  treemapnode_delete_all(*tmn);
   *tmn = new_tree;
 }
 
