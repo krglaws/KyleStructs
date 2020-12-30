@@ -1,5 +1,8 @@
+#include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
 
-#include "include/datacont.h"
+#include <datacont.h>
 
 
 datacont* datacont_new(const void* data, const enum dataconttype dct, const size_t size)
@@ -345,5 +348,3 @@ uint32_t datacont_hash(const datacont* dc)
       return __hash(dc->dp, sizeof(double) * dc->size);
   }
 }
-
-

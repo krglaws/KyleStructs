@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 
-#include "../src/include/datacont.h"
+#include <datacont.h>
 
 
 static int datacont_new_tests()

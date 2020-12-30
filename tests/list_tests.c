@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 
-#include "../src/include/list.h"
+#include <list.h>
 
 
 static int list_new_tests()

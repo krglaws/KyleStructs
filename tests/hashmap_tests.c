@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 
-#include "../src/include/hashmap.h"
+#include <hashmap.h>
 
 
 static int hashmap_new_tests()

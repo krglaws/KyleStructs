@@ -1,4 +1,3 @@
-
 #ifndef _TREESETNODE_H_
 #define _TREESETNODE_H_
 
@@ -224,4 +223,3 @@ void treesetnode_balance(treesetnode** tsn);
 
 
 #endif
-

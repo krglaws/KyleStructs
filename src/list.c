@@ -1,5 +1,6 @@
+#include <stdlib.h>
 
-#include "include/list.h"
+#include <list.h>
 
 
 list* list_new()
@@ -116,5 +117,3 @@ unsigned int list_length(const list* ls)
 
   return listnode_length(ls->head);
 }
-
-

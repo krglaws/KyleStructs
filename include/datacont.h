@@ -1,11 +1,9 @@
-
 #ifndef _DATACONT_H_
 #define _DATACONT_H_
 
 
 #include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
+#include <inttypes.h>
 
 
 enum datacontcomp
@@ -169,4 +167,3 @@ uint32_t datacont_hash(const datacont* dc);
 
 
 #endif
-

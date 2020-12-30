@@ -1,5 +1,6 @@
+#include <stdlib.h>
 
-#include "include/listnode.h"
+#include <listnode.h>
 
 
 listnode* listnode_new(const datacont* dc)
@@ -231,4 +232,3 @@ unsigned int listnode_length(const listnode* ln)
   
   return 1 + listnode_length(ln->next); 
 }
-

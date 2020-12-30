@@ -1,5 +1,4 @@
-
-#include "include/treemapnode.h"
+#include <treemapnode.h>
 
 
 treemapnode* treemapnode_new(const datacont* key, const datacont* value)
@@ -284,4 +283,3 @@ void treemapnode_balance(treemapnode** tmn)
   treemapnode_delete_all(*tmn);
   *tmn = new_tree;
 }
-

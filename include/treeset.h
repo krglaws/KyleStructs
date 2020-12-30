@@ -1,4 +1,3 @@
-
 #ifndef _TREESET_H_
 #define _TREESET_H_
 
@@ -190,4 +189,3 @@ void treeset_balance(treeset* ts);
 
 
 #endif
-

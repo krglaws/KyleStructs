@@ -1,4 +1,3 @@
-
 #ifndef _HASHSET_H_
 #define _HASHSET_H_
 
@@ -157,4 +156,3 @@ void hashset_optimize(hashset* hs);
 
 
 #endif
-

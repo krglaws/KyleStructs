@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 
-#include "../src/include/treemapnode.h"
+#include <treemapnode.h>
 
 
 static int treemapnode_new_tests()

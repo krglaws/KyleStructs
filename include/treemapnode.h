@@ -1,4 +1,3 @@
-
 #ifndef _TREEMAPNODE_H_
 #define _TREEMAPNODE_H_
 
@@ -227,4 +226,3 @@ void treemapnode_balance(treemapnode** tmn);
 
 
 #endif
-

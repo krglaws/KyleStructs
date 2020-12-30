@@ -1,8 +1,7 @@
-
-/* main header */
-
 #ifndef _KYLESTRUCTS_H_
 #define _KYLESTRUCTS_H_
+
+/* main header */
 
 #include <kylestructs/datacont.h>
 
@@ -27,4 +26,3 @@
 #include <kylestructs/hashmap.h>
 
 #endif
-

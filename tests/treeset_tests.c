@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 
-#include "../src/include/treeset.h"
+#include <treeset.h>
 
 
 static int treeset_new_tests()

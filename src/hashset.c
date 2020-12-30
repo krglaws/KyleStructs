@@ -1,5 +1,4 @@
-
-#include "include/hashset.h"
+#include <hashset.h>
 
 
 hashset* hashset_new(const enum dataconttype type, const unsigned int num_buckets)
@@ -101,4 +100,3 @@ void hashset_optimize(hashset* hs)
   for (int i = 0; i < hs->num_buckets; i++)
     treeset_balance(hs->buckets[i]);
 }
-

@@ -1,4 +1,3 @@
-
 #ifndef _HASHMAP_H_
 #define _HASHMAP_H_
 
@@ -176,4 +175,3 @@ void hashmap_optimize(hashmap* hm);
 
 
 #endif
-

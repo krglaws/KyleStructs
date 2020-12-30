@@ -1,5 +1,4 @@
-
-#include "include/hashmap.h"
+#include <hashmap.h>
 
 
 hashmap* hashmap_new(const enum dataconttype type, const unsigned int num_buckets)
@@ -147,4 +146,3 @@ void hashmap_optimize(hashmap* hm)
   for (int i = 0; i < hm->num_buckets; i++)
     treemap_balance(hm->buckets[i]);
 }
-

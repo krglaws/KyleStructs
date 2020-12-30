@@ -1,4 +1,3 @@
-
 #ifndef _QUEUE_H_
 #define _QUEUE_H_
 
@@ -84,4 +83,3 @@ unsigned int queue_length(queue* q);
 
 
 #endif
-

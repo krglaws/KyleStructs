@@ -1,5 +1,6 @@
+#include <stdlib.h>
 
-#include "include/queue.h"
+#include <queue.h>
 
 
 queue* queue_new()
@@ -53,4 +54,3 @@ unsigned int queue_length(queue* q)
 
   return listnode_length(q->head);
 }
-

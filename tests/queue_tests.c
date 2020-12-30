@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 
-#include "../src/include/queue.h"
+#include <queue.h>
 
 
 static int queue_new_tests()

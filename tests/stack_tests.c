@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 
-#include "../src/include/stack.h"
+#include <stack.h>
 
 
 static int stack_new_tests()

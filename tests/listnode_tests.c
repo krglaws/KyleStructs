@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 
-#include "../src/include/listnode.h"
+#include <listnode.h>
 
 
 static int listnode_new_tests()

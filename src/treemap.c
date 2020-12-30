@@ -1,5 +1,4 @@
-
-#include "include/treemap.h"
+#include <treemap.h>
 
 
 treemap* treemap_new()
@@ -101,4 +100,3 @@ void treemap_balance(treemap* tm)
 
   treemapnode_balance(&tm->root);
 }
-

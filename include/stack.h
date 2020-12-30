@@ -1,4 +1,3 @@
-
 #ifndef _STACK_H_
 #define _STACK_H_
 
@@ -84,4 +83,3 @@ unsigned int stack_height(stack* s);
 
 
 #endif
-

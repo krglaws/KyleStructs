@@ -1,4 +1,3 @@
-
 #ifndef _LISTNODE_H_
 #define _LISTNODE_H_
 

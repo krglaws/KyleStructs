@@ -1,5 +1,4 @@
-
-#include "include/treesetnode.h"
+#include <treesetnode.h>
 
 
 treesetnode* treesetnode_new(const datacont* dc)
@@ -276,4 +275,3 @@ void treesetnode_balance(treesetnode** tsn)
   treesetnode_delete_all(*tsn);
   *tsn = new_tree;
 }
-

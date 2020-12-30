@@ -2,7 +2,7 @@
 ERRTITLE="TESTS FAILED:"
 FAILED=""
 
-TESTBIN="tests/bin"
+TESTBIN="testbin"
 
 echo ==============================
 echo ----------------------------

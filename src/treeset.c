@@ -1,5 +1,4 @@
-
-#include "include/treeset.h"
+#include <treeset.h>
 
 
 treeset* treeset_new()
@@ -93,4 +92,3 @@ void treeset_balance(treeset* ts)
 
   treesetnode_balance(&ts->root);
 }
-

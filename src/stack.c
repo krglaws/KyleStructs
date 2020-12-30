@@ -1,5 +1,4 @@
-
-#include "include/stack.h"
+#include <stack.h>
 
 
 stack* stack_new()
@@ -49,4 +48,3 @@ unsigned int stack_height(stack* s)
 
   return listnode_length(s->top);
 }
-

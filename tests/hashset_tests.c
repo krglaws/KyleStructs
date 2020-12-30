@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 
-#include "../src/include/hashset.h"
+#include <hashset.h>
 
 
 static int hashset_new_tests()

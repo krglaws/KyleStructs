@@ -1,13 +1,14 @@
 
 CC := gcc
-CFLAGS := -fPIC 
+CFLAGS := -Iinclude -fPIC
+TESTFLAGS := -Iinclude
 
 SRC := src
-INC := src/include
-SBIN := src/bin
+INC := include
+SBIN := bin
 
 TEST := tests
-TBIN := tests/bin
+TBIN := testbin
 
 INCLOC := /usr/include/kylestructs
 LIBLOC := /usr/lib
@@ -101,77 +102,77 @@ DATACONTTESTDEPS := $(DATACONTDEPS)
 DATACONTTESTTARG := $(TBIN)/datacont_tests.out
 
 $(DATACONTTESTTARG): $(TEST)/datacont_tests.c $(DATACONTTESTDEPS)
-	$(CC) -g $^ -o $@
+	$(CC) -g $^ -o $@ $(TESTFLAGS)
 
 
 LISTNODETESTDEPS := $(DATACONTTESTDEPS) $(LISTNODEDEPS) 
 LISTNODETESTTARG := $(TBIN)/listnode_tests.out
 
 $(LISTNODETESTTARG): $(TEST)/listnode_tests.c $(LISTNODETESTDEPS)
-	$(CC) -g $^ -o $@
+	$(CC) -g $^ -o $@ $(TESTFLAGS)
 
 
 LISTTESTDEPS := $(LISTNODETESTDEPS) $(LISTDEPS)
 LISTTESTTARG := $(TBIN)/list_tests.out
 
 $(LISTTESTTARG): $(TEST)/list_tests.c $(LISTTESTDEPS)
-	$(CC) -g $^ -o $@
+	$(CC) -g $^ -o $@ $(TESTFLAGS)
 
 
 QUEUETESTDEPS := $(LISTNODETESTDEPS) $(QUEUEDEPS)
 QUEUETESTTARG := $(TBIN)/queue_tests.out
 
 $(QUEUETESTTARG): $(TEST)/queue_tests.c $(QUEUETESTDEPS)
-	$(CC) -g $^ -o $@
+	$(CC) -g $^ -o $@ $(TESTFLAGS)
 
 
 STACKTESTDEPS := $(LISTNODETESTDEPS) $(STACKDEPS)
 STACKTESTTARG := $(TBIN)/stack_tests.out
 
 $(STACKTESTTARG): $(TEST)/stack_tests.c $(STACKTESTDEPS) 
-	$(CC) -g $^ -o $@
+	$(CC) -g $^ -o $@ $(TESTFLAGS)
 
 
 TREESETNODETESTDEPS := $(LISTNODETESTDEPS) $(TREESETNODEDEPS)
 TREESETNODETESTTARG := $(TBIN)/treesetnode_tests.out
 
 $(TREESETNODETESTTARG): $(TEST)/treesetnode_tests.c $(TREESETNODETESTDEPS)
-	$(CC) -g $^ -o $@
+	$(CC) -g $^ -o $@ $(TESTFLAGS)
 
 
 TREESETTESTDEPS := $(TREESETNODETESTDEPS) $(TREESETDEPS)
 TREESETTESTTARG := $(TBIN)/treeset_tests.out
 
 $(TREESETTESTTARG): $(TEST)/treeset_tests.c $(TREESETTESTDEPS)
-	$(CC) -g $^ -o $@
+	$(CC) -g $^ -o $@ $(TESTFLAGS)
 
 
 HASHSETTESTDEPS := $(TREESETTESTDEPS) $(LISTTESTDEPS) $(HASHSETDEPS)
 HASHSETTESTTARG := $(TBIN)/hashset_tests.out
 
 $(HASHSETTESTTARG): $(TEST)/hashset_tests.c $(HASHSETTESTDEPS)
-	$(CC) -g $^ -o $@
+	$(CC) -g $^ -o $@ $(TESTFLAGS)
 
 
 TREEMAPNODETESTDEPS := $(LISTNODETESTDEPS) $(TREEMAPNODEDEPS)
 TREEMAPNODETESTTARG := $(TBIN)/treemapnode_tests.out
 
 $(TREEMAPNODETESTTARG): $(TEST)/treemapnode_tests.c $(TREEMAPNODETESTDEPS)
-	$(CC) -g $^ -o $@
+	$(CC) -g $^ -o $@ $(TESTFLAGS)
 
 
 TREEMAPTESTDEPS := $(TREEMAPNODETESTDEPS) $(LISTTESTDEPS) $(TREEMAPDEPS)
 TREEMAPTESTTARG := $(TBIN)/treemap_tests.out
 
 $(TREEMAPTESTTARG): $(TEST)/treemap_tests.c $(TREEMAPTESTDEPS)
-	$(CC) -g $^ -o $@
+	$(CC) -g $^ -o $@ $(TESTFLAGS)
 
 
 HASHMAPTESTDEPS += $(TREEMAPTESTDEPS) $(HASHMAPDEPS)
 HASHMAPTESTTARG := $(TBIN)/hashmap_tests.out
 
 $(HASHMAPTESTTARG): $(TEST)/hashmap_tests.c $(HASHMAPTESTDEPS)
-	$(CC) -g $^ -o $@
+	$(CC) -g $^ -o $@ $(TESTFLAGS)
 
 
 .PHONY: run_tests

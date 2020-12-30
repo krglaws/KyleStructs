@@ -1,4 +1,3 @@
-
 #ifndef _LIST_H_
 #define _LIST_H_
 
@@ -237,4 +236,3 @@ unsigned int list_length(const list* ls);
 
 
 #endif
-
