@@ -303,14 +303,15 @@ enum datacontcomp datacont_compare(const datacont* dca, const datacont* dcb)
 
 static uint32_t __hash(const void* data, const size_t size)
 {
-  uint32_t seed = 2147483647;
+  uint32_t hash = 5381;
 
   for (int i = 0; i < size; i++)
   {
-    uint8_t byte = *((uint8_t*) data + i);
-    seed = ((seed * byte) << 16) + ((seed * byte) >> 16);
+    uint8_t byte = (uint8_t) data[i];
+    hash = ((hash << 5) + hash) + byte;
   }
-  return seed;
+
+  return hash;
 }
 
 
