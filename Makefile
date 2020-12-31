@@ -18,78 +18,78 @@ default: all
 
 # compile sources
 
-DATACONTDEPS := $(SRC)/datacont.c 
-DATACONTTARG := $(SBIN)/datacont.o
+DATACONTDEPS := $(SRC)/ks_datacont.c 
+DATACONTTARG := $(SBIN)/ks_datacont.o
 
 $(DATACONTTARG): $(DATACONTDEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-LISTNODEDEPS := $(SRC)/listnode.c
-LISTNODETARG := $(SBIN)/listnode.o
+LISTNODEDEPS := $(SRC)/ks_listnode.c
+LISTNODETARG := $(SBIN)/ks_listnode.o
 
 $(LISTNODETARG): $(LISTNODEDEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-LISTDEPS := $(SRC)/list.c
-LISTTARG := $(SBIN)/list.o
+LISTDEPS := $(SRC)/ks_list.c
+LISTTARG := $(SBIN)/ks_list.o
 
 $(LISTTARG): $(LISTDEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-QUEUEDEPS := $(SRC)/queue.c
-QUEUETARG := $(SBIN)/queue.o
+QUEUEDEPS := $(SRC)/ks_queue.c
+QUEUETARG := $(SBIN)/ks_queue.o
 
 $(QUEUETARG): $(QUEUEDEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-STACKDEPS := $(SRC)/stack.c
-STACKTARG := $(SBIN)/stack.o
+STACKDEPS := $(SRC)/ks_stack.c
+STACKTARG := $(SBIN)/ks_stack.o
 
 $(STACKTARG): $(STACKDEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-TREESETNODEDEPS := $(SRC)/treesetnode.c
-TREESETNODETARG := $(SBIN)/treesetnode.o
+TREESETNODEDEPS := $(SRC)/ks_treesetnode.c
+TREESETNODETARG := $(SBIN)/ks_treesetnode.o
 
 $(TREESETNODETARG): $(TREESETNODEDEPS) 
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-TREESETDEPS := $(SRC)/treeset.c 
-TREESETTARG := $(SBIN)/treeset.o
+TREESETDEPS := $(SRC)/ks_treeset.c 
+TREESETTARG := $(SBIN)/ks_treeset.o
 
 $(TREESETTARG): $(TREESETDEPS) 
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-HASHSETDEPS := $(SRC)/hashset.c 
-HASHSETTARG := $(SBIN)/hashset.o
+HASHSETDEPS := $(SRC)/ks_hashset.c 
+HASHSETTARG := $(SBIN)/ks_hashset.o
 
 $(HASHSETTARG): $(HASHSETDEPS) 
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-TREEMAPNODEDEPS := $(SRC)/treemapnode.c 
-TREEMAPNODETARG := $(SBIN)/treemapnode.o
+TREEMAPNODEDEPS := $(SRC)/ks_treemapnode.c 
+TREEMAPNODETARG := $(SBIN)/ks_treemapnode.o
 
 $(TREEMAPNODETARG): $(TREEMAPNODEDEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-TREEMAPDEPS := $(SRC)/treemap.c 
-TREEMAPTARG := $(SBIN)/treemap.o
+TREEMAPDEPS := $(SRC)/ks_treemap.c 
+TREEMAPTARG := $(SBIN)/ks_treemap.o
 
 $(TREEMAPTARG): $(TREEMAPDEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
-HASHMAPDEPS := $(SRC)/hashmap.c 
-HASHMAPTARG := $(SBIN)/hashmap.o
+HASHMAPDEPS := $(SRC)/ks_hashmap.c 
+HASHMAPTARG := $(SBIN)/ks_hashmap.o
 
 $(HASHMAPTARG): $(HASHMAPDEPS)
 	$(CC) -c $< -o $@ $(CFLAGS)

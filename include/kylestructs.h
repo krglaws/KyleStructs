@@ -3,26 +3,26 @@
 
 /* main header */
 
-#include <kylestructs/datacont.h>
+#include <kylestructs/ks_datacont.h>
 
-#include <kylestructs/listnode.h>
+#include <kylestructs/ks_listnode.h>
 
-#include <kylestructs/treesetnode.h>
+#include <kylestructs/ks_treesetnode.h>
 
-#include <kylestructs/treemapnode.h>
+#include <kylestructs/ks_treemapnode.h>
 
-#include <kylestructs/list.h>
+#include <kylestructs/ks_list.h>
 
-#include <kylestructs/stack.h>
+#include <kylestructs/ks_stack.h>
 
-#include <kylestructs/queue.h>
+#include <kylestructs/ks_queue.h>
 
-#include <kylestructs/treeset.h>
+#include <kylestructs/ks_treeset.h>
 
-#include <kylestructs/treemap.h>
+#include <kylestructs/ks_treemap.h>
 
-#include <kylestructs/hashset.h>
+#include <kylestructs/ks_hashset.h>
 
-#include <kylestructs/hashmap.h>
+#include <kylestructs/ks_hashmap.h>
 
 #endif
