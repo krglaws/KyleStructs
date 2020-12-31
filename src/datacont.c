@@ -307,7 +307,7 @@ static uint32_t __hash(const void* data, const size_t size)
 
   for (int i = 0; i < size; i++)
   {
-    uint8_t byte = (uint8_t) data[i];
+    uint8_t byte = *((uint8_t *) data + i);
     hash = ((hash << 5) + hash) + byte;
   }
 
