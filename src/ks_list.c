@@ -89,6 +89,65 @@ int ks_list_insert(ks_list* ls, const ks_datacont* dc, int index)
 }
 
 
+int ks_list_push(ks_list* ls, const ks_datacont* dc)
+{
+  if (ls == NULL || dc == NULL) return -1;
+
+  if (ls->head != NULL)
+    return ks_listnode_insert(&(ls->head), dc, 0);
+
+  ls->head = ks_listnode_new(dc);
+
+  return 0;
+}
+
+
+ks_datacont* ks_list_pop(ks_list* ls)
+{
+  if (ls == NULL || ls->head == NULL) return NULL;
+
+  ks_datacont* dc = ks_datacont_copy(ks_listnode_get(ls->head, 0));
+
+  ks_listnode_remove_at(&(ls->head), 0);
+
+  return dc;
+}
+
+
+const ks_datacont* ks_list_peek(const ks_list* ls)
+{
+  if (ls == NULL) return NULL;
+
+  return ks_listnode_get(ls->head, 0);
+}
+
+
+int ks_list_enqueue(ks_list* ls, const ks_datacont* dc)
+{
+  if (ls == NULL || dc == NULL) return -1;
+
+  if (ls->head == NULL)
+  {
+    ls->head = ks_listnode_new(dc);
+    return 0;
+  }
+
+  return ks_listnode_insert(&(ls->head), dc, 0);
+}
+
+
+ks_datacont* ks_list_dequeue(ks_list* ls)
+{
+  if (ls == NULL || ls->head == NULL) return NULL;
+
+  ks_datacont* dc = ks_datacont_copy(ks_listnode_get(ls->head, -1));
+
+  ks_listnode_remove_at(&(ls->head), -1);
+
+  return dc;
+}
+
+
 int ks_list_index(const ks_list* ls, const ks_datacont* dc)
 {
   if (ls == NULL || dc == NULL) return -1;

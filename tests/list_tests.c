@@ -463,6 +463,207 @@ static int ks_list_insert_tests()
 }
 
 
+static int ks_list_push_tests()
+{
+  int retval = 0;
+
+  /* TEST 1 */
+  ks_list* ls = ks_list_new();
+  
+  if (ks_list_push(ls, ks_datacont_new("A", KS_CHAR, 1)) != 0)
+  {
+    printf("TEST 1: ks_list_push() should return 0 on success\n");
+    retval = -1;
+  }
+
+  /* TEST 2 */
+  if (ks_list_push(ls, ks_datacont_new("B", KS_CHAR, 1)) != 0)
+  {
+    printf("TEST 2: ks_list_push() should return 0 on success\n");
+    retval = -1;
+  }
+
+  /* TEST 3 */
+  if (ks_list_push(NULL, NULL) != -1)
+  {
+    printf("TEST 3: ks_list_push() should return -1 when params are NULL\n");
+    retval = -1;
+  }
+
+  ks_list_delete(ls);
+
+  return retval;
+}
+
+
+static int ks_list_pop_tests()
+{
+  int retval = 0;
+
+  /* TEST 1 */
+  ks_list* ls = ks_list_new();
+  ks_list_push(ls, ks_datacont_new("A", KS_CHAR, 1));
+  ks_list_push(ls, ks_datacont_new("B", KS_CHAR, 1));
+  ks_list_push(ls, ks_datacont_new("C", KS_CHAR, 1));
+
+  ks_datacont* dc = ks_list_pop(ls);
+  if (dc->c != 'C')
+  {
+    printf("TEST 1: Unexpected ks_datacont* returned from ks_list_pop(): %c. Expected: C\n", dc->c);
+    retval = -1;
+  }
+  ks_datacont_delete(dc);
+
+  /* TEST 2 */
+  dc = ks_list_pop(ls);
+  if (dc->c != 'B')
+  {
+    printf("TEST 2: Unexpected ks_datacont* returned from ks_list_pop(): %c. Expected: B\n", dc->c);
+    retval = -1;
+  }
+  ks_datacont_delete(dc);
+
+  /* TEST 3 */
+  dc = ks_list_pop(ls);
+  if (dc->c != 'A')
+  {
+    printf("TEST 3: Unexpected ks_datacont* returned from ks_list_pop(): %c. Expected: A\n", dc->c);
+    retval = -1;
+  }
+  ks_datacont_delete(dc);
+ 
+  /* TEST 4 */
+  dc = ks_list_pop(ls);
+  if (dc != NULL)
+  {
+    printf("TEST 4: ks_list_pop() should return NULL on empty ks_list*\n");
+    retval = -1;
+  }
+
+  ks_list_delete(ls);
+
+  return retval;
+}
+
+
+static int ks_list_peek_tests()
+{
+  int retval = 0;
+
+  /* TEST 1 */
+  ks_list* ls = ks_list_new();
+  ks_list_push(ls, ks_datacont_new("A", KS_CHAR, 1));
+
+  const ks_datacont* dc = ks_list_peek(ls);
+
+  if (dc->c != 'A')
+  {
+    printf("TEST 1: Unexpected ks_datacont* returned from ks_list_peek(): %c. Expected: 'A'\n", dc->c);
+    retval = -1;
+  }
+
+  if (ks_list_remove_at(ls, 0) != 0)
+  {
+    printf("TEST 1: ks_list_peek() should not remove from ks_list, only return reference.\n");
+    retval = -1;
+  }
+
+  /* TEST 2 */
+  if (ks_list_peek(ls) != NULL)
+  {
+    printf("TEST 2: ks_list_peek() should return NULL on empty list.\n");
+    retval = -1;
+  }
+
+  ks_list_delete(ls);
+
+  return retval;
+}
+
+
+static int ks_list_enqueue_tests()
+{
+  int retval = 0;
+
+  /* TEST 1 */
+  ks_list* ls = ks_list_new();
+  
+  if (ks_list_enqueue(ls, ks_datacont_new("A", KS_CHAR, 1)) != 0)
+  {
+    printf("TEST 1: ks_list_enqueue() should return 0 on success\n");
+    retval = -1;
+  }
+
+  /* TEST 2 */
+  if (ks_list_enqueue(ls, ks_datacont_new("B", KS_CHAR, 1)) != 0)
+  {
+    printf("TEST 2: ks_list_enqueue() should return 0 on success\n");
+    retval = -1;
+  }
+
+  /* TEST 3 */
+  if (ks_list_enqueue(NULL, NULL) != -1)
+  {
+    printf("TEST 3: ks_list_enqueue() should return -1 when params are NULL\n");
+    retval = -1;
+  }
+
+  ks_list_delete(ls);
+
+  return retval;
+}
+
+
+static int ks_list_dequeue_tests()
+{
+  int retval = 0;
+
+  /* TEST 1 */
+  ks_list* ls = ks_list_new();
+  ks_list_enqueue(ls, ks_datacont_new("A", KS_CHAR, 1));
+  ks_list_enqueue(ls, ks_datacont_new("B", KS_CHAR, 1));
+  ks_list_enqueue(ls, ks_datacont_new("C", KS_CHAR, 1));
+
+  ks_datacont* dc = ks_list_dequeue(ls);
+  if (dc->c != 'A')
+  {
+    printf("TEST 1: Unexpected ks_datacont* returned from ks_list_dequeue(): %c. Expected: A\n", dc->c);
+    retval = -1;
+  }
+  ks_datacont_delete(dc);
+
+  /* TEST 2 */
+  dc = ks_list_dequeue(ls);
+  if (dc->c != 'B')
+  {
+    printf("TEST 2: Unexpected ks_datacont* returned from ks_list_dequeue(): %c. Expected: B\n", dc->c);
+    retval = -1;
+  }
+  ks_datacont_delete(dc);
+
+  /* TEST 3 */
+  dc = ks_list_dequeue(ls);
+  if (dc->c != 'C')
+  {
+    printf("TEST 3: Unexpected ks_datacont* returned from ks_list_dequeue(): %c. Expected: C\n", dc->c);
+    retval = -1;
+  }
+  ks_datacont_delete(dc);
+ 
+  /* TEST 4 */
+  dc = ks_list_dequeue(ls);
+  if (dc != NULL)
+  {
+    printf("TEST 4: ks_list_dequeue() should return NULL on empty ks_list\n");
+    retval = -1;
+  }
+
+  ks_list_delete(ls);
+
+  return retval;
+}
+
+
 static int ks_list_index_tests()
 {
   int retval = 0;
@@ -663,6 +864,36 @@ int main()
   printf("==-----------------------------------==\n");
   printf("Running ks_list_insert_tests()...\n");
   if (ks_list_insert_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running ks_list_push_tests()...\n");
+  if (ks_list_push_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running ks_list_pop_tests()...\n");
+  if (ks_list_pop_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running ks_list_peek_tests()...\n");
+  if (ks_list_peek_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running ks_list_enqueue_tests()...\n");
+  if (ks_list_enqueue_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running ks_list_dequeue_tests()...\n");
+  if (ks_list_dequeue_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 

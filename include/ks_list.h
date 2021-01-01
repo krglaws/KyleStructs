@@ -169,6 +169,79 @@ int ks_list_replace_all(ks_list* ls, const ks_datacont* old_dc, const ks_datacon
 int ks_list_insert(ks_list* ls, const ks_datacont* dc, int index);
 
 
+/* --------------------------
+ * ks_list_push():
+ * Inserts a ks_datacont* at the beginning of a ks_list.
+ *
+ * Inputs:
+ * ks_list* ls - the list being operated on.
+ * ks_datacont* dc - the ks_datacont being pushed.
+ *
+ * Returns:
+ * int result - (-1) when either parameter is NULL.
+ *            - (0) on success.
+ */
+int ks_list_push(ks_list* ls, const ks_datacont* dc);
+
+
+/* ---------------------------
+ * ks_list_pop():
+ * Removes and returns the ks_datacont located at the beginning of a ks_list.
+ *
+ * Inputs:
+ * ks_list* ls - the list being operated on.
+ * ks_datacont* dc - the ks_datacont being popped from beginning of ks_list.
+ *
+ * Returns:
+ * ks_datacont* dc - (NULL) if 'ls' is NULL or empty.
+ *                 - the ks_datacont located at the beginning of ks_list.
+ */
+ks_datacont* ks_list_pop(ks_list* ls);
+
+
+/* --------------------------
+ * ks_list_peek():
+ * Returns the ks_datacont located at the beginnning of the list.
+ *
+ * Inputs:
+ * ks_list* ls - the list being operated on.
+ *
+ * Returns:
+ * ks_datacont* dc - (NULL) if 'ls' is NULL or empty.
+ *                 - a pointer to the ks_datacont located at the beginning of ks_list.
+ */
+const ks_datacont* ks_list_peek(const ks_list* ls);
+
+
+/* --------------------------
+ * ks_list_enqueue():
+ * Inserts a ks_datacont* at the beginning of a ks_list.
+ * 
+ * Inputs:
+ * ks_list* ls - the ks_list begin operated on.
+ * ks_datacont* - the ks_datacont being inserted.
+ *
+ * Returns:
+ * int result - (-1) when either parameter is NULL or when 'index' is OOB.
+ *            - (0) on success.
+ */
+int ks_list_enqueue(ks_list* ls, const ks_datacont* dc);
+
+
+/* --------------------------
+ * ks_list_dequeue():
+ * Removes and returns the ks_datacont located at the end of the ks_list.
+ *
+ * Inputs:
+ * ks_list* ls - the ks_list being operated on.
+ *
+ * Returns:
+ * ks_datacont* dc - (NULL) if 'ls' is NULL or empty.
+ *                 - the ks_datacont located at the beginning of ks_list.
+ */
+ks_datacont* ks_list_dequeue(ks_list* ls);
+
+
 /* ---------------------------
  * ks_list_index():
  * Returns the index of the first ks_datacont that matches the ks_datacont 'dc' param located within a ks_list.
@@ -199,7 +272,7 @@ int ks_list_index(const ks_list* ls, const ks_datacont* dc);
  *
  * Returns:
  * ks_datacont* dc - (NULL) if the 'index' is OOB, or if either param is NULL.
- *              - a copy of the ks_datacont located at 'index'.
+ *              - a pointer to the ks_datacont located at 'index'.
  *
  * Notes:
  * The ks_datacont returned by this function is a pointer to the original contained within the ks_list, so it should not
