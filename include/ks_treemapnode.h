@@ -2,22 +2,6 @@
 #define _KS_TREEMAPNODE_H_
 
 
-#include <ks_datacont.h>
-#include <ks_listnode.h>
-
-
-typedef struct ks_treemapnode ks_treemapnode;
-
-
-struct ks_treemapnode
-{
-  ks_datacont* key;
-  ks_datacont* value;
-  ks_treemapnode* left;
-  ks_treemapnode* right;
-};
-
-
 /* ------------------------------------
  * ks_treemapnode_new():
  * Creates a new ks_treemapnode.
@@ -46,6 +30,23 @@ ks_treemapnode* ks_treemapnode_new(const ks_datacont* key, const ks_datacont* va
 void ks_treemapnode_delete(ks_treemapnode* tmn);
 
 
+/* ----------------------------------
+ * ks_treemapnode_copy():
+ * Creates a copy of a treemapnode* and its ks_datacont*.
+ *
+ * Inputs:
+ * ks_treempanode* tmn - the ks_treemapnode to be copied.
+ *
+ * Returns:
+ * ks_treemapnode* - a copy of the ks_treemapnode*.
+ *
+ * Notes:
+ * ks_treemapnode_copy() only copies the ks_treemapnode itself
+ * and its ks_datacont, but not any other connected ks_treemapnodes.
+ */
+ks_treemapnode* ks_treemapnode_copy(const ks_treemapnode* tmn);
+
+
 /* -----------------------------------
  * ks_treemapnode_delete_all():
  * Deletes a ks_treemapnode, its 'key' and 'value' members, and recursively
@@ -58,6 +59,20 @@ void ks_treemapnode_delete(ks_treemapnode* tmn);
  * void
  */
 void ks_treemapnode_delete_all(ks_treemapnode* tmn);
+
+
+/* ----------------------------------
+ * ks_treemapnode_copy_all():
+ * Creates a copy of a treemapnode*, its ks_datacont*, and any
+ * connected ks_treemapnodes.
+ *
+ * Inputs:
+ * ks_treempanode* tmn - the ks_treemapnode to be copied.
+ *
+ * Returns:
+ * ks_treemapnode* - a copy of the ks_treemapnode*.
+ */
+ks_treemapnode* ks_treemapnode_copy_all(const ks_treemapnode* tmn);
 
 
 /* ----------------------------------

@@ -1,7 +1,10 @@
-
 #include <stdio.h>
 
+#include <ks_types.h>
+#include <ks_datacont.h>
+#include <ks_treesetnode.h>
 #include <ks_treeset.h>
+#include <ks_hashset.h>
 
 
 static int ks_treeset_new_tests()
@@ -24,6 +27,36 @@ static int ks_treeset_new_tests()
     retval = -1;
   }
   ks_treeset_delete(ts);
+
+  return retval;
+}
+
+
+static int ks_treeset_copy_tests()
+{
+  int retval = 0;
+
+  /* TEST 1 */
+  ks_treeset* ts = ks_treeset_new();
+  ks_treeset_add(ts, ks_datacont_new("A", KS_CHAR, 1));
+  ks_treeset_add(ts, ks_datacont_new("B", KS_CHAR, 1));
+
+  ks_treeset* ts_copy = ks_treeset_copy(ts);
+
+  if (ts_copy == NULL)
+  {
+    printf("TEST 1: Unexpected NULL return from ks_treeset_copy()\n");
+    return -1;
+  }
+
+  if (ts_copy->root->dc->c != 'A' || ts_copy->root->right->dc->c != 'B')
+  {
+    printf("TEST 1: Unexpected ks_datacont values after ts_treeset_copy()\n");
+    retval = -1;
+  }
+
+  ks_treeset_delete(ts);
+  ks_treeset_delete(ts_copy);
 
   return retval;
 }
@@ -389,6 +422,12 @@ int main()
   printf("==-----------------------------------==\n");
   printf("Running ks_treeset_new_tests()...\n");
   if (ks_treeset_new_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running ks_treeset_copy_tests()...\n");
+  if (ks_treeset_copy_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 

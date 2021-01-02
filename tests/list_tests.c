@@ -1,6 +1,8 @@
-
 #include <stdio.h>
 
+#include <ks_types.h>
+#include <ks_datacont.h>
+#include <ks_listnode.h>
 #include <ks_list.h>
 
 
@@ -18,6 +20,42 @@ static int ks_list_new_tests()
   }
 
   ks_list_delete(ls);
+
+  return retval;
+}
+
+
+static int ks_list_copy_tests()
+{
+  int retval = 0;
+
+  /* TEST 1 */
+  char c = 'A';
+  ks_list* ls = ks_list_new();
+
+  for (int i = 0; i < 3; i++)
+  {
+    ks_list_add(ls, ks_datacont_new(&c, KS_INT, 1));
+    c++;
+  }
+
+  ks_list* ls_copy = ks_list_copy(ls);
+
+  if (ls_copy == NULL)
+  {
+    printf("TEST 1: Unexpected NULL return from ks_list_copy()\n");
+    return -1;
+  }
+
+  /* TEST 2 */
+  if (ls_copy->head->dc->c != 'A' || ls_copy->head->next->next->dc->c != 'C')
+  {
+    printf("TEST 2: Unexpected datacont values in ks_list copy\n");
+    retval = -1;
+  }
+
+  ks_list_delete(ls);
+  ks_list_delete(ls_copy);
 
   return retval;
 }
@@ -816,6 +854,12 @@ int main()
   printf("==-----------------------------------==\n");
   printf("Running ks_list_new_tests()...\n");
   if (ks_list_new_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running ks_list_copy_tests()...\n");
+  if (ks_list_copy_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 

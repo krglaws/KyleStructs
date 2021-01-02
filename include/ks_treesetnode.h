@@ -2,20 +2,6 @@
 #define _KS_TREESETNODE_H_
 
 
-#include "ks_datacont.h"
-
-
-typedef struct ks_treesetnode ks_treesetnode;
-
-
-struct ks_treesetnode
-{
-  ks_datacont* dc;
-  ks_treesetnode* right;
-  ks_treesetnode* left;
-};
-
-
 /* ---------------------
  * ks_treesetnode_new():
  * Creates a new ks_treesetnode* containing a specified ks_datacont value.
@@ -50,6 +36,23 @@ ks_treesetnode* ks_treesetnode_new(const ks_datacont* dc);
 void ks_treesetnode_delete(ks_treesetnode* tsn);
 
 
+/* -----------------------
+ * ks_treesetnode_copy():
+ * Creates a copy of a ks_treesetnode and its ks_datacont.
+ *
+ * Inputs:
+ * ks_treesetnode* tsn - the ks_treesetnode being copy.
+ *
+ * Returns:
+ * ks_treesetnode* - a copy of 'tsn'.
+ *
+ * Notes:
+ * ks_treesetnode_copy() will only copy 'tsn' and its ks_datacont,
+ * but not any other connected ks_treesetnodes.
+ */
+ks_treesetnode* ks_treesetnode_copy(const ks_treesetnode* tsn);
+
+
 /* --------------------------
  * ks_treesetnode_delete_all():
  * Deletes a ks_treesetnode and all nodes connected to it.
@@ -61,6 +64,19 @@ void ks_treesetnode_delete(ks_treesetnode* tsn);
  * void
  */
 void ks_treesetnode_delete_all(ks_treesetnode* tsn);
+
+
+/* ----------------------------
+ * ks_treesetnode_copy_all():
+ * Creates a copy of a ks_treesetnode and all nodes connected to it.
+ *
+ * Inputs:
+ * ks_treesetnode* tsn - the ks_treesetnode being copied.
+ *
+ * Returns:
+ * ks_treesetnode* - a copy of 'tsn'.
+ */
+ks_treesetnode* ks_treesetnode_copy_all(const ks_treesetnode* tsn);
 
 
 /* -----------------------

@@ -2,35 +2,6 @@
 #define _KS_HASHSET_H_
 
 
-#include <ks_datacont.h>
-#include <ks_list.h>
-#include <ks_treeset.h>
-
-
-/* -----------------------
- * notes: 
- *
- * ks_hashsets, unlike its inherited types ks_treeset and ks_treesetnode, are required to have the type defined
- * within the struct itself. This is to prevent two ks_dataconts of non-comparable types to be added into 
- * two separate buckets without error. ks_treesets and ks_treesetnodes on the other hand have their types
- * determined by the first ks_datacont that is passed into them.
- *
- * Since ks_hashsets are not iterable the way a ks_treeset is, ks_hashset_to_list() provides a means for iterating
- * over the contents of a ks_hashset.
- */
-typedef struct ks_hashset ks_hashset;
-
-
-struct ks_hashset
-{
-  enum ks_datatype type;
-
-  unsigned int num_buckets;
-
-  ks_treeset** buckets;
-};
-
-
 /* ----------------------------------
  * ks_hashset_new():
  * Creates a new empty ks_hashset.
@@ -55,6 +26,19 @@ ks_hashset* ks_hashset_new(const enum ks_datatype type, const unsigned int num_b
  * void
  */
 void ks_hashset_delete(ks_hashset* hs);
+
+
+/* -------------------------------
+ * ks_hashset_copy():
+ * Creates a copy of a ks_hashset and all of its contents.
+ *
+ * Inputs:
+ * ks_hashset* hs - the ks_hashset being delete.
+ *
+ * Returns:
+ * ks_hashset* - a copy of 'hs'.
+ */
+ks_hashset* ks_hashset_copy(const ks_hashset* hs);
 
 
 /* --------------------------------

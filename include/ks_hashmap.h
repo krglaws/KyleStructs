@@ -2,24 +2,6 @@
 #define _KS_HASHMAP_H_
 
 
-#include <ks_datacont.h>
-#include <ks_list.h>
-#include <ks_treemap.h>
-
-
-typedef struct ks_hashmap ks_hashmap;
-
-
-struct ks_hashmap
-{
-  enum ks_datatype type;
-
-  unsigned int num_buckets;
- 
-  ks_treemap** buckets;
-};
-
-
 /* ------------------------------------
  * ks_hashmap_new():
  * Creates a new empty ks_hashmap.
@@ -45,6 +27,19 @@ ks_hashmap* ks_hashmap_new(const enum ks_datatype type, const unsigned int num_b
  * void
  */
 void ks_hashmap_delete(ks_hashmap* hm);
+
+
+/* ----------------------------------
+ * ks_hashmap_copy():
+ * Creates a copy of a ks_hashmap and all its contents.
+ *
+ * Inputs:
+ * ks_hashmap* hm - the ks_hashmap to be copied.
+ *
+ * Returns:
+ * ks_hashmap* - a copy of 'hm'.
+ */
+ks_hashmap* ks_hashmap_copy(const ks_hashmap* hm);
 
 
 /* ----------------------------------

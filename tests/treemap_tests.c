@@ -1,6 +1,10 @@
-
 #include <stdio.h>
 
+#include <ks_types.h>
+#include <ks_datacont.h>
+#include <ks_listnode.h>
+#include <ks_list.h>
+#include <ks_treemapnode.h>
 #include <ks_treemap.h>
 
 
@@ -17,6 +21,42 @@ static int ks_treemap_new_tests()
     retval = -1;
   }
   ks_treemap_delete(tm);
+
+  return retval;
+}
+
+
+static int ks_treemap_copy_tests()
+{
+  int retval = 0;
+
+  /* TEST 1 */
+  ks_treemap* tm = ks_treemap_new();
+  ks_treemap_add(tm, ks_datacont_new("B", KS_CHAR, 1), ks_datacont_new("B", KS_CHAR, 1));
+  ks_treemap_add(tm, ks_datacont_new("C", KS_CHAR, 1), ks_datacont_new("C", KS_CHAR, 1));
+
+  ks_treemap* tm_copy = ks_treemap_copy(tm);
+
+  if (tm_copy == NULL)
+  {
+    printf("TEST 1: Unexpected NULL return from ks_treemap_copy()\n");
+    return -1;
+  }
+
+  if (tm_copy->root->key->c != 'B')
+  {
+    printf("TEST 1: Unexpected ks_datacont value in ks_treemap_copy() result\n");
+    retval = -1;
+  }
+
+  if (tm_copy->root->right->key->c != 'C')
+  {
+    printf("TEST 1: Unexpected ks_datacont value in ks_treemap_copy() result\n");
+    retval = -1;
+  }
+
+  ks_treemap_delete(tm);
+  ks_treemap_delete(tm_copy);
 
   return retval;
 }
@@ -569,6 +609,12 @@ int main()
   printf("==-----------------------------------==\n");
   printf("Running ks_treemap_new_tests()...\n");
   if (ks_treemap_new_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running ks_treemap_copy_tests()...\n");
+  if (ks_treemap_copy_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 

@@ -6,79 +6,6 @@
 #include <stdint.h>
 
 
-enum ks_comparison
-{
-  KS_LESSTHAN,
-  KS_EQUAL,
-  KS_GREATERTHAN,
-  KS_CANTCOMPARE
-};
-
-
-enum ks_datatype
-{
-  KS_CHAR,
-  KS_SHORT,
-  KS_INT,
-  KS_LL,
-  KS_FLOAT,
-  KS_DOUBLE,
-
-  KS_UCHAR,
-  KS_USHORT,
-  KS_UINT,
-  KS_ULL,
-
-  KS_CHARP,
-  KS_SHORTP,
-  KS_INTP,
-  KS_LLP,
-  KS_FLOATP,
-  KS_DOUBLEP,
-
-  KS_UCHARP,
-  KS_USHORTP,
-  KS_UINTP,
-  KS_ULLP
-};
-
-
-typedef struct ks_datacont ks_datacont;
-
-
-struct ks_datacont
-{
-  enum ks_datatype type;
-  size_t size;
-  union
-  {
-    char c;
-    short s;
-    int i;
-    long long ll;
-    float f;
-    double d;
-
-    unsigned char uc;
-    unsigned short us;
-    unsigned int ui;
-    unsigned long long ull;
-
-    char* cp;
-    short* sp;
-    int* ip;
-    long long* llp;
-    float* fp;
-    double* dp;
-
-    unsigned char* ucp;
-    unsigned short* usp;
-    unsigned int* uip;
-    unsigned long long* ullp;
-  };
-};
-
-
 /* ---------------------------
  * ks_datacont_new():
  * Creates a new ks_datacont* containing the data pointed to by 'data'.
@@ -91,14 +18,22 @@ struct ks_datacont
  * 
  * Returns:
  * ks_datacont* dc - (NULL) if 'data' is NULL or 'count'== 0.
- *              - a ks_datacont* containing the data specified.
+ *                 - a ks_datacont* containing the data specified.
  *
  * Notes:
- * The data pointed to by 'data' is COPIED into the new ks_datacont structure. This way,
- * the user code is able to simply allocate whatever data is being used onto the stack.
+ * The data pointed to by 'data' is copied into the new ks_datacont structure. This gives
+ * the user code the ability to allocate data onto the stack, create a ks_datacont for it,
+ * and return it.
  *
  * When the new ks_datacont is to be of type CHARP, a null terminating character '\0' is
  * appended to the end of the string so that calls like strlen(dc->cp) won't cause a seg fault.
+ * 
+ * The types KS_VOIDP, KS_LIST, KS_TREESET, KS_HASHSET,
+ * KS_TREEMAP, and KS_HASHMAP will always be treated as
+ * single items (i.e. they should only point to one object
+ * in memory). Consequently, the 'size' member of the ks_datacont
+ * struct is not used in these cases, although it may be used
+ * by user code for its own purposes.
  */
 ks_datacont* ks_datacont_new(const void* data, const enum ks_datatype type, const size_t size);
 
@@ -110,8 +45,13 @@ ks_datacont* ks_datacont_new(const void* data, const enum ks_datatype type, cons
  * Inputs:
  * ks_datacont* dc - the ks_datacont being deleted.
  *
- * Returns: 
+ * Returns:
  * void
+ * 
+ * Notes:
+ * ks_datacont_delete() will not call free() on the pointer in KS_VOIDP type
+ * as it does on the other pointer types. The user code is expected to handle
+ * whatever memory management is necessary in that case.
  */
 void ks_datacont_delete(ks_datacont* dc);
 
@@ -126,12 +66,12 @@ void ks_datacont_delete(ks_datacont* dc);
  *
  * Returns:
  * ks_datacont* copy - (NULL) if 'dc' is NULL.
- *                - a copy of 'dc'.
+ *                   - a copy of 'dc'.
  *
  * Notes:
- * The copy that is returned by this function contains no references whatsoever to the
- * data contained within the original. This way each copy can be independently deleted
- * or otherwise modified without affecting one another.
+ * ks_datacont_copy() will always do deep copies (i.e. it will make a copy of
+ * the ks_datacont struct itself, as well as any data it points to),
+ * except on KS_VOIDP types.
  */
 ks_datacont* ks_datacont_copy(const ks_datacont* dc);
 
@@ -148,6 +88,10 @@ ks_datacont* ks_datacont_copy(const ks_datacont* dc);
  * Returns:
  * enum ks_comparison result - see the enum ks_comparison definition at the top of this
  *                            header for details. 
+ * 
+ * Notes:
+ * When used on any pointer type, ks_datacont_compare() will only compare the values
+ * of the pointers themselves.
  */
 enum ks_comparison ks_datacont_compare(const ks_datacont* dca, const ks_datacont* dcb);
 
@@ -162,6 +106,10 @@ enum ks_comparison ks_datacont_compare(const ks_datacont* dca, const ks_datacont
  *
  * Returns:
  * uint32_t hash - the hash of the data contained in the ks_datacont.
+ * 
+ * Notes:
+ * When used on any pointer type, ks_datacont_hash() will only hash the value of the
+ * pointer itself.
  */
 uint32_t ks_datacont_hash(const ks_datacont* dc);
 

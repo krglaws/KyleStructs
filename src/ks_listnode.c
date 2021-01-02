@@ -1,5 +1,6 @@
 #include <stdlib.h>
 
+#include <ks_types.h>
 #include <ks_datacont.h>
 #include <ks_listnode.h>
 
@@ -26,6 +27,16 @@ void ks_listnode_delete(ks_listnode* ln)
 }
 
 
+ks_listnode* ks_listnode_copy(const ks_listnode* ln)
+{
+  if (ln == NULL) return NULL;
+
+  ks_datacont* dc = ks_datacont_copy(ln->dc);
+
+  return ks_listnode_new(dc);
+}
+
+
 void ks_listnode_delete_all(ks_listnode* ln)
 {
   if (ln == NULL) return;
@@ -33,6 +44,18 @@ void ks_listnode_delete_all(ks_listnode* ln)
   ks_listnode_delete_all(ln->next);
 
   ks_listnode_delete(ln);
+}
+
+
+ks_listnode* ks_listnode_copy_all(const ks_listnode* ln)
+{
+  if (ln == NULL) return NULL;
+
+  ks_listnode* ln_copy = ks_listnode_copy(ln);
+
+  ln_copy->next = ks_listnode_copy_all(ln->next);
+
+  return ln_copy;
 }
 
 

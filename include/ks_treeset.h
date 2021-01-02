@@ -2,19 +2,6 @@
 #define _KS_TREESET_H_
 
 
-#include <ks_datacont.h>
-#include <ks_treesetnode.h>
-
-
-typedef struct ks_treeset ks_treeset;
-
-
-struct ks_treeset
-{
-  ks_treesetnode* root;
-};
-
-
 /* ---------------------
  * ks_treeset_new():
  * Creates a new empty ks_treeset.
@@ -39,6 +26,19 @@ ks_treeset* ks_treeset_new();
  * void
  */
 void ks_treeset_delete(ks_treeset* ts);
+
+
+/* -----------------------
+ * ks_treeset_copy():
+ * Creates a copy of a ks_treeset and all of its contents.
+ *
+ * Inputs:
+ * ks_treeset* ts - the ks_treeset to be copied.
+ *
+ * Returns:
+ * ks_treesetnode - a copy of the treesetnode.
+ */
+ks_treeset* ks_treeset_copy(const ks_treeset* ts);
 
 
 /* ----------------------

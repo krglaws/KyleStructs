@@ -1,8 +1,11 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#include <ks_types.h>
 #include <ks_datacont.h>
+#include <ks_listnode.h>
 #include <ks_list.h>
+#include <ks_treemapnode.h>
 #include <ks_treemap.h>
 #include <ks_hashmap.h>
 
@@ -32,6 +35,21 @@ void ks_hashmap_delete(ks_hashmap* hm)
 
   free(hm->buckets);
   free(hm);
+}
+
+
+ks_hashmap* ks_hashmap_copy(const ks_hashmap* hm)
+{
+  if (hm == NULL) return NULL;
+
+  ks_hashmap* hm_copy = ks_hashmap_new(hm->type, hm->num_buckets);
+
+  for (int i = 0; i < hm->num_buckets; i++)
+  {
+    hm_copy->buckets[i] = ks_treemap_copy(hm->buckets[i]);
+  }
+
+  return hm_copy;
 }
 
 

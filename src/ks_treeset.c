@@ -1,8 +1,10 @@
 #include <stdlib.h>
 
+#include <ks_types.h>
 #include <ks_datacont.h>
 #include <ks_treesetnode.h>
 #include <ks_treeset.h>
+#include <ks_hashset.h>
 
 
 ks_treeset* ks_treeset_new()
@@ -18,6 +20,18 @@ void ks_treeset_delete(ks_treeset* ts)
   ks_treesetnode_delete_all(ts->root);
 
   free(ts);
+}
+
+
+ks_treeset* ks_treeset_copy(const ks_treeset* ts)
+{
+  if (ts == NULL) return NULL;
+
+  ks_treeset* ts_copy = ks_treeset_new();
+
+  ts_copy->root = ks_treesetnode_copy_all(ts->root);
+
+  return ts_copy;
 }
 
 

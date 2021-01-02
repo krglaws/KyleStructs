@@ -2,20 +2,6 @@
 #define _TREEMAP_H_
 
 
-#include <ks_datacont.h>
-#include <ks_treemapnode.h>
-#include <ks_list.h>
-
-
-typedef struct ks_treemap ks_treemap;
-
-
-struct ks_treemap
-{
-  ks_treemapnode* root;
-};
-
-
 /* ------------------------------------
  * ks_treemap_new():
  * Creates a new empty ks_treemap.
@@ -40,6 +26,19 @@ ks_treemap* ks_treemap_new();
  * void
  */
 void ks_treemap_delete(ks_treemap* tm);
+
+
+/* ---------------------------------
+ * ks_treemap_copy():
+ * Creats a copy of a ks_treemap*.
+ *
+ * Inputs:
+ * ks_treemap* tm - the ks_treemap to be copied.
+ *
+ * Returns:
+ * ks_treemap* - a copy of 'tm'.
+ */
+ks_treemap* ks_treemap_copy(const ks_treemap* tm);
 
 
 /* ----------------------------------

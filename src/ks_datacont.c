@@ -2,7 +2,16 @@
 #include <stdint.h>
 #include <string.h>
 
+#include <ks_types.h>
 #include <ks_datacont.h>
+#include <ks_listnode.h>
+#include <ks_list.h>
+#include <ks_treesetnode.h>
+#include <ks_treeset.h>
+#include <ks_hashset.h>
+#include <ks_treemapnode.h>
+#include <ks_treemap.h>
+#include <ks_hashmap.h>
 
 
 ks_datacont* ks_datacont_new(const void* data, const enum ks_datatype dct, const size_t size)
@@ -45,6 +54,9 @@ ks_datacont* ks_datacont_new(const void* data, const enum ks_datatype dct, const
     case KS_ULL:
       dc->ull = *((unsigned long long*) data);
       break;
+    case KS_VOIDP:
+      dc->vp = (void*) data;
+      break;
     case KS_CHARP:
       dc->cp = calloc(1, (sizeof(char) * size) + 1);
       memcpy(dc->cp, data, sizeof(char) * size);
@@ -85,6 +97,21 @@ ks_datacont* ks_datacont_new(const void* data, const enum ks_datatype dct, const
       dc->ullp = malloc(sizeof(unsigned long long) * size);
       memcpy(dc->ullp, data, sizeof(long long) * size);
       break;
+    case KS_LIST:
+      dc->ls = (ks_list*) data;
+      break;
+    case KS_TREESET:
+      dc->ts = (ks_treeset*) data;
+      break;
+    case KS_HASHSET:
+      dc->hs = (ks_hashset*) data;
+      break;
+    case KS_TREEMAP:
+      dc->tm = (ks_treemap*) data;
+      break;
+    case KS_HASHMAP:
+      dc->hm = (ks_hashmap*) data;
+      break;
   }
   return dc;
 }
@@ -92,14 +119,41 @@ ks_datacont* ks_datacont_new(const void* data, const enum ks_datatype dct, const
 
 void ks_datacont_delete(ks_datacont* dc)
 {
-  if (dc == NULL) return;
-  if (dc->type < KS_CHARP)
-    free(dc);
-  else
+  if (dc == NULL)
+  {
+    return;
+  }
+
+  // free all pointer types except void*
+  if (dc->type > KS_VOIDP && dc->type < KS_LIST)
   {
     free(dc->cp);
-    free(dc);
   }
+
+  // free kylestruct types
+  if (dc->type > KS_ULLP)
+  {
+    switch (dc->type)
+    {
+      case KS_LIST:
+        ks_list_delete(dc->ls);
+        break;
+      case KS_TREESET:
+        ks_treeset_delete(dc->ts);
+        break;
+      case KS_HASHSET:
+        ks_hashset_delete(dc->hs);
+        break;
+      case KS_TREEMAP:
+        ks_treemap_delete(dc->tm);
+        break;
+      case KS_HASHMAP:
+        ks_hashmap_delete(dc->hm);
+        break;
+    }
+  }
+
+  free(dc);
 }
 
 
@@ -128,6 +182,8 @@ ks_datacont* ks_datacont_copy(const ks_datacont* dc)
       return ks_datacont_new(&(dc->ui), dc->type, dc->size);
     case KS_ULL:
       return ks_datacont_new(&(dc->ull), dc->type, dc->size);
+    case KS_VOIDP:
+      return ks_datacont_new(&(dc->vp), dc->type, dc->size);
     case KS_CHARP:
       return ks_datacont_new(dc->cp, dc->type, dc->size);
     case KS_SHORTP:
@@ -146,158 +202,75 @@ ks_datacont* ks_datacont_copy(const ks_datacont* dc)
       return ks_datacont_new(dc->uip, dc->type, dc->size);
     case KS_ULLP:
       return ks_datacont_new(dc->ullp, dc->type, dc->size);
+    case KS_LIST:
+      return ks_datacont_new(ks_list_copy(dc->ls), dc->type, dc->size);
+    case KS_TREESET:
+      return ks_datacont_new(ks_treeset_copy(dc->ts), dc->type, dc->size);
+    case KS_HASHSET:
+      return ks_datacont_new(ks_hashset_copy(dc->hs), dc->type, dc->size);
+    case KS_TREEMAP:
+      return ks_datacont_new(ks_treemap_copy(dc->tm), dc->type, dc->size);
+    case KS_HASHMAP:
+      return ks_datacont_new(ks_hashmap_copy(dc->hm), dc->type, dc->size);
   }
   return NULL;
 }
 
 
-static enum ks_comparison _compare_single_items(const ks_datacont* dca, const ks_datacont* dcb)
+enum ks_comparison ks_datacont_compare(const ks_datacont* dca, const ks_datacont* dcb)
 {
+  if (dca == NULL || dcb == NULL || dca->type != dcb->type)
+  {
+    return KS_CANTCOMPARE;
+  }
+
   switch(dca->type)
   {
     case KS_CHAR:
       if (dca->c == dcb->c) return KS_EQUAL;
-      else if (dca->c < dcb->c) return KS_LESSTHAN;
-      else return KS_GREATERTHAN;
+      if (dca->c < dcb->c) return KS_LESSTHAN;
+      return KS_GREATERTHAN;
     case KS_SHORT:
       if (dca->s == dcb->s) return KS_EQUAL;
-      else if (dca->s < dcb->s) return KS_LESSTHAN;
-      else return KS_GREATERTHAN;
-      break;
+      if (dca->s < dcb->s) return KS_LESSTHAN;
+      return KS_GREATERTHAN;
     case KS_INT:
       if (dca->i == dcb->i) return KS_EQUAL;
-      else if (dca->i < dcb->i) return KS_LESSTHAN;
-      else return KS_GREATERTHAN;
-      break;
+      if (dca->i < dcb->i) return KS_LESSTHAN;
+      return KS_GREATERTHAN;
     case KS_LL:
       if (dca->ll == dcb->ll) return KS_EQUAL;
-      else if (dca->ll < dcb->ll) return KS_LESSTHAN;
-      else return KS_GREATERTHAN;
-      break;
+      if (dca->ll < dcb->ll) return KS_LESSTHAN;
+      return KS_GREATERTHAN;
     case KS_FLOAT:
       if (dca->f == dcb->f) return KS_EQUAL;
-      else if (dca->f < dcb->f) return KS_LESSTHAN;
-      else return KS_GREATERTHAN;
-      break;
+      if (dca->f < dcb->f) return KS_LESSTHAN;
+      return KS_GREATERTHAN;
     case KS_DOUBLE:
       if (dca->d == dcb->d) return KS_EQUAL;
-      else if (dca->d < dcb->d) return KS_LESSTHAN;
-      else return KS_GREATERTHAN;
-      break;
+      if (dca->d < dcb->d) return KS_LESSTHAN;
+      return KS_GREATERTHAN;
     case KS_UCHAR:
       if (dca->uc == dcb->uc) return KS_EQUAL;
-      else if (dca->uc < dcb->uc) return KS_LESSTHAN;
-      else return KS_GREATERTHAN;
-      break;
+      if (dca->uc < dcb->uc) return KS_LESSTHAN;
+      return KS_GREATERTHAN;
     case KS_USHORT:
       if (dca->us == dcb->us) return KS_EQUAL;
-      else if (dca->us < dcb->us) return KS_LESSTHAN;
-      else return KS_GREATERTHAN;
-      break;
+      if (dca->us < dcb->us) return KS_LESSTHAN;
+      return KS_GREATERTHAN;
     case KS_UINT:
       if (dca->ui == dcb->ui) return KS_EQUAL;
-      else if (dca->ui < dcb->ui) return KS_LESSTHAN;
-      else return KS_GREATERTHAN;
-      break;
+      if (dca->ui < dcb->ui) return KS_LESSTHAN;
+      return KS_GREATERTHAN;
     case KS_ULL:
       if (dca->ull == dcb->ull) return KS_EQUAL;
-      else if (dca->ull < dcb->ull) return KS_LESSTHAN;
-      else return KS_GREATERTHAN;
-      break;
+      if (dca->ull < dcb->ull) return KS_LESSTHAN;
+      return KS_GREATERTHAN;
+    default:
+      if (dca->vp == dcb->vp) return KS_EQUAL;
+      if (dca->vp < dcb->vp) return KS_LESSTHAN;
+      return KS_GREATERTHAN;
   }
-  return KS_CANTCOMPARE;
-}
-
-
-static enum ks_comparison _compare_multi_items(const ks_datacont* dca, const ks_datacont* dcb)
-{
-  switch(dca->type)
-  {
-    case KS_CHARP:
-      for (int i = 0; i < dca->size && i < dcb->size; i++)
-      {
-        if (dca->cp[i] < dcb->cp[i]) return KS_LESSTHAN;
-	else if (dca->cp[i] > dcb->cp[i]) return KS_GREATERTHAN;
-      }
-      break;
-    case KS_SHORTP:
-      for (int i = 0; i < dca->size && i < dcb->size; i++)
-      {
-        if (dca->sp[i] < dcb->sp[i]) return KS_LESSTHAN;
-	else if (dca->sp[i] > dcb->sp[i]) return KS_GREATERTHAN;
-      }
-      break;
-    case KS_INTP:
-      for (int i = 0; i < dca->size && i < dcb->size; i++)
-      {
-        if (dca->ip[i] < dcb->ip[i]) return KS_LESSTHAN;
-	else if (dca->ip[i] > dcb->ip[i]) return KS_GREATERTHAN;
-      }
-      break;
-    case KS_LLP:
-      for (int i = 0; i < dca->size && i < dcb->size; i++)
-      {
-        if (dca->llp[i] < dcb->llp[i]) return KS_LESSTHAN;
-	else if (dca->llp[i] > dcb->llp[i]) return KS_GREATERTHAN;
-      }
-      break;
-    case KS_FLOATP:
-      for (int i = 0; i < dca->size && i < dcb->size; i++)
-      {
-        if (dca->fp[i] < dcb->fp[i]) return KS_LESSTHAN;
-	else if (dca->fp[i] > dcb->fp[i]) return KS_GREATERTHAN;
-      }
-      break;
-    case KS_DOUBLEP:
-      for (int i = 0; i < dca->size && i < dcb->size; i++)
-      {
-        if (dca->dp[i] < dcb->dp[i]) return KS_LESSTHAN;
-	else if (dca->dp[i] > dcb->dp[i]) return KS_GREATERTHAN;
-      }
-      break;
-    case KS_UCHARP:
-      for (int i = 0; i < dca->size && i < dcb->size; i++)
-      {
-        if (dca->ucp[i] < dcb->ucp[i]) return KS_LESSTHAN;
-	else if (dca->ucp[i] > dcb->ucp[i]) return KS_GREATERTHAN;
-      }
-      break;
-    case KS_USHORTP:
-      for (int i = 0; i < dca->size && i < dcb->size; i++)
-      {
-        if (dca->usp[i] < dcb->usp[i]) return KS_LESSTHAN;
-	else if (dca->usp[i] > dcb->usp[i]) return KS_GREATERTHAN;
-      }
-      break;
-    case KS_UINTP:
-      for (int i = 0; i < dca->size && i < dcb->size; i++)
-      {
-        if (dca->uip[i] < dcb->uip[i]) return KS_LESSTHAN;
-	else if (dca->uip[i] > dcb->uip[i]) return KS_GREATERTHAN;
-      }
-      break;
-    case KS_ULLP:
-      for (int i = 0; i < dca->size && i < dcb->size; i++)
-      {
-        if (dca->ullp[i] < dcb->ullp[i]) return KS_LESSTHAN;
-	else if (dca->ullp[i] > dcb->ullp[i]) return KS_GREATERTHAN;
-      }
-      break;
-  }
-  if (dca->size < dcb->size) return KS_LESSTHAN;
-  else if (dca->size > dcb->size) return KS_GREATERTHAN;
-  else return KS_EQUAL;
-}
-
-
-enum ks_comparison ks_datacont_compare(const ks_datacont* dca, const ks_datacont* dcb)
-{
-  if (dca->type != dcb->type)
-    return KS_CANTCOMPARE;
-
-  if (dca->type < KS_CHARP)
-    return _compare_single_items(dca, dcb);
-  else return _compare_multi_items(dca, dcb);
 }
 
 
@@ -335,17 +308,7 @@ uint32_t ks_datacont_hash(const ks_datacont* dc)
       return __hash(&dc->f, sizeof(float));
     case KS_DOUBLE:
       return __hash(&dc->d, sizeof(double));
-    case KS_CHARP:
-      return __hash(dc->cp, sizeof(char) * dc->size);
-    case KS_SHORTP:
-      return __hash(dc->sp, sizeof(short) * dc->size);
-    case KS_INTP:
-      return __hash(dc->ip, sizeof(int) * dc->size);
-    case KS_LLP:
-      return __hash(dc->llp, sizeof(long long) * dc->size);
-    case KS_FLOATP:
-      return __hash(dc->fp, sizeof(float) * dc->size);
-    case KS_DOUBLEP:
-      return __hash(dc->dp, sizeof(double) * dc->size);
+    default:
+      return __hash(dc->vp, sizeof(void *));
   }
 }

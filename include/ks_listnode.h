@@ -2,19 +2,6 @@
 #define _KS_LISTNODE_H_
 
 
-#include <ks_datacont.h>
-
-
-typedef struct ks_listnode ks_listnode;
-
-
-struct ks_listnode
-{
-  ks_datacont* dc;
-  ks_listnode* next;
-};
-
-
 /* -------------------
  * ks_listnode_new():
  * Creates a new ks_listnode* containing a ks_datacont*.
@@ -29,7 +16,7 @@ ks_listnode* ks_listnode_new(const ks_datacont* dc);
 
 
 /* --------------------
- * ks_listnode_delete(ks_listnode* ln):
+ * ks_listnode_delete():
  * Deletes a ks_listnode and its ks_datacont* member.
  *
  * Inputs:
@@ -43,6 +30,23 @@ ks_listnode* ks_listnode_new(const ks_datacont* dc);
  * assumed that the user code has or will disconnect any connected nodes.
  */
 void ks_listnode_delete(ks_listnode* ln);
+
+
+/* --------------------
+ * ks_listnode_copy():
+ * Creates a copy of a ks_listnode and its ks_datacont.
+ *
+ * Inputs:
+ * ks_listnode* ln - the ks_listnode being copied.
+ *
+ * Returns:
+ * ks_listnode* - a copy of the ks_listnode.
+ *
+ * Notes:
+ * ks_listnode_copy() only copies 'ln' and its connected ks_datacont*,
+ * but not any other connected ks_listnodes.
+ */
+ks_listnode* ks_listnode_copy(const ks_listnode* ln);
 
 
 /* -------------------
@@ -61,6 +65,19 @@ void ks_listnode_delete(ks_listnode* ln);
  * member set to NULL.
  */
 void ks_listnode_delete_all(ks_listnode* ln);
+
+
+/* ----------------------
+ * ks_listnode_copy_all():
+ * Creates a copy of a ks_listnode and all of its connected nodes.
+ *
+ * Inputs:
+ * ks_listnode* ln - the ks_listnode to be copied.
+ * 
+ * Returns:
+ * ks_listnode* - a copy of the ks_listnode.
+ */
+ks_listnode* ks_listnode_copy_all(const ks_listnode* ln);
 
 
 /* --------------------

@@ -1,6 +1,7 @@
-
 #include <stdio.h>
 
+#include <ks_types.h>
+#include <ks_datacont.h>
 #include <ks_treesetnode.h>
 
 
@@ -17,7 +18,8 @@ static int ks_treesetnode_new_tests()
     printf("TEST 1: ks_treesetnode contains unexpected ks_datacont* value.\n");
     retval = -1;
   }
-  if (! (tsn->left == NULL && tsn->right == NULL))
+
+  if (tsn->left != NULL || tsn->right != NULL)
   {
     printf("TEST 1: ks_treesetnode should contain NULL left and right ks_treesetnode* values.\n");
     retval = -1;
@@ -28,13 +30,72 @@ static int ks_treesetnode_new_tests()
 }
 
 
+static int ks_treesetnode_copy_tests()
+{
+  int retval = 0;
+
+  /* TEST 1 */
+  ks_treesetnode* tsn = ks_treesetnode_new(ks_datacont_new("B", KS_CHAR, 1));
+
+  ks_treesetnode* tsn_copy = ks_treesetnode_copy(tsn);
+
+  if (tsn_copy == NULL)
+  {
+    printf("TEST 1: Unexpected NULL return from ks_treesetnode_copy()\n");
+    return -1;
+  }
+
+  if (tsn_copy->dc->c != 'B')
+  {
+    printf("TEST 1: Unexpected ks_datacont value after ks_treesetnode_copy()\n");
+    retval = -1;
+  }
+
+  ks_treesetnode_delete(tsn);
+  ks_treesetnode_delete(tsn_copy);
+
+  return retval;
+}
+
+
+static int ks_treesetnode_copy_all_tests()
+{
+  int retval = 0;
+
+  /* TEST 1 */
+  int num = 1;
+  ks_treesetnode* tsn = ks_treesetnode_new(ks_datacont_new(&num, KS_INT, 1));
+  num++;
+  ks_treesetnode_add(tsn, ks_datacont_new(&num, KS_INT, 1));
+
+  ks_treesetnode* tsn_copy = ks_treesetnode_copy_all(tsn);
+
+  if (tsn_copy == NULL)
+  {
+    printf("TEST 1: Unexpected NULL return from ks_treesetnode_copy_all()\n");
+    return -1;
+  }
+
+  if (tsn_copy->dc->i != 1 || tsn_copy->right->dc->i != 2)
+  {
+    printf("TEST 1: Unexpected ks_datacont values after ks_treesetnode_copy_all()\n");
+    retval = -1;
+  }
+
+  ks_treesetnode_delete_all(tsn);
+  ks_treesetnode_delete_all(tsn_copy);
+
+  return retval;
+}
+
+
 static int ks_treesetnode_add_tests()
 {
   int retval = 0;
 
-  ks_treesetnode* tsn = ks_treesetnode_new(ks_datacont_new("B\0", KS_CHARP, 2));
-  ks_datacont* left = ks_datacont_new("A\0", KS_CHARP, 2);
-  ks_datacont* right = ks_datacont_new("C\0", KS_CHARP, 2);
+  ks_treesetnode* tsn = ks_treesetnode_new(ks_datacont_new("B", KS_CHAR, 1));
+  ks_datacont* left = ks_datacont_new("A", KS_CHAR, 1);
+  ks_datacont* right = ks_datacont_new("C", KS_CHAR, 1);
 
   /* Test 1 */
   if (ks_treesetnode_add(tsn, left) != 0)
@@ -45,9 +106,9 @@ static int ks_treesetnode_add_tests()
 
   if (tsn->left != NULL)
   {
-    if (tsn->left->dc->cp[0] != 'A')
+    if (tsn->left->dc->c != 'A')
     {
-      printf("TEST 1: Unexpected container value on left node: %c. Expected: %c.\n", tsn->left->dc->cp[0], 'A');
+      printf("TEST 1: Unexpected container value on left node: %c. Expected: %c.\n", tsn->left->dc->c, 'A');
       retval = -1;
     }
   }
@@ -55,7 +116,7 @@ static int ks_treesetnode_add_tests()
   {
     printf("TEST 1: Unexpected NULL value in left node of tsn.\n");
     retval = -1;
-  }  
+  }
 
   /* Test 2 */
   if (ks_treesetnode_add(tsn, right) != 0)
@@ -65,9 +126,9 @@ static int ks_treesetnode_add_tests()
   }
   if (tsn->right != NULL)
   {
-    if (tsn->right->dc->cp[0] != 'C')
+    if (tsn->right->dc->c != 'C')
     {
-      printf("TEST 2: Unexpected container value on right node: %c. Expcted: %c.\n", tsn->right->dc->cp[0], 'C');
+      printf("TEST 2: Unexpected container value on right node: %c. Expcted: %c.\n", tsn->right->dc->c, 'C');
       retval = -1;
     }
   }
@@ -442,6 +503,18 @@ int main()
   printf("==-----------------------------------==\n");
   printf("Running ks_treesetnode_new_tests()...\n");
   if (ks_treesetnode_new_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running ks_treesetnode_copy_tests()...\n");
+  if (ks_treesetnode_copy_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running ks_treesetnode_copy_all_tests()...\n");
+  if (ks_treesetnode_copy_all_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 

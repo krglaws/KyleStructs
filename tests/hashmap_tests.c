@@ -1,6 +1,11 @@
-
 #include <stdio.h>
 
+#include <ks_types.h>
+#include <ks_datacont.h>
+#include <ks_listnode.h>
+#include <ks_list.h>
+#include <ks_treemapnode.h>
+#include <ks_treemap.h>
 #include <ks_hashmap.h>
 
 
@@ -23,6 +28,51 @@ static int ks_hashmap_new_tests()
     retval = -1;
   }
   ks_hashmap_delete(hm);
+
+  return retval;
+}
+
+
+static int ks_hashmap_copy_tests()
+{
+  int retval = 0;
+
+  /* TEST 1 */
+  ks_hashmap* hm = ks_hashmap_new(KS_CHAR, 2);
+  ks_hashmap_add(hm, ks_datacont_new("B", KS_CHAR, 1), ks_datacont_new("B", KS_CHAR, 1));
+
+  ks_hashmap* hm_copy = ks_hashmap_copy(hm);
+
+  if (hm_copy == NULL)
+  {
+    printf("TEST 1: Unexpected NULL return from ks_hashmap_copy() result\n");
+    return -1;
+  }
+
+  if (hm_copy->buckets[0] != NULL)
+  {
+    if (hm_copy->buckets[0]->root->key->c != 'B')
+    {
+      printf("TEST 1: Unexpected ks_datacont value in ks_hashmap_copy() result\n");
+      retval = -1;
+    }
+  }
+  else if (hm_copy->buckets[1] != NULL)
+  {
+    if (hm_copy->buckets[1]->root->key->c != 'B')
+    {
+      printf("TEST 1: Unexpected ks_datacont value in ks_hashmap_copy() result\n");
+      retval = -1;
+    }
+  }
+  else
+  {
+    printf("TEST 1: Unexpected empty ks_hashmap after ks_hashmap_copy()\n");
+    retval = -1;
+  }
+
+  ks_hashmap_delete(hm);
+  ks_hashmap_delete(hm_copy);
 
   return retval;
 }
@@ -198,6 +248,12 @@ int main()
   printf("==-----------------------------------==\n");
   printf("Running ks_hashmap_new_tests()...\n");
   if (ks_hashmap_new_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running ks_hashmap_copy_tests()...\n");
+  if (ks_hashmap_copy_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 

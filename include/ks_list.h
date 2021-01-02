@@ -2,19 +2,6 @@
 #define _KS_LIST_H_
 
 
-#include <ks_datacont.h>
-#include <ks_listnode.h>
-
-
-typedef struct ks_list ks_list;
-
-
-struct ks_list
-{
-  ks_listnode* head;
-};
-
-
 /* -------------------
  * ks_list_new():
  * Creates a new empty ks_list*.
@@ -39,6 +26,16 @@ ks_list* ks_list_new();
  * void
  */
 void ks_list_delete(ks_list* ls);
+
+
+/* ---------------------
+ * ks_list_copy():
+ * Creates a copy of a list and all of its contents.
+ *
+ * Inputs:
+ * ks_list* 
+ */
+ks_list* ks_list_copy(const ks_list* ls);
 
 
 /* --------------------

@@ -1,6 +1,7 @@
-
 #include <stdio.h>
 
+#include <ks_types.h>
+#include <ks_datacont.h>
 #include <ks_listnode.h>
 
 
@@ -23,6 +24,55 @@ static int ks_listnode_new_tests()
   }
 
   ks_listnode_delete(ln);
+
+  return retval;
+}
+
+
+static int ks_listnode_copy_tests()
+{
+  int retval = 0;
+
+  /* TEST 1 */
+  ks_listnode* ln = ks_listnode_new(ks_datacont_new("A", KS_CHAR, 1));
+  ks_listnode* ln_copy = ks_listnode_copy(ln);
+
+  if (ln_copy == NULL)
+  {
+    printf("TEST 1: Unexpected NULL return from ks_listnode_copy().\n");
+    retval = -1;
+  }
+
+  ks_listnode_delete(ln);
+  ks_listnode_delete(ln_copy);
+
+  return retval;
+}
+
+
+static int ks_listnode_copy_all_tests()
+{
+  int retval = 0;
+
+  /* TEST 1 */
+  ks_listnode* ln = ks_listnode_new(ks_datacont_new("A", KS_CHAR, 1));
+  ln->next = ks_listnode_new(ks_datacont_new("B", KS_CHAR, 1));
+
+  ks_listnode* ln_copy = ks_listnode_copy_all(ln);
+  if (ln_copy == NULL)
+  {
+    printf("TEST 1: Unexpected NULL return from ks_listnode_copy().\n");
+    return -1;
+  }
+
+  if (ln_copy->dc->c != 'A' || ln_copy->next->dc->c != 'B')
+  {
+    printf("TEST 1: Unexpected ks_datacont values after ks_listnode_copy_all()\n");
+    retval = -1;
+  }
+
+  ks_listnode_delete_all(ln);
+  ks_listnode_delete_all(ln_copy);
 
   return retval;
 }
@@ -604,6 +654,18 @@ int main()
   printf("==-----------------------------------==\n");
   printf("Running ks_listnode_new_tests()...\n");
   if (ks_listnode_new_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running ks_listnode_copy_tests()...\n");
+  if (ks_listnode_copy_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running ks_listnode_copy_all_tests()...\n");
+  if (ks_listnode_copy_all_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 

@@ -1,6 +1,15 @@
 #include <stdio.h>
 
+#include <ks_types.h>
 #include <ks_datacont.h>
+#include <ks_listnode.h>
+#include <ks_list.h>
+#include <ks_treesetnode.h>
+#include <ks_treeset.h>
+#include <ks_hashset.h>
+#include <ks_treemapnode.h>
+#include <ks_treemap.h>
+#include <ks_hashmap.h>
 
 
 static int ks_datacont_new_tests()
@@ -53,18 +62,15 @@ static int ks_datacont_new_tests()
 static int ks_datacont_copy_tests()
 {
   int retval = 0;
-  ks_datacont* dc1 = ks_datacont_new("ABCDEF\0", KS_CHARP, 7);
+
+  int num = 1234;
+  ks_datacont* dc1 = ks_datacont_new(&num, KS_INT, 1);
   ks_datacont* dc2 = ks_datacont_copy(dc1);
 
   /* TEST 1 */
   if (dc1 == dc2) 
   {
     printf("TEST 1: ks_datacont_copy() should return different reference.\n");
-    retval = -1;
-  }
-  if (dc1->cp == dc2->cp)
-  {
-    printf("TEST 1: dc1->cp should contain different value than dc2->cp.\n");
     retval = -1;
   }
 
@@ -84,7 +90,7 @@ static int ks_datacont_copy_tests()
 
   ks_datacont_delete(dc1);
   ks_datacont_delete(dc2);
-  
+
   return retval;
 }
 
@@ -93,7 +99,6 @@ static int ks_datacont_compare_tests()
 {
   int retval = 0;
   int num;
-  char* str;
   enum ks_comparison result;
   ks_datacont* dca;
   ks_datacont* dcb;
@@ -113,9 +118,8 @@ static int ks_datacont_compare_tests()
   ks_datacont_delete(dcb);
 
   /* Test 2 */
-  str = "TESTSTRING";
-  dca = ks_datacont_new(str, KS_CHARP, 11);
-  dcb = ks_datacont_new(str, KS_CHARP, 11);
+  dca = ks_datacont_new("A", KS_CHAR, 11);
+  dcb = ks_datacont_new("A", KS_CHAR, 11);
   result = ks_datacont_compare(dca, dcb);
   if (result != KS_EQUAL)
   {
@@ -126,6 +130,7 @@ static int ks_datacont_compare_tests()
   ks_datacont_delete(dcb);
 
   /* Test 3 */
+  char* str = "TESTSTRING";
   dca = ks_datacont_new(str, KS_CHARP, 11);
   dcb = ks_datacont_new(&num, KS_INT, 1);
   result = ks_datacont_compare(dca, dcb);
@@ -183,7 +188,7 @@ int main()
 
   printf("==-----------------------------------==\n");
   printf("Running ks_datacont_compare_tests()...\n");
-  if (ks_datacont_compare_tests()) retval - 1;
+  if (ks_datacont_compare_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 

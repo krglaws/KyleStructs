@@ -1,5 +1,6 @@
 #include <stdlib.h>
 
+#include <ks_types.h>
 #include <ks_datacont.h>
 #include <ks_treesetnode.h>
 
@@ -26,6 +27,16 @@ void ks_treesetnode_delete(ks_treesetnode* tsn)
 }
 
 
+ks_treesetnode* ks_treesetnode_copy(const ks_treesetnode* tsn)
+{
+  if (tsn == NULL) return NULL;
+
+  ks_datacont* dc = ks_datacont_copy(tsn->dc);
+
+  return ks_treesetnode_new(dc);
+}
+
+
 void ks_treesetnode_delete_all(ks_treesetnode* tsn)
 {
   if (tsn == NULL) return;
@@ -35,6 +46,19 @@ void ks_treesetnode_delete_all(ks_treesetnode* tsn)
   ks_treesetnode_delete_all(tsn->right);
 
   ks_treesetnode_delete(tsn);
+}
+
+
+ks_treesetnode* ks_treesetnode_copy_all(const ks_treesetnode* tsn)
+{
+  if (tsn == NULL) return NULL;
+
+  ks_treesetnode* tsn_copy = ks_treesetnode_copy(tsn);
+
+  tsn_copy->left = ks_treesetnode_copy_all(tsn->left);
+  tsn_copy->right = ks_treesetnode_copy_all(tsn->right);
+
+  return tsn_copy;
 }
 
 

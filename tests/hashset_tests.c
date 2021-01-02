@@ -1,6 +1,11 @@
-
 #include <stdio.h>
 
+#include <ks_types.h>
+#include <ks_datacont.h>
+#include <ks_listnode.h>
+#include <ks_list.h>
+#include <ks_treesetnode.h>
+#include <ks_treeset.h>
 #include <ks_hashset.h>
 
 
@@ -21,6 +26,51 @@ static int ks_hashset_new_tests()
     retval = -1;
   }
   ks_hashset_delete(hs);
+
+  return retval;
+}
+
+
+static int ks_hashset_copy_tests()
+{
+  int retval = 0;
+
+  /* Test 1 */
+  ks_hashset* hs = ks_hashset_new(KS_CHAR, 2);
+  ks_hashset_add(hs, ks_datacont_new("B", KS_CHAR, 1));
+
+  ks_hashset* hs_copy = ks_hashset_copy(hs);
+
+  if (hs_copy == NULL)
+  {
+    printf("TEST 1: Unexpected NULL return from ks_hashset_copy()\n");
+    return -1;
+  }
+
+  if (hs_copy->buckets[0] != NULL)
+  {
+    if (hs_copy->buckets[0]->root->dc->c != 'B')
+    {
+      printf("TEST 1: Unexpected ks_datacont value after ks_hashset_copy()\n");
+      retval = -1;
+    }
+  }
+  else if (hs_copy->buckets[1] != NULL)
+  {
+    if (hs_copy->buckets[1]->root->dc->c != 'B')
+    {
+      printf("TEST 1: Unexpected ks_datacont value after ks_hashset_copy()\n");
+      retval = -1;
+    }
+  }
+  else
+  {
+    printf("TEST 1: Unexpected empty ks_hashset after ks_hashset_copy()\n");
+    retval = -1;
+  }
+
+  ks_hashset_delete(hs);
+  ks_hashset_delete(hs_copy);
 
   return retval;
 }
@@ -241,6 +291,12 @@ int main()
   printf("==-----------------------------------==\n");
   printf("Running ks_hashset_new_tests()...\n");
   if (ks_hashset_new_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running ks_hashset_copy_tests()...\n");
+  if (ks_hashset_copy_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 

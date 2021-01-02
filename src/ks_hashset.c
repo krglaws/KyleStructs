@@ -1,8 +1,11 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#include <ks_types.h>
 #include <ks_datacont.h>
+#include <ks_listnode.h>
 #include <ks_list.h>
+#include <ks_treesetnode.h>
 #include <ks_treeset.h>
 #include <ks_hashset.h>
 
@@ -32,6 +35,21 @@ void ks_hashset_delete(ks_hashset* hs)
 
   free(hs->buckets);
   free(hs);
+}
+
+
+ks_hashset* ks_hashset_copy(const ks_hashset* hs)
+{
+  if (hs == NULL) return NULL;
+
+  ks_hashset* hs_copy = ks_hashset_new(hs->type, hs->num_buckets);
+
+  for (int i = 0; i < hs->num_buckets; i++)
+  {
+    hs_copy->buckets[i] = ks_treeset_copy(hs->buckets[i]);
+  }
+
+  return hs_copy;
 }
 
 

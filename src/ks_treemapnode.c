@@ -1,5 +1,6 @@
 #include <stdlib.h>
 
+#include <ks_types.h>
 #include <ks_datacont.h>
 #include <ks_listnode.h>
 #include <ks_treemapnode.h>
@@ -31,6 +32,17 @@ void ks_treemapnode_delete(ks_treemapnode* tmn)
 }
 
 
+ks_treemapnode* ks_treemapnode_copy(const ks_treemapnode* tmn)
+{
+  if (tmn == NULL) return NULL;
+
+  ks_datacont* key = ks_datacont_copy(tmn->key);
+  ks_datacont* val = ks_datacont_copy(tmn->value);
+
+  return ks_treemapnode_new(key, val);
+}
+
+
 void ks_treemapnode_delete_all(ks_treemapnode* tmn)
 {
   if (tmn == NULL) return;
@@ -40,6 +52,19 @@ void ks_treemapnode_delete_all(ks_treemapnode* tmn)
   ks_treemapnode_delete_all(tmn->right);
 
   ks_treemapnode_delete(tmn);
+}
+
+
+ks_treemapnode* ks_treemapnode_copy_all(const ks_treemapnode* tmn)
+{
+  if (tmn == NULL) return NULL;
+
+  ks_treemapnode* tmn_copy = ks_treemapnode_copy(tmn);
+
+  tmn_copy->left = ks_treemapnode_copy_all(tmn->left);
+  tmn_copy->right = ks_treemapnode_copy_all(tmn->right);
+
+  return tmn_copy;
 }
 
 
