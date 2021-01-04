@@ -1,0 +1,44 @@
+digraph G {
+	labelloc="t";
+	label = "KyleStructs 'Inheritance' Graph";
+
+	subgraph cluster0 {
+		label = "Tier 1";
+		color = blue;
+		ks_datacont;
+	}
+
+	subgraph cluster1 {
+		label = "Tier 2";
+		color = blue;
+		ks_treemapnode;
+		ks_treesetnode;
+		ks_listnode;
+	}
+
+	subgraph cluster2 {
+		label = "Tier 3";
+		color = blue;
+		ks_treemap;
+		ks_treeset;
+		ks_list;
+	}
+
+	subgraph cluster3 {
+		label = "Tier 4";
+		color = blue;
+		ks_hashmap;
+		ks_hashset;
+	}
+
+	ks_datacont -> ks_treemapnode;
+	ks_datacont -> ks_treesetnode;
+	ks_datacont -> ks_listnode;
+
+	ks_treemapnode -> ks_treemap;
+	ks_treesetnode -> ks_treeset;
+	ks_listnode -> ks_list;
+
+	ks_treemap -> ks_hashmap;
+	ks_treeset -> ks_hashset;
+}

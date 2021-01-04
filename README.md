@@ -10,54 +10,49 @@ Here is a quick example of how KyleStructs might be used:
 /* gcc main.c -lkylestructs */
 
 #include <stdio.h>
+#include <string.h>
 #include <kylestructs.h>
 
 
 int main()
 {
-  hashmap* phonebook = hashmap_new(CHARP, 10);
-  datacont* number_dc;
-  datacont* name_dc;
+  ks_hashmap* phonebook = ks_hashmap_new(KS_CHARP, 10);
+  const ks_datacont* number_dc;
+  const ks_datacont* name_dc;
 
   char number[30] = {0};
   char name[30] = {0};
-  
+
   printf("Enter a name followed by a 10-digit phone number:\n");
 
-  while (scanf("%s %s", name, number) != -1) {
+  while (scanf("%s %s", name, number) != -1)
+  {
+    number_dc = ks_datacont_new(number, KS_CHARP, strlen(number));
+    name_dc = ks_datacont_new(name, KS_CHARP, strlen(name));
 
-    datacont* number_dc = datacont_new(number, CHARP, strlen(number));
-    datacont* name_dc = datacont_new(name, CHARP, strlen(name));
-
-    if (hashmap_add(phonebook, number_dc, name_dc) == 1)
+    if (ks_hashmap_add(phonebook, number_dc, name_dc) == 1)
       printf("Replaced existing number %s.\n", number);
 
     memset(number, 0, 30);
     memset(name, 0, 30);
   }
 
-  int count = hashmap_count(phonebook);
-
-  list* numbers = hashmap_keys(phonebook);
-  list* names = hashmap_values(phonebook);
+  int count = ks_hashmap_count(phonebook);
 
   for (int i = 0; i < count; i++)
   {
-    number_dc = list_get(numbers, i);
-    name_dc = list_get(names, i);
+    number_dc = ks_hashmap_get_key(phonebook, i);
+    name_dc = ks_hashmap_get(phonebook, number_dc);
 
     printf("%s => %s\n", number_dc->cp, name_dc->cp);
   }
 
-  hashmap_delete(phonebook);
-  list_delete(numbers);
-  list_delete(names);
+  ks_hashmap_delete(phonebook);
 }
-
 ```
 
 ## Library Overview
-At the center of all of these different data structures is the `datacont` struct. It is a container that can hold pretty much any primitive data type, and comes with a library for comparison, duplication, hashing, and more. All other structures are built on top of the `datacont` struct so that they in turn can handle most kinds of data. As the design for each structure grows more complex, functionality is borrowed from one or more of those that are less complex. Here is a graph to illustrate the order of "inheritance":
+At the center of all of these different data structures is the `ks_datacont` struct. It is a container that can hold pretty much any primitive data type, and comes with a library for comparison, duplication, hashing, and more. All other structures are built on top of the `ks_datacont` struct so that they in turn can handle most kinds of data. As the design for each structure grows more complex, functionality is borrowed from one or more of those that are less complex. Here is a graph to illustrate the order of "inheritance":
 
 ![Overview](samples/inheritance_graph.png)
 
