@@ -2,8 +2,6 @@
 
 #include <ks_types.h>
 #include <ks_datacont.h>
-#include <ks_listnode.h>
-#include <ks_list.h>
 #include <ks_treesetnode.h>
 #include <ks_treeset.h>
 #include <ks_hashset.h>
@@ -234,49 +232,83 @@ static int ks_hashset_count_tests()
 }
 
 
-static int ks_hashset_to_list_tests()
+static int ks_hashset_get_tests()
 {
   int retval = 0;
 
-  ks_hashset* hs = ks_hashset_new(KS_CHAR, 10);
-  ks_datacont* dcC = ks_datacont_new("C", KS_CHAR, 1);
-  ks_datacont* dcA = ks_datacont_new("A", KS_CHAR, 1);
-  ks_datacont* dcB = ks_datacont_new("B", KS_CHAR, 1);
-
-  ks_hashset_add(hs, dcC);
-  ks_hashset_add(hs, dcA);
-  ks_hashset_add(hs, dcB);
-
   /* TEST 1 */
-  ks_list* ls = ks_hashset_to_list(hs);
+  ks_hashset* hs = ks_hashset_new(KS_CHAR, 2);
 
-  int len;
-  if ((len = ks_list_length(ls)) != 3)
+  ks_treeset* ts0 = ks_treeset_new();
+  ks_treeset_add(ts0, ks_datacont_new("B", KS_CHAR, 1));
+  ks_treeset_add(ts0, ks_datacont_new("A", KS_CHAR, 1));
+  ks_treeset_add(ts0, ks_datacont_new("C", KS_CHAR, 1));
+
+  ks_treeset* ts1 = ks_treeset_new();
+  ks_treeset_add(ts1, ks_datacont_new("E", KS_CHAR, 1));
+  ks_treeset_add(ts1, ks_datacont_new("D", KS_CHAR, 1));
+  ks_treeset_add(ts1, ks_datacont_new("F", KS_CHAR, 1));
+
+  hs->buckets[0] = ts0;
+  hs->buckets[1] = ts1;
+
+  const ks_datacont* dc = ks_hashset_get(hs, -1);
+  if (dc->c != 'F')
   {
-    printf("TEST 1: Unexpected ks_list length: %d. Expected 3.\n", len);
+    printf("TEST 1: Unexpected ks_datacont value after ks_hashset_get(): %c. Expected: 'F'\n", dc->c);
     retval = -1;
   }
 
-  if (ks_list_index(ls, dcA) == -1)
+  dc = ks_hashset_get(hs, 5);
+  if (dc->c != 'F')
   {
-    printf("TEST 1: ks_list should contain value 'A'.\n");
+    printf("TEST 1: Unexpected ks_datacont value after ks_hashset_get(): %c. Expected: 'F'\n", dc->c);
     retval = -1;
   }
 
-  if (ks_list_index(ls, dcB) == -1)
+  dc = ks_hashset_get(hs, -3);
+  if (dc->c != 'D')
   {
-    printf("TEST 1: ks_list should contain value 'B'.\n");
+    printf("TEST 1: Unexpected ks_datacont value after ks_hashset_get(): %c. Expected: 'D'\n", dc->c);
     retval = -1;
   }
 
-  if (ks_list_index(ls, dcC) == -1)
+  dc = ks_hashset_get(hs, 3);
+  if (dc->c != 'D')
   {
-    printf("TEST 1: ks_list should contains value 'C'.\n");
+    printf("TEST 1: Unexpected ks_datacont value after ks_hashset_get(): %c. Expected: 'D'\n", dc->c);
+    retval = -1;
+  }
+
+  dc = ks_hashset_get(hs, -4);
+  if (dc->c != 'C')
+  {
+    printf("TEST 1: Unexpected ks_datacont value after ks_hashset_get(): %c. Expected: 'C'\n", dc->c);
+    retval = -1;
+  }
+
+  dc = ks_hashset_get(hs, 2);
+  if (dc->c != 'C')
+  {
+    printf("TEST 1: Unexpected ks_datacont value after ks_hashset_get(): %c. Expected: 'C'\n", dc->c);
+    retval = -1;
+  }
+
+  dc = ks_hashset_get(hs, -6);
+  if (dc->c != 'A')
+  {
+    printf("TEST 1: Unexpected ks_datacont value after ks_hashset_get(): %c. Expected: 'A'\n", dc->c);
+    retval = -1;
+  }
+
+  dc = ks_hashset_get(hs, 0);
+  if (dc->c != 'A')
+  {
+    printf("TEST 1: Unexpected ks_datacont value after ks_hashset_get(): %c. Expected: 'A'\n", dc->c);
     retval = -1;
   }
 
   ks_hashset_delete(hs);
-  ks_list_delete(ls);
 
   return retval;
 }
@@ -325,8 +357,8 @@ int main()
   printf("==-----------------------------------==\n\n");
 
   printf("==-----------------------------------==\n");
-  printf("Running ks_hashset_to_list_tests()...\n");
-  if (ks_hashset_to_list_tests()) retval = -1;
+  printf("Running ks_hashset_get_tests()...\n");
+  if (ks_hashset_get_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 

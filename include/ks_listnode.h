@@ -95,6 +95,24 @@ ks_listnode* ks_listnode_copy_all(const ks_listnode* ln);
 int ks_listnode_add(ks_listnode* ln, const ks_datacont* dc);
 
 
+/* ---------------------
+ * ks_listnode_merge():
+ * Merges two ks_listnodes.
+ *
+ * Inputs:
+ * ks_listnode* lna - the left half of new ks_listnode* chain.
+ * ks_listnode* lnb - the right half of new ks_listnode* chain.
+ *
+ * Returns:
+ * ks_listnode* - pointer to beginning of ks_listnode chain.
+ *
+ * Notes:
+ * If one of the params is NULL, the non-NULL param will be returned.
+ * If both are NULL, NULL will be returned.
+ */
+ks_listnode* ks_listnode_merge(ks_listnode* lna, ks_listnode* lnb);
+
+
 /* -----------------------
  * ks_listnode_remove_by():
  * Removes the first occurrence of a ks_datacont found within a chain of ks_listnodes.

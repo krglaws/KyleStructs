@@ -101,6 +101,37 @@ static int ks_list_add_tests()
 }
 
 
+static int ks_list_merge_tests()
+{
+  int retval = 0;
+
+  /* TEST 1 */
+  ks_list* lsa = ks_list_new();
+  ks_list_add(lsa, ks_datacont_new("A", KS_CHAR, 1));
+
+  ks_list* lsb = ks_list_new();
+  ks_list_add(lsb, ks_datacont_new("B", KS_CHAR, 1));
+
+  lsa = ks_list_merge(lsa, lsb);
+
+  if (ks_list_length(lsa) != 2)
+  {
+    printf("TEST 1: Unexpected ks_list length after ks_list_merge()\n");
+    retval = -1;
+  }
+
+  if (lsa->head->dc->c != 'A' || lsa->head->next->dc->c != 'B')
+  {
+    printf("TEST 1: Unexpected ks_datacont values after ks_list_merge()\n");
+    retval = -1;
+  }
+
+  ks_list_delete(lsa);
+
+  return retval;
+}
+
+
 static int ks_list_remove_by_tests()
 {
   int retval = 0;
@@ -866,6 +897,12 @@ int main()
   printf("==-----------------------------------==\n");
   printf("Running ks_list_add_tests()...\n");
   if (ks_list_add_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running ks_list_merge_tests()...\n");
+  if (ks_list_merge_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 

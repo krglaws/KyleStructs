@@ -46,6 +46,18 @@ int ks_list_add(ks_list* ls, const ks_datacont* dc)
 }
 
 
+ks_list* ks_list_merge(ks_list* lsa, ks_list* lsb)
+{
+  if (lsa == NULL || lsb == NULL) return lsa ? lsa : lsb;
+
+  lsa->head = ks_listnode_merge(lsa->head, lsb->head);
+
+  free(lsb);
+
+  return lsa;
+}
+
+
 int ks_list_remove_by(ks_list* ls, const ks_datacont* dc)
 {
   if (ls == NULL || dc == NULL) return -1;

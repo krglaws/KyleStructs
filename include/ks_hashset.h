@@ -107,23 +107,18 @@ unsigned int ks_hashset_contains(const ks_hashset* hs, const ks_datacont* dc);
 unsigned int ks_hashset_count(const ks_hashset* hs);
 
 
-/* ------------------------
- * ks_hashset_to_list():
- * Returns a ks_list of all ks_dataconts within a ks_hashset.
+/* --------------------
+ * ks_hashset_get():
+ * Retrieves a ks_datacont located at a specified index within a ks_hashset.
  *
  * Inputs:
- * ks_hashset* hs - the ks_hashset being operated on.
- *
- * Returns:
- * ks_list* ls - (NULL) if 'hs' is NULL.
- *          - a ks_list containing zero or more ks_dataconts.
+ * ks_hashet* hs - the ks_hashset being operated on.
+ * int index - the index from which to retrieve a ks_datacont.
  *
  * Notes:
- * The ks_dataconts contained within 'ls' are copies of those in 'hs', and can
- * be safely deleted by the user code without affecting the ks_dataconts within
- * 'hs'.
+ * Negative values for 'index' are allowed.
  */
-ks_list* ks_hashset_to_list(const ks_hashset* hs);
+ks_datacont* ks_hashset_get(const ks_hashset* hs, int index);
 
 
 /* --------------------

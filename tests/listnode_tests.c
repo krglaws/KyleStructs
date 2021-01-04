@@ -117,6 +117,34 @@ static int ks_listnode_add_tests()
 }
 
 
+static int ks_listnode_merge_tests()
+{
+  int retval = 0;
+
+  /* TEST 1 */
+  ks_listnode* lna = ks_listnode_new(ks_datacont_new("A", KS_CHAR, 1));
+  ks_listnode* lnb = ks_listnode_new(ks_datacont_new("B", KS_CHAR, 1));
+
+  lna = ks_listnode_merge(lna, lnb);
+
+  if (ks_listnode_length(lna) != 2)
+  {
+    printf("TEST 1: Unexpected ks_listnode length after ks_listnode_merge()\n");
+    retval = -1;
+  }
+
+  if (lna->dc->c != 'A' || lna->next->dc->c != 'B')
+  {
+    printf("TEST 1: Unexpected ks_datacont values after ks_listnode_merge()\n");
+    retval = -1;
+  }
+
+  ks_listnode_delete_all(lna);
+
+  return retval;
+}
+
+
 static int ks_listnode_remove_by_tests()
 {
   int retval = 0;
@@ -672,6 +700,12 @@ int main()
   printf("==-----------------------------------==\n");
   printf("Running ks_listnode_add_tests()...\n");
   if (ks_listnode_add_tests()) retval = -1;
+  printf("done.\n");
+  printf("==-----------------------------------==\n\n");
+
+  printf("==-----------------------------------==\n");
+  printf("Running ks_listnode_merge_tests()...\n");
+  if (ks_listnode_merge_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 

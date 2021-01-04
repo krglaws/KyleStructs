@@ -98,25 +98,15 @@ ks_list* ks_hashmap_keys(const ks_hashmap* hm)
     return NULL;
 
   ks_list* ls = ks_list_new();
-  ks_list* temp = NULL;
-  ks_listnode* end = NULL;
+  ks_list* temp;
 
   for (int i = 0; i < hm->num_buckets; i++)
   {
-    if ((temp = ks_treemap_keys(hm->buckets[i])) == NULL)
-      continue;
+    temp = ks_treemap_keys(hm->buckets[i]);
 
-    if (ls->head == NULL)
-    {
-      ls->head = end = temp->head;
-      free(temp);
-    }
-    else
-    {
-      while (end->next) end = end->next;
-      end->next = temp->head;
-    }
+    ls = ks_list_merge(ls, temp);
   }
+
   return ls;
 }
 
@@ -128,24 +118,14 @@ ks_list* ks_hashmap_values(const ks_hashmap* hm)
 
   ks_list* ls = ks_list_new();
   ks_list* temp = NULL;
-  ks_listnode* end = NULL;
 
   for (int i = 0; i < hm->num_buckets; i++)
   {
-    if ((temp = ks_treemap_values(hm->buckets[i])) == NULL)
-      continue;
+    temp = ks_treemap_values(hm->buckets[i]);
 
-    if (ls->head == NULL)
-    {
-      ls->head = end = temp->head;
-      free(temp);
-    }
-    else
-    {
-      while (end->next) end = end->next;
-      end->next = temp->head;
-    }
+    ls = ks_list_merge(ls, temp);
   }
+
   return ls;
 }
 

@@ -54,6 +54,24 @@ int ks_list_add(ks_list* ls, const ks_datacont* dc);
 
 
 /* -----------------------
+ * ks_list_merge():
+ * Merges two lists into one.
+ *
+ * Inputs:
+ * ks_list* lsa - the ks_list to be merged to.
+ * ks_list* lsb - the ks_list to be merged with lsa.
+ *
+ * Returns:
+ * ks_list* - the merged list object.
+ *
+ * Notes:
+ * If one of the params is NULL, the non-NULL param will be returned.
+ * If both are NULL, NULL will be returned.
+ */
+ks_list* ks_list_merge(ks_list* lsa, ks_list* lsb);
+
+
+/* -----------------------
  * ks_list_remove_by():
  * Removes the first occurrence of a ks_datacont found within a ks_list.
  *

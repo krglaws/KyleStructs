@@ -71,6 +71,21 @@ int ks_listnode_add(ks_listnode* ln, const ks_datacont* dc)
 }
 
 
+ks_listnode* ks_listnode_merge(ks_listnode* lna, ks_listnode* lnb)
+{
+  if (lna == NULL || lnb == NULL) return lna ? lna : lnb;
+
+  ks_listnode* iter = lna;
+
+  while (iter->next != NULL)
+    iter = iter->next;
+
+  iter->next = lnb;
+
+  return lna;
+}
+
+
 int ks_listnode_remove_by(ks_listnode** ln, const ks_datacont* dc)
 {
   if (ln == NULL || *ln == NULL || dc == NULL) return -1;

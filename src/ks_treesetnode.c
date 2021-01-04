@@ -205,30 +205,26 @@ static ks_datacont* __ks_treesetnode_get(const ks_treesetnode* tsn, const int in
 {
   if (tsn == NULL) return NULL;
 
+  ks_treesetnode* first = index < 0 ? tsn->right : tsn->left;
+  ks_treesetnode* second = index < 0 ? tsn->left : tsn->right;
+
   ks_datacont* dc;
 
-  if (index < 0 &&
-        (dc = __ks_treesetnode_get(tsn->right, index, curr_index)) != NULL)
+  if ((dc = __ks_treesetnode_get(first, index, curr_index)) != NULL)
     return dc;
 
-  else if ((dc = __ks_treesetnode_get(tsn->left, index, curr_index)) != NULL)
-    return dc;
+  index < 0 ? (*curr_index)-- : (*curr_index)++;
 
   if (*curr_index == index)
     return tsn->dc;
 
-  index < 0 ? (*curr_index)-- : (*curr_index)++;
-
-  if (index < 0)
-    return __ks_treesetnode_get(tsn->left, index, curr_index);
-
-  return __ks_treesetnode_get(tsn->right, index, curr_index);
+  return __ks_treesetnode_get(second, index, curr_index);
 }
 
 
 ks_datacont* ks_treesetnode_get(const ks_treesetnode* tsn, const int index)
 {
-  int curr_index = index < 0 ? -1 : 0;
+  int curr_index = index < 0 ? 0 : -1;
 
   return __ks_treesetnode_get(tsn, index, &curr_index);
 }

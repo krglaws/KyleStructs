@@ -104,16 +104,27 @@ unsigned int ks_hashset_count(const ks_hashset* hs)
 }
 
 
-ks_list* ks_hashset_to_list(const ks_hashset* hs)
+ks_datacont* ks_hashset_get(const ks_hashset* hs, int index)
 {
   if (hs == NULL) return NULL;
 
-  ks_list* ls = ks_list_new();
+  int start = index < 0 ? hs->num_buckets - 1 : 0;
+  int end = index < 0 ? -1 : hs->num_buckets;
+  int dir = index < 0 ? -1 : 1;
 
-  for (int i = 0, j = 0; i < hs->num_buckets; i++, j = 0)
-    while (ks_list_add(ls, ks_datacont_copy(ks_treeset_get(hs->buckets[i], j++))) != -1);
+  for (; start != end; start += dir)
+  {
+    ks_treeset* ts = hs->buckets[start];
 
-  return ls;
+    ks_datacont* dc = ks_treeset_get(ts, index);
+
+    if (dc != NULL)
+      return dc;
+
+    index -= (dir * ks_treeset_count(ts));
+  }
+
+  return NULL;
 }
 
 
