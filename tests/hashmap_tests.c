@@ -168,48 +168,82 @@ static int ks_hashmap_get_tests()
 }
 
 
-static int ks_hashmap_keys_tests()
+static int ks_hashmap_get_key_tests()
 {
   int retval = 0;
 
   /* TEST 1 */
-  ks_hashmap* hm = ks_hashmap_new(KS_INT, 10);
+  ks_hashmap* hm = ks_hashmap_new(KS_CHAR, 2);
 
-  int one = 1;
-  ks_hashmap_add(hm, ks_datacont_new(&one, KS_INT, 1), ks_datacont_new("A", KS_CHAR, 1));
+  ks_treemap* tm0 = ks_treemap_new();
+  ks_treemap_add(tm0, ks_datacont_new("B", KS_CHAR, 1), ks_datacont_new("B", KS_CHAR, 1));
+  ks_treemap_add(tm0, ks_datacont_new("A", KS_CHAR, 1), ks_datacont_new("A", KS_CHAR, 1));
+  ks_treemap_add(tm0, ks_datacont_new("C", KS_CHAR, 1), ks_datacont_new("C", KS_CHAR, 1));
 
-  ks_list* ls = ks_hashmap_keys(hm);
-  if (ls->head->dc->i != 1)
+  ks_treemap* tm1 = ks_treemap_new();
+  ks_treemap_add(tm1, ks_datacont_new("E", KS_CHAR, 1), ks_datacont_new("E", KS_CHAR, 1));
+  ks_treemap_add(tm1, ks_datacont_new("D", KS_CHAR, 1), ks_datacont_new("D", KS_CHAR, 1));
+  ks_treemap_add(tm1, ks_datacont_new("F", KS_CHAR, 1), ks_datacont_new("F", KS_CHAR, 1));
+
+  hm->buckets[0] = tm0;
+  hm->buckets[1] = tm1;
+
+  const ks_datacont* dc = ks_hashmap_get_key(hm, -1);
+  if (dc->c != 'F')
   {
-    printf("TEST 1: Unexpected ks_listnode item value: %d. Expected 1.\n", ls->head->dc->i);
+    printf("TEST 1: Unexpected ks_datacont value after ks_hashmap_get_key(): %c. Expected: 'F'\n", dc->c);
     retval = -1;
   }
 
-  ks_list_delete(ls);
-  ks_hashmap_delete(hm);
-
-  return retval;
-}
-
-
-static int ks_hashmap_values_tests()
-{
-  int retval = 0;
-
-  /* TEST 1 */
-  ks_hashmap* hm = ks_hashmap_new(KS_INT, 10);
-
-  int one = 1;
-  ks_hashmap_add(hm, ks_datacont_new(&one, KS_INT, 1), ks_datacont_new("A", KS_CHAR, 1));
-
-  ks_list* ls = ks_hashmap_values(hm);
-  if (ls->head->dc->c != 'A')
+  dc = ks_hashmap_get_key(hm, 5);
+  if (dc->c != 'F')
   {
-    printf("TEST 1: Unexpected ks_listnode item value: %c. Expected 'A'.\n", ls->head->dc->c);
+    printf("TEST 1: Unexpected ks_datacont value after ks_hashmap_get_key(): %c. Expected: 'F'\n", dc->c);
     retval = -1;
   }
 
-  ks_list_delete(ls);
+  dc = ks_hashmap_get_key(hm, -3);
+  if (dc->c != 'D')
+  {
+    printf("TEST 1: Unexpected ks_datacont value after ks_hashmap_get_key(): %c. Expected: 'D'\n", dc->c);
+    retval = -1;
+  }
+
+  dc = ks_hashmap_get_key(hm, 3);
+  if (dc->c != 'D')
+  {
+    printf("TEST 1: Unexpected ks_datacont value after ks_hashmap_get_key(): %c. Expected: 'D'\n", dc->c);
+    retval = -1;
+  }
+
+  dc = ks_hashmap_get_key(hm, -4);
+  if (dc->c != 'C')
+  {
+    printf("TEST 1: Unexpected ks_datacont value after ks_hashmap_get_key(): %c. Expected: 'C'\n", dc->c);
+    retval = -1;
+  }
+
+  dc = ks_hashmap_get_key(hm, 2);
+  if (dc->c != 'C')
+  {
+    printf("TEST 1: Unexpected ks_datacont value after ks_hashmap_get_key(): %c. Expected: 'C'\n", dc->c);
+    retval = -1;
+  }
+
+  dc = ks_hashmap_get_key(hm, -6);
+  if (dc->c != 'A')
+  {
+    printf("TEST 1: Unexpected ks_datacont value after ks_hashmap_get_key(): %c. Expected: 'A'\n", dc->c);
+    retval = -1;
+  }
+
+  dc = ks_hashmap_get_key(hm, 0);
+  if (dc->c != 'A')
+  {
+    printf("TEST 1: Unexpected ks_datacont value after ks_hashmap_get_key(): %c. Expected: 'A'\n", dc->c);
+    retval = -1;
+  }
+
   ks_hashmap_delete(hm);
 
   return retval;
@@ -276,17 +310,11 @@ int main()
   printf("==-----------------------------------==\n\n");
 
   printf("==-----------------------------------==\n");
-  printf("Running ks_hashmap_keys_tests()...\n");
-  if (ks_hashmap_keys_tests()) retval = -1;
+  printf("Running ks_hashmap_get_key_tests()...\n");
+  if (ks_hashmap_get_key_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 
-  printf("==-----------------------------------==\n");
-  printf("Running ks_hashmap_getvals_tests()...\n");
-  if (ks_hashmap_values_tests()) retval = -1;
-  printf("done.\n");
-  printf("==-----------------------------------==\n\n");
-  
   printf("==-----------------------------------==\n");
   printf("Running ks_hashmap_count_tests()...\n");
   if (ks_hashmap_count_tests()) retval = -1;

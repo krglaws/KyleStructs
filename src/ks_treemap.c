@@ -73,30 +73,6 @@ ks_datacont* ks_treemap_get_key(const ks_treemap* tm, int index)
 }
 
 
-ks_list* ks_treemap_keys(const ks_treemap* tm)
-{
-  if (tm == NULL) return NULL;
-
-  ks_list* ls = ks_list_new();
-
-  ls->head = ks_treemapnode_keys(tm->root);
-
-  return ls;
-}
-
-
-ks_list* ks_treemap_values(const ks_treemap* tm)
-{
-  if (tm == NULL) return NULL;
-
-  ks_list* ls = ks_list_new();
-
-  ls->head = ks_treemapnode_values(tm->root);
-
-  return ls;
-}
-
-
 unsigned int ks_treemap_count(const ks_treemap* tm)
 {
   if (tm == NULL) return 0;

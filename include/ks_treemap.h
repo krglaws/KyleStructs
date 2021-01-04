@@ -126,44 +126,6 @@ ks_datacont* ks_treemap_get(const ks_treemap* tm, const ks_datacont* key);
 ks_datacont* ks_treemap_get_key(const ks_treemap* tm, int index);
 
 
-/* --------------------------
- * ks_treemap_keys():
- * Get a linked ks_list of all keys contained within a ks_treemap.
- *
- * Inputs:
- * ks_treemap* tm - the ks_treemap to be operated on 
- *
- * Returns:
- * ks_list* ls - (NULL) if 'tm' is NULL or empty.
- *          - a ks_list of keys contained in 'ls'.
- * 
- * Notes:
- * The ks_list returned by this procedure contains copies of the original
- * keys located inside of 'tm', and can be deleted or modified without
- * affecting the originals inside of 'tm'. 
- */
-ks_list* ks_treemap_keys(const ks_treemap* tm);
-
-
-/* --------------------------
- * ks_treemap_values():
- * Get a linked ks_list of all values contained within a ks_treemap.
- *
- * Inputs:
- * ks_treemap* tm - the ks_treemap to be operated on
- *
- * Returns:
- * ks_list* ls - (NULL) if 'tm' is NULL
- *          - a ks_list of the keys contained within 'tm'.
- *
- * Notes:
- * The ks_list returned by this procedure contains copies of the original
- * values located inside of 'tm', and can be deleted or modified without
- * affecting the originals inside of 'tm'. 
- */
-ks_list* ks_treemap_values(const ks_treemap* tm);
-
-
 /* ----------------------------
  * ks_treemap_count():
  * Count the number of key-value pairs stored within a ks_treemap.

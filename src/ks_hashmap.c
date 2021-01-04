@@ -92,41 +92,27 @@ ks_datacont* ks_hashmap_get(const ks_hashmap* hm, const ks_datacont* key)
 }
 
 
-ks_list* ks_hashmap_keys(const ks_hashmap* hm)
+ks_datacont* ks_hashmap_get_key(const ks_hashmap* hm, int index)
 {
-  if (hm == NULL || hm->buckets == NULL)
-    return NULL;
+  if (hm == NULL) return NULL;
 
-  ks_list* ls = ks_list_new();
-  ks_list* temp;
+  int start = index < 0 ? hm->num_buckets - 1 : 0;
+  int end = index < 0 ? -1 : hm->num_buckets;
+  int dir = index < 0 ? -1 : 1;
 
-  for (int i = 0; i < hm->num_buckets; i++)
+  for (; start != end; start += dir)
   {
-    temp = ks_treemap_keys(hm->buckets[i]);
+    ks_treemap* tm = hm->buckets[start];
 
-    ls = ks_list_merge(ls, temp);
+    ks_datacont* dc = ks_treemap_get_key(tm, index);
+
+    if (dc != NULL)
+      return dc;
+
+    index -= (dir * ks_treemap_count(tm));
   }
 
-  return ls;
-}
-
-
-ks_list* ks_hashmap_values(const ks_hashmap* hm)
-{
-  if (hm == NULL || hm->buckets == NULL)
-    return NULL;
-
-  ks_list* ls = ks_list_new();
-  ks_list* temp = NULL;
-
-  for (int i = 0; i < hm->num_buckets; i++)
-  {
-    temp = ks_treemap_values(hm->buckets[i]);
-
-    ls = ks_list_merge(ls, temp);
-  }
-
-  return ls;
+  return NULL;
 }
 
 

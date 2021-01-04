@@ -106,42 +106,24 @@ int ks_hashmap_remove(ks_hashmap* hm, const ks_datacont* key);
 ks_datacont* ks_hashmap_get(const ks_hashmap* hm, const ks_datacont* key);
 
 
-/* --------------------------
- * ks_hashmap_keys():
- * Get a ks_list of all keys contained within a ks_hashmap. 
- *
+/* ---------------------------
+ * ks_hashmap_get_key():
+ * Gets a key from a ks_hashmap by index.
+ * 
  * Inputs:
  * ks_hashmap* hm - the ks_hashmap to be operated on
+ * int index - the index from which to retrieve a key
  *
  * Returns:
- * ks_list* ls - (NULL) if 'hm' is NULL, or if 'hm' is empty.
- *          - a ks_list of the keys contained within 'hm'.
+ * ks_datacont* key - (NULL) when index OOB.
+ *                    - the value located at 'index'.
  *
  * Notes:
- * The ks_dataconts in the returned ks_list are copies of the originals in the ks_hashmap, 
- * and can be deleted or otherwise modified.
+ * The ks_datacont returned by this function is a pointer to the original contained within the ks_hashmap,
+ * so it should not be deleted or modified by client code.
+ * See notes on ks_hashmap_remove().
  */
-ks_list* ks_hashmap_keys(const ks_hashmap* hm);
-
-
-/* --------------------------
- * ks_hashmap_values():
- * Get a linked ks_list of all values contained within
- * a ks_hashmap. These are copies of the originals
- * in the ks_hashmap, and can be free()'d or
- * otherwise modified.
- *
- * Inputs:
- * ks_hashmap* hm - the ks_hashmap to be operated on
- *
- * Returns:
- * ks_list* ls - (NULL) if 'hm' is NULL or empty.
- *          - a ks_list of the values contained in 'hm'.
- *
- * Notes:
- * See notes on ks_hashmap_keys().
- */
-ks_list* ks_hashmap_values(const ks_hashmap* hm);
+ks_datacont* ks_hashmap_get_key(const ks_hashmap* hm, int index);
 
 
 /* ---------------------------------

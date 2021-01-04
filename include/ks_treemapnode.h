@@ -161,42 +161,6 @@ ks_datacont* ks_treemapnode_get(const ks_treemapnode* tmn, const ks_datacont* ke
 ks_datacont* ks_treemapnode_get_key(const ks_treemapnode* tmn, int index);
 
 
-/* --------------------------
- * ks_treemapnode_keys():
- * Get a linked list of all keys contained within a ks_treemapnode tree.
- * 
- * Inputs:
- * ks_treemapnode* tmn - the ks_treemapnode to be operated on
- *
- * Returns:
- * ks_listnode* lsn - (NULL) if 'tmn' is NULL.
- *               - a list of the keys contained in 'tmn'.
- *
- * Notes:
- * 'lsn' contains copies of the original 'key' ks_dataconts in 'tmn' which can be
- * safely deleted or modified without affecting the originals inside of 'tmn'.
- */
-ks_listnode* ks_treemapnode_keys(const ks_treemapnode* tmn);
-
-
-/* --------------------------
- * ks_treemapnode_values():
- * Get a linked list of all values contained within a ks_treemapnode.
- *
- * Inputs:
- * ks_treemapnode* tmn - the ks_treemapnode to be operated on
- *
- * Returns:
- * ks_listnode* lsn - (NULL) if 'tmn' is NULL or empty.
- *               - a list of the values contained in 'tmn'.
- *
- * Notes:
- * 'lsn' contains copies of the original 'value' ks_dataconts in 'tmn' which can be
- * safely deleted or modified without affecting the originals inside of 'tmn'.
- */
-ks_listnode* ks_treemapnode_values(const ks_treemapnode* tmn);
-
-
 /* ----------------------------
  * ks_treemapnode_count():
  * Count the number of key/value pairs stored within a ks_treemapnode.

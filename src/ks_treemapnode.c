@@ -195,52 +195,6 @@ ks_datacont* ks_treemapnode_get_key(const ks_treemapnode* tmn, int index)
 }
 
 
-ks_listnode* ks_treemapnode_keys(const ks_treemapnode* tmn)
-{
-  if (tmn == NULL) return NULL;
- 
-  ks_listnode* lsn = ks_treemapnode_keys(tmn->left);
- 
-  if (lsn == NULL)
-  {
-    lsn = ks_listnode_new(ks_datacont_copy(tmn->key));
-    lsn->next = ks_treemapnode_keys(tmn->right);
-    return lsn;
-  }
-  else
-  {
-    ks_listnode* end = lsn;
-    while (end->next) end = end->next;
-    end->next = ks_listnode_new(ks_datacont_copy(tmn->key));
-    end->next->next = ks_treemapnode_keys(tmn->right);
-    return lsn;
-  }
-}
-
-
-ks_listnode* ks_treemapnode_values(const ks_treemapnode* tmn)
-{
-  if (tmn == NULL) return NULL;
-
-  ks_listnode* lsn = ks_treemapnode_values(tmn->left);
-
-  if (lsn == NULL)
-  {
-    lsn = ks_listnode_new(ks_datacont_copy(tmn->value));
-    lsn->next = ks_treemapnode_values(tmn->right);
-    return lsn;
-  }
-  else
-  {
-    ks_listnode* end = lsn;
-    while (end->next) end = end->next;
-    end->next = ks_listnode_new(ks_datacont_copy(tmn->value));
-    end->next->next = ks_treemapnode_values(tmn->right);
-    return lsn;
-  }
-}
-
-
 unsigned int ks_treemapnode_count(const ks_treemapnode* tmn)
 {
   if (tmn == NULL) return 0;
