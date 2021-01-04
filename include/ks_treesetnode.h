@@ -233,9 +233,9 @@ unsigned int ks_treesetnode_height(const ks_treesetnode* tsn);
  * ks_treesetnode* tsn - the root of the ks_treesetnode being balanced.
  *
  * Returns:
- * void
+ * ks_treesetnode* - a balanced treesetnode*.
  */
-void ks_treesetnode_balance(ks_treesetnode** tsn);
+ks_treesetnode* ks_treesetnode_balance(ks_treesetnode* tsn);
 
 
 #endif

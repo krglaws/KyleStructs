@@ -588,9 +588,9 @@ static int ks_treemap_balance_tests()
 
   ks_treemap_balance(tm);
   height = ks_treemap_height(tm);
-  if (height != 7)
+  if (height != 5)
   {
-    printf("TEST 1: Unexpected tree height after ks_treemap_balance(): %d. Expected: 7.\n", height);
+    printf("TEST 1: Unexpected tree height after ks_treemap_balance(): %d. Expected: 5.\n", height);
     retval = -1;
   }
 

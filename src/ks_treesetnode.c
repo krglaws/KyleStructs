@@ -251,50 +251,31 @@ unsigned int ks_treesetnode_height(const ks_treesetnode* tsn)
 }
 
 
-void ks_treesetnode_balance(ks_treesetnode** tsn)
+static ks_treesetnode* __ks_treesetnode_balance(ks_treesetnode* tsn, int start, int end)
 {
-  if (tsn == NULL || *tsn == NULL) return;
+  if (start > end) return NULL;
 
-  int count = ks_treesetnode_count(*tsn);
+  int mid = (start + end) / 2;
 
-  if (count < 3) return;
+  ks_datacont* dc = ks_datacont_copy(ks_treesetnode_get(tsn, mid));
+  ks_treesetnode* root = ks_treesetnode_new(dc);
 
-  int temp = count, rowlen = 2, nrows = 1, fulltree = 1;
-  while (temp /= 2)
-  {
-    nrows++;
-    fulltree += rowlen;
-    rowlen *= 2;
-  }
+  root->left = __ks_treesetnode_balance(tsn, start, mid - 1);
+  root->right = __ks_treesetnode_balance(tsn, mid + 1, end);
 
-  int rootindex = fulltree / 2;
-  ks_treesetnode* new_tree = ks_treesetnode_new(
-                            ks_datacont_copy(
-                              ks_treesetnode_get(*tsn, rootindex)));
+  return root;
+}
 
-  rowlen = 2; 
-  int added = 1;
-  float prev = 0.5, curr = 0.25;
 
-  for (int i = 1; i < nrows && added < count; i++)
-  {
-    for (int j = 0; j < rowlen && added < count; j++)
-    {
-      int index = (int) (fulltree * (curr + (j * prev)));
+ks_treesetnode* ks_treesetnode_balance(ks_treesetnode* root)
+{
+  if (root == NULL) return NULL;
 
-      if (index < count)
-      {
-        ks_datacont* curr_dc = ks_datacont_copy(ks_treesetnode_get(*tsn, index));
-        ks_treesetnode_add(new_tree, curr_dc);
-        added++;
-      }
-    }
+  int count = ks_treesetnode_count(root);
 
-    prev = curr;
-    curr /= 2;
-    rowlen *= 2;
-  }
+  ks_treesetnode* balanced =  __ks_treesetnode_balance(root, 0, count - 1);
 
-  ks_treesetnode_delete_all(*tsn);
-  *tsn = new_tree;
+  ks_treesetnode_delete_all(root);
+
+  return balanced;
 }

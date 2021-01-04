@@ -108,5 +108,5 @@ void ks_treeset_balance(ks_treeset* ts)
 {
   if (ts == NULL) return;
 
-  ks_treesetnode_balance(&ts->root);
+  ts->root = ks_treesetnode_balance(ts->root);
 }

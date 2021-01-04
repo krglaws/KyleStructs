@@ -480,7 +480,7 @@ static int ks_treesetnode_balance_tests()
     return -1;
   }
 
-  ks_treesetnode_balance(&tsn);
+  tsn = ks_treesetnode_balance(tsn);
   height = ks_treesetnode_height(tsn);
   if (height != 5)
   {

@@ -228,17 +228,12 @@ unsigned int ks_treemapnode_height(const ks_treemapnode* tmn);
  * Balances a ks_treemapnode* tree to ensure optimal performance.
  *
  * Inputs:
- * ks_treemapnode** tmn - the root of the ks_treemapnode being balanced.
+ * ks_treemapnode* tmn - the root of the ks_treemapnode being balanced.
  *
  * Returns:
- * void
- *
- * Notes:
- * Because the root of 'tmn' may change during the balancing process,
- * a 'tmn' must be passed in as a nested pointer so that it can be set to
- * the new root node when necessary.
+ * ks_treemapnode* - a balanced treemapnode*.
  */
-void ks_treemapnode_balance(ks_treemapnode** tmn);
+ks_treemapnode* ks_treemapnode_balance(ks_treemapnode* tmn);
 
 
 #endif

@@ -170,30 +170,26 @@ static ks_datacont* __ks_treemapnode_get_key(const ks_treemapnode* tmn, int inde
 {
   if (tmn == NULL) return NULL;
 
-  ks_datacont* dc;
+  ks_treemapnode* first = index < 0 ? tmn->right : tmn->left;
+  ks_treemapnode* second = index < 0 ? tmn->left : tmn->right;
 
-  if (index < 0 &&
-        (dc = __ks_treemapnode_get_key(tmn->right, index, curr_index)) != NULL)
-    return dc;
+  ks_datacont* key;
 
-  else if ((dc = __ks_treemapnode_get_key(tmn->left, index, curr_index)) != NULL)
-    return dc;
+  if ((key = __ks_treemapnode_get_key(first, index, curr_index)) != NULL)
+    return key;
+
+  index < 0 ? (*curr_index)-- : (*curr_index)++;
 
   if (*curr_index == index)
     return tmn->key;
 
-  index < 0 ? (*curr_index)-- : (*curr_index)++;
-
-  if (index < 0)
-    return __ks_treemapnode_get_key(tmn->left, index, curr_index);
-
-  return __ks_treemapnode_get_key(tmn->right, index, curr_index);
+  return __ks_treemapnode_get_key(second, index, curr_index);
 }
 
 
 ks_datacont* ks_treemapnode_get_key(const ks_treemapnode* tmn, int index)
 {
-  int curr_index = index < 0 ? -1 : 0;
+  int curr_index = index < 0 ? 0 : -1;
 
   return __ks_treemapnode_get_key(tmn, index, &curr_index);
 }
@@ -266,51 +262,32 @@ unsigned int ks_treemapnode_height(const ks_treemapnode* tmn)
 }
 
 
-void ks_treemapnode_balance(ks_treemapnode** tmn)
+static ks_treemapnode* __ks_treemapnode_balance(ks_treemapnode* tmn, int start, int end)
 {
-  if (tmn == NULL || *tmn == NULL) return;
+  if (start > end) return NULL;
 
-  int count = ks_treemapnode_count(*tmn);
+  int mid = (start + end) / 2;
 
-  if (count < 3) return;
+  ks_datacont* key = ks_datacont_copy(ks_treemapnode_get_key(tmn, mid));
+  ks_datacont* val = ks_datacont_copy(ks_treemapnode_get(tmn, key));
+  ks_treemapnode* root = ks_treemapnode_new(key, val);
 
-  int temp = count, rowlen = 2, nrows = 1, fulltree = 1;
-  while (temp /= 2)
-  {
-    nrows++;
-    fulltree += rowlen;
-    rowlen *= 2;
-  }
+  root->left = __ks_treemapnode_balance(tmn, start, mid - 1);
+  root->right = __ks_treemapnode_balance(tmn, mid + 1, end);
 
-  int rootindex = fulltree / 2;
-  ks_datacont* key = ks_datacont_copy(ks_treemapnode_get_key(*tmn, rootindex));
-  ks_datacont* value = ks_datacont_copy(ks_treemapnode_get(*tmn, key));
-  ks_treemapnode* new_tree = ks_treemapnode_new(key, value);
+  return root;
+}
 
-  rowlen = 2;
-  int added = 1;
-  float prev = 0.5, curr = 0.25;
 
-  for (int i = 1; i < nrows && added < count; i++)
-  {
-    for (int j = 0; j < rowlen && added < count; j++)
-    {
-      int index = (int) (fulltree * (curr + (j * prev)));
+ks_treemapnode* ks_treemapnode_balance(ks_treemapnode* root)
+{
+  if (root == NULL) return NULL;
 
-      if (index < count)
-      {
-        key = ks_datacont_copy(ks_treemapnode_get_key(*tmn, index));
-        value = ks_datacont_copy(ks_treemapnode_get(*tmn, key));
-        ks_treemapnode_add(new_tree, key, value);
-        added++;
-      }
+  int count = ks_treemapnode_count(root);
 
-      prev = curr;
-      curr /= 2;
-      rowlen *= 2;
-    }
-  }
+  ks_treemapnode* balanced =  __ks_treemapnode_balance(root, 0, count - 1);
 
-  ks_treemapnode_delete_all(*tmn);
-  *tmn = new_tree;
+  ks_treemapnode_delete_all(root);
+
+  return balanced;
 }

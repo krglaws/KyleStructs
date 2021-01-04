@@ -117,5 +117,5 @@ void ks_treemap_balance(ks_treemap* tm)
 {
   if (tm == NULL) return;
 
-  ks_treemapnode_balance(&tm->root);
+  tm->root = ks_treemapnode_balance(tm->root);
 }
