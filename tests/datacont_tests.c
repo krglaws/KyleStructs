@@ -142,6 +142,24 @@ static int ks_datacont_compare_tests()
   ks_datacont_delete(dca);
   ks_datacont_delete(dcb);
 
+  /* TEST 4 */
+  short arr1[3] = { 0xfff0, 0xffff, 0xffff };
+  short arr2[2] = { 0xffff, 0xffff };
+
+  ks_datacont* dcc = ks_datacont_new(arr1, KS_SHORTP, 3);
+  ks_datacont* dcd = ks_datacont_new(arr2, KS_SHORTP, 2);
+
+  result = ks_datacont_compare(dcc, dcd);
+
+  if (result != KS_LESSTHAN)
+  {
+    printf("TEST 3: Unexpected comparison result: %d. Expected: %d\n", result, KS_CANTCOMPARE);
+    retval = -1;
+  }
+
+  ks_datacont_delete(dcc);
+  ks_datacont_delete(dcd);
+
   return retval;
 }
 

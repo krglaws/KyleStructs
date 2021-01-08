@@ -266,11 +266,32 @@ enum ks_comparison ks_datacont_compare(const ks_datacont* dca, const ks_datacont
       if (dca->ull == dcb->ull) return KS_EQUAL;
       if (dca->ull < dcb->ull) return KS_LESSTHAN;
       return KS_GREATERTHAN;
-    default:
+    case KS_VOIDP:
       if (dca->vp == dcb->vp) return KS_EQUAL;
       if (dca->vp < dcb->vp) return KS_LESSTHAN;
       return KS_GREATERTHAN;
+    case KS_CHARP:
+    case KS_SHORTP:
+    case KS_INTP:
+    case KS_LLP:
+    case KS_FLOATP:
+    case KS_DOUBLEP:
+    case KS_UCHARP:
+    case KS_USHORTP:
+    case KS_UINTP:
+    case KS_ULLP:
+      for (int i = 0; i < dca->size && i < dcb->size; i++)
+      {
+        if (dca->cp[i] < dcb->cp[i]) return KS_LESSTHAN;
+        else if (dca->cp[i] > dcb->cp[i]) return KS_GREATERTHAN;
+      }
+    break;
   }
+
+  if (dca->size < dcb->size) return KS_LESSTHAN;
+  if (dca->size > dcb->size) return KS_GREATERTHAN;
+
+  return KS_EQUAL;
 }
 
 
