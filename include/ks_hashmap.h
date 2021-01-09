@@ -60,9 +60,7 @@ ks_hashmap* ks_hashmap_copy(const ks_hashmap* hm);
  * If this procedure returns -1, the key-value pair was not stored in 'hm', and
  * so it is the responsibility of the client code to delete 'key' and 'value' when
  * they are no longer needed. If 0 is returned, the client code should not delete or modify
- * 'key' or 'value', as this could cause behavioral issues with 'hm'. If 1 is returned,
- * 'key' was already present, and only 'value' has been placed into 'hm', while 'key'
- * will have to be deleted by the client code.
+ * 'key' or 'value', as this could cause behavioral issues with 'hm'.
  */
 int ks_hashmap_add(ks_hashmap* hm, const ks_datacont* key, const ks_datacont* value);
 

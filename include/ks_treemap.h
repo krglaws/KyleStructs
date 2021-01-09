@@ -60,9 +60,7 @@ ks_treemap* ks_treemap_copy(const ks_treemap* tm);
  * If the key-value pair are successfully stored into the ks_treemap, the client code must NOT
  * modify or delete 'key' or 'value', otherwise undefined behavior could ensue. If the pair
  * was not added to the ks_treemap, the client code is responsible for deleting the 'key' and
- * 'value' ks_dataconts when they are no longer needed. If 'value' is replaced by a new value,
- * the 'key' ks_datacont was not stored into the ks_treemap, so it is the client code's responsibility
- * to delete 'key'.
+ * 'value' ks_dataconts when they are no longer needed.
  */
 int ks_treemap_add(ks_treemap* tm, const ks_datacont* key, const ks_datacont* value);
 

@@ -93,9 +93,7 @@ ks_treemapnode* ks_treemapnode_copy_all(const ks_treemapnode* tmn);
  * If the key-value pair is successfully added to the ks_treemapnode, the user code
  * must not delete or modify 'key' or 'value', otherwise undefined behavior could
  * ensue. If the pair was not added to the treemap, the user code is responsible for
- * deleting both when they are no longer needed. If 'value' is replaced by a new value,
- * the 'key' is not stored into the treemap, and it is the user code's responsibility
- * to delete the 'key'.
+ * deleting both when they are no longer needed.
  */
 int ks_treemapnode_add(ks_treemapnode* tmn, const ks_datacont* key, const ks_datacont* value);
 
