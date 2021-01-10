@@ -61,6 +61,8 @@ typedef struct ks_treemapnode ks_treemapnode;
 typedef struct ks_treemap ks_treemap;
 typedef struct ks_hashmap ks_hashmap;
 
+typedef struct ks_iterator ks_iterator;
+
 
 struct ks_datacont
 {
@@ -163,5 +165,14 @@ struct ks_hashmap
   ks_treemap** buckets;
 };
 
+
+struct ks_iterator
+{
+  enum ks_datatype type;
+  int size;
+  int index;
+  void* parent;
+  ks_listnode* curr;
+};
 
 #endif
