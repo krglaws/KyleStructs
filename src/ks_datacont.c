@@ -329,7 +329,18 @@ uint32_t ks_datacont_hash(const ks_datacont* dc)
       return __hash(&dc->f, sizeof(float));
     case KS_DOUBLE:
       return __hash(&dc->d, sizeof(double));
+    case KS_CHARP:
+    case KS_SHORTP:
+    case KS_INTP:
+    case KS_LLP:
+    case KS_FLOATP:
+    case KS_DOUBLEP:
+    case KS_UCHARP:
+    case KS_USHORTP:
+    case KS_UINTP:
+    case KS_ULLP:
+      return __hash(dc->cp, dc->size);
     default:
-      return __hash(dc->vp, sizeof(void *));
+      return __hash(&dc->vp, sizeof(void *));
   }
 }
