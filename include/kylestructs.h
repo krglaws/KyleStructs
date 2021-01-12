@@ -7,6 +7,8 @@
 
 #include <kylestructs/ks_datacont.h>
 
+#include <kylestructs/ks_iterator.h>
+
 #include <kylestructs/ks_listnode.h>
 
 #include <kylestructs/ks_treesetnode.h>
