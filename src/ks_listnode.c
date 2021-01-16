@@ -204,7 +204,7 @@ int ks_listnode_replace_all(ks_listnode* ln, const ks_datacont* old_dc, const ks
 
 int ks_listnode_insert(ks_listnode** ln, const ks_datacont* dc, int index)
 {
-  if (ln == NULL || *ln == NULL || dc == NULL ||
+  if (ln == NULL || dc == NULL ||
       index < 0 && (index = ks_listnode_length(*ln) + index) < 0)
     return -1;
 
@@ -215,6 +215,9 @@ int ks_listnode_insert(ks_listnode** ln, const ks_datacont* dc, int index)
     *ln = new_node;
     return 0;
   }
+
+  else if (*ln == NULL)
+    return -1;
 
   return ks_listnode_insert(&((*ln)->next), dc, index-1);
 }

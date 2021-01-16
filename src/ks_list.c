@@ -151,12 +151,6 @@ int ks_list_enqueue(ks_list* ls, const ks_datacont* dc)
 {
   if (ls == NULL || dc == NULL) return -1;
 
-  if (ls->head == NULL)
-  {
-    ls->head = ks_listnode_new(dc);
-    return 0;
-  }
-
   return ks_listnode_insert(&(ls->head), dc, 0);
 }
 
