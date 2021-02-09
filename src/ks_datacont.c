@@ -16,7 +16,15 @@
 
 ks_datacont* ks_datacont_new(const void* data, const enum ks_datatype dct, const size_t size)
 {
-  if (data == NULL || size == 0) return NULL;
+  if (data == NULL)
+  {
+     return NULL;
+  }
+
+  if (size == 0 && dct != KS_CHARP)
+  {
+    return NULL;
+  }
 
   ks_datacont* dc = malloc(sizeof(ks_datacont));
   dc->type = dct;
