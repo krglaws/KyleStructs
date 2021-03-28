@@ -54,13 +54,15 @@ ks_hashmap* ks_hashmap_copy(const ks_hashmap* hm);
  * Returns:
  * int result - (-1) if any param is NULL, or if 'key's type does not match 'hm's type.
  *            - (0) pair was added successfully.
- *            - (1) pair added successfully, old key replaced.
+ *            - (1) pair added successfully, old key and value replaced.
  *
  * Notes:
- * If this procedure returns -1, the key-value pair was not stored in 'hm', and
- * so it is the responsibility of the client code to delete 'key' and 'value' when
- * they are no longer needed. If 0 is returned, the client code should not delete or modify
- * 'key' or 'value', as this could cause behavioral issues with 'hm'.
+ * If the key-value pair is successfully added to the ks_hashmap (0), the user code
+ * must not delete or modify 'key' or 'value', otherwise undefined behavior could
+ * ensue. If a key with the same value was already present (1), the old key and value
+ * have been deleted and replaced by the new key and value. If the pair was not added
+ * to the ks_hashmap (-1), the user code is responsible for deleting both when they are 
+ * no longer needed.
  */
 int ks_hashmap_add(ks_hashmap* hm, const ks_datacont* key, const ks_datacont* value);
 

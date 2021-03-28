@@ -54,13 +54,15 @@ ks_treemap* ks_treemap_copy(const ks_treemap* tm);
  * int result - (-1) if any params are NULL, or if 'key's ks_dataconttype is different from
  *              the other ks_dataconts in the tree.
  *            - (0) pair was added successfully.
- *            - (1) 'key' already present, replaced old 'value'.
+ *            - (1) 'key' already present, old key and value replaced.
  *
  * Notes:
- * If the key-value pair are successfully stored into the ks_treemap, the client code must NOT
- * modify or delete 'key' or 'value', otherwise undefined behavior could ensue. If the pair
- * was not added to the ks_treemap, the client code is responsible for deleting the 'key' and
- * 'value' ks_dataconts when they are no longer needed.
+ * If the key-value pair is successfully added to the ks_treemap (0), the user code
+ * must not delete or modify 'key' or 'value', otherwise undefined behavior could
+ * ensue. If a key with the same value was already present (1), the old key and value
+ * have been deleted and replaced by the new key and value. If the pair was not added
+ * to the ks_treemap (-1), the user code is responsible for deleting both when they are 
+ * no longer needed.
  */
 int ks_treemap_add(ks_treemap* tm, const ks_datacont* key, const ks_datacont* value);
 
@@ -106,7 +108,7 @@ ks_datacont* ks_treemap_get(const ks_treemap* tm, const ks_datacont* key);
 
 /* --------------------------
  * ks_treemap_get_key():
- * Retrieves a key located at a specified index within a ks_treemapnode.
+ * Retrieves a key located at a specified index within a ks_treemap.
  *
  * Inputs:
  * ks_treemap* tm - the ks_treemap being operated on.

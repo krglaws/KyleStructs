@@ -87,13 +87,15 @@ ks_treemapnode* ks_treemapnode_copy_all(const ks_treemapnode* tmn);
  * Returns:
  * int result - (-1) if any params are NULL.
  *            - (0) pair added successfully
- *            - (1) already contains pair, old value replaced with new value.
+ *            - (1) already contains pair, old key and value replaced.
  *
  * Notes:
- * If the key-value pair is successfully added to the ks_treemapnode, the user code
+ * If the key-value pair is successfully added to the ks_treemapnode (0), the user code
  * must not delete or modify 'key' or 'value', otherwise undefined behavior could
- * ensue. If the pair was not added to the treemap, the user code is responsible for
- * deleting both when they are no longer needed.
+ * ensue. If a key with the same value was already present (1), the old key and value
+ * have been deleted and replaced by the new key and value. If the pair was not added
+ * to the ks_treemapnode (-1), the user code is responsible for deleting both when they are 
+ * no longer needed.
  */
 int ks_treemapnode_add(ks_treemapnode* tmn, const ks_datacont* key, const ks_datacont* value);
 
