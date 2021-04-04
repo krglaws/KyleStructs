@@ -36,7 +36,7 @@ void ks_iterator_delete(ks_iterator* iter);
 
 
 /* -------------------
- * ks_iterator_get():
+ * ks_iterator_next():
  * Retreives the current ks_datacont from an iterator, and
  * advances to the next.
  *
@@ -46,7 +46,7 @@ void ks_iterator_delete(ks_iterator* iter);
  * Returns:
  * ks_datacont* - the current ks_datacont being pointed to by 'iter'.
  */
-const ks_datacont* ks_iterator_get(ks_iterator* iter);
+const ks_datacont* ks_iterator_next(ks_iterator* iter);
 
 
 /* -------------------

@@ -56,7 +56,7 @@ static int ks_iterator_new_tests()
 }
 
 
-static int ks_iterator_get_tests()
+static int ks_iterator_next_tests()
 {
   int retval = 0;
 
@@ -68,24 +68,24 @@ static int ks_iterator_get_tests()
 
   ks_iterator* iter = ks_iterator_new(ls, KS_LIST);
  
-  const ks_datacont* dc = ks_iterator_get(iter);
+  const ks_datacont* dc = ks_iterator_next(iter);
   if (dc->c != 'A')
   {
-    printf("TEST 1: Unexpected ks_iterator_get() value: %c. Expected: A\n", iter->curr->dc->c);
+    printf("TEST 1: Unexpected ks_iterator_next() value: %c. Expected: A\n", iter->curr->dc->c);
     retval = -1;
   }
 
-  dc = ks_iterator_get(iter);
+  dc = ks_iterator_next(iter);
   if (dc->c != 'B')
   {
-    printf("TEST 1: Unexpected ks_iterator_get() value: %c. Expected: B\n", iter->curr->dc->c);
+    printf("TEST 1: Unexpected ks_iterator_next() value: %c. Expected: B\n", iter->curr->dc->c);
     retval = -1;
   }
 
-  dc = ks_iterator_get(iter);
+  dc = ks_iterator_next(iter);
   if (dc->c != 'C')
   {
-    printf("TEST 1: Unexpected ks_iterator_get() value: %c. Expected: C\n", iter->curr->dc->c);
+    printf("TEST 1: Unexpected ks_iterator_next() value: %c. Expected: C\n", iter->curr->dc->c);
     retval = -1;
   }
 
@@ -108,21 +108,21 @@ static int ks_iterator_end_tests()
 
   ks_iterator* iter = ks_iterator_new(ls, KS_LIST);
 
-  ks_iterator_get(iter);
+  ks_iterator_next(iter);
   if (ks_iterator_end(iter) == true)
   {
     printf("TEST 1: Unexpected ks_iterator_end() return: true. Expected: false\n");
     retval = -1;
   }
 
-  ks_iterator_get(iter);
+  ks_iterator_next(iter);
   if (ks_iterator_end(iter) == true)
   {
     printf("TEST 1: Unexpected ks_iterator_end() return: true. Expected: false\n");
     retval = -1;
   }
 
-  ks_iterator_get(iter);
+  ks_iterator_next(iter);
   if (ks_iterator_end(iter) == false)
   {
     printf("TEST 1: Unexpected ks_iterator_end() return: false. Expected: true\n");
@@ -149,8 +149,8 @@ int main()
   printf("==-----------------------------------==\n\n");
 
   printf("==-----------------------------------==\n");
-  printf("Running ks_iterator_get_tests()...\n");
-  if (ks_iterator_get_tests()) retval = -1;
+  printf("Running ks_iterator_next_tests()...\n");
+  if (ks_iterator_next_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 

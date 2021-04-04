@@ -58,7 +58,7 @@ void ks_iterator_delete(ks_iterator* iter)
 }
 
 
-const ks_datacont* ks_iterator_get(ks_iterator* iter)
+const ks_datacont* ks_iterator_next(ks_iterator* iter)
 {
   if (iter == NULL)
   {
