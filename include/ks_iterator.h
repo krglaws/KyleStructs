@@ -1,9 +1,6 @@
 #ifndef _KS_ITERATOR_H_
 #define _KS_ITERATOR_H_
 
-#include <stdbool.h>
-
-
 /* -------------------
  * ks_iterator_new():
  * Creates an iterator for a kylestructs object.
@@ -47,18 +44,5 @@ void ks_iterator_delete(ks_iterator* iter);
  * ks_datacont* - the current ks_datacont being pointed to by 'iter'.
  */
 const ks_datacont* ks_iterator_next(ks_iterator* iter);
-
-
-/* -------------------
- * ks_iterator_end():
- * Determines if ks_iterator has reached the end.
- * 
- * Inputs:
- * ks_iterator* iter - the iterator being operated on.
- *
- * Returns:
- * bool - (true) if 'iter' is at the end, (false) otherwise.
- */
-bool ks_iterator_end(const ks_iterator* iter);
 
 #endif

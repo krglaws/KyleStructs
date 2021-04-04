@@ -96,46 +96,6 @@ static int ks_iterator_next_tests()
 }
 
 
-static int ks_iterator_end_tests()
-{
-  int retval = 0;
-
-  /* TEST 1 */
-  ks_list* ls = ks_list_new();
-  ks_list_add(ls, ks_datacont_new("A", KS_CHAR, 1));
-  ks_list_add(ls, ks_datacont_new("B", KS_CHAR, 1));
-  ks_list_add(ls, ks_datacont_new("C", KS_CHAR, 1));
-
-  ks_iterator* iter = ks_iterator_new(ls, KS_LIST);
-
-  ks_iterator_next(iter);
-  if (ks_iterator_end(iter) == true)
-  {
-    printf("TEST 1: Unexpected ks_iterator_end() return: true. Expected: false\n");
-    retval = -1;
-  }
-
-  ks_iterator_next(iter);
-  if (ks_iterator_end(iter) == true)
-  {
-    printf("TEST 1: Unexpected ks_iterator_end() return: true. Expected: false\n");
-    retval = -1;
-  }
-
-  ks_iterator_next(iter);
-  if (ks_iterator_end(iter) == false)
-  {
-    printf("TEST 1: Unexpected ks_iterator_end() return: false. Expected: true\n");
-    retval = -1;
-  }
-
-  ks_iterator_delete(iter);
-  ks_list_delete(ls);
-
-  return retval;
-}
-
-
 int main()
 {
   int retval = 0;
@@ -151,12 +111,6 @@ int main()
   printf("==-----------------------------------==\n");
   printf("Running ks_iterator_next_tests()...\n");
   if (ks_iterator_next_tests()) retval = -1;
-  printf("done.\n");
-  printf("==-----------------------------------==\n\n");
-
-  printf("==-----------------------------------==\n");
-  printf("Running ks_iterator_end_tests()...\n");
-  if (ks_iterator_end_tests()) retval = -1;
   printf("done.\n");
   printf("==-----------------------------------==\n\n");
 

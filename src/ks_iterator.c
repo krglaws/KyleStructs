@@ -98,14 +98,3 @@ const ks_datacont* ks_iterator_next(ks_iterator* iter)
 
   return dc;
 }
-
-
-bool ks_iterator_end(const ks_iterator* iter)
-{
-  if (iter == NULL)
-  {
-    return true;
-  }
-
-  return iter->index >= iter->size;
-}
