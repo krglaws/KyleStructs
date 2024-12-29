@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-#include "ks_datacont.h"
-#include "ks_treesetnode.h"
-#include "ks_types.h"
+#include "kylestructs/ks_datacont.h"
+#include "kylestructs/ks_treesetnode.h"
+#include "kylestructs/ks_types.h"
 
 static int ks_treesetnode_new_tests() {
   int retval = 0;

@@ -1,14 +1,14 @@
-#include "ks_hashmap.h"
+#include "kylestructs/ks_hashmap.h"
 
 #include <stdint.h>
 #include <stdlib.h>
 
-#include "ks_datacont.h"
-#include "ks_list.h"
-#include "ks_listnode.h"
-#include "ks_treemap.h"
-#include "ks_treemapnode.h"
-#include "ks_types.h"
+#include "kylestructs/ks_datacont.h"
+#include "kylestructs/ks_list.h"
+#include "kylestructs/ks_listnode.h"
+#include "kylestructs/ks_treemap.h"
+#include "kylestructs/ks_treemapnode.h"
+#include "kylestructs/ks_types.h"
 
 ks_hashmap* ks_hashmap_new(enum ks_datatype type, size_t num_buckets) {
   if (num_buckets == 0) return NULL;

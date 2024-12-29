@@ -1,15 +1,15 @@
 #include <stdio.h>
 
-#include "ks_datacont.h"
-#include "ks_hashmap.h"
-#include "ks_hashset.h"
-#include "ks_list.h"
-#include "ks_listnode.h"
-#include "ks_treemap.h"
-#include "ks_treemapnode.h"
-#include "ks_treeset.h"
-#include "ks_treesetnode.h"
-#include "ks_types.h"
+#include "kylestructs/ks_datacont.h"
+#include "kylestructs/ks_hashmap.h"
+#include "kylestructs/ks_hashset.h"
+#include "kylestructs/ks_list.h"
+#include "kylestructs/ks_listnode.h"
+#include "kylestructs/ks_treemap.h"
+#include "kylestructs/ks_treemapnode.h"
+#include "kylestructs/ks_treeset.h"
+#include "kylestructs/ks_treesetnode.h"
+#include "kylestructs/ks_types.h"
 
 static int ks_datacont_new_tests() {
   int retval = 0;

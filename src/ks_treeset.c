@@ -1,11 +1,11 @@
-#include "ks_treeset.h"
+#include "kylestructs/ks_treeset.h"
 
 #include <stdlib.h>
 
-#include "ks_datacont.h"
-#include "ks_hashset.h"
-#include "ks_treesetnode.h"
-#include "ks_types.h"
+#include "kylestructs/ks_datacont.h"
+#include "kylestructs/ks_hashset.h"
+#include "kylestructs/ks_treesetnode.h"
+#include "kylestructs/ks_types.h"
 
 ks_treeset* ks_treeset_new() { return calloc(1, sizeof(ks_treesetnode)); }
 

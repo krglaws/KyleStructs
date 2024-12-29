@@ -1,9 +1,9 @@
-#include "ks_treesetnode.h"
+#include "kylestructs/ks_treesetnode.h"
 
 #include <stdlib.h>
 
-#include "ks_datacont.h"
-#include "ks_types.h"
+#include "kylestructs/ks_datacont.h"
+#include "kylestructs/ks_types.h"
 
 ks_treesetnode* ks_treesetnode_new(const ks_datacont* dc) {
   if (dc == NULL) return NULL;

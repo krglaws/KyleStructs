@@ -1,10 +1,10 @@
-#include "ks_list.h"
+#include "kylestructs/ks_list.h"
 
 #include <stdlib.h>
 
-#include "ks_datacont.h"
-#include "ks_listnode.h"
-#include "ks_types.h"
+#include "kylestructs/ks_datacont.h"
+#include "kylestructs/ks_listnode.h"
+#include "kylestructs/ks_types.h"
 
 ks_list* ks_list_new() { return calloc(1, sizeof(ks_list)); }
 

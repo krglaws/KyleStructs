@@ -1,10 +1,10 @@
-#include "ks_treemapnode.h"
+#include "kylestructs/ks_treemapnode.h"
 
 #include <stdlib.h>
 
-#include "ks_datacont.h"
-#include "ks_listnode.h"
-#include "ks_types.h"
+#include "kylestructs/ks_datacont.h"
+#include "kylestructs/ks_listnode.h"
+#include "kylestructs/ks_types.h"
 
 ks_treemapnode* ks_treemapnode_new(const ks_datacont* key,
                                    const ks_datacont* value) {

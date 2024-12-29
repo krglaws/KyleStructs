@@ -1,9 +1,9 @@
 #include <stdio.h>
 
-#include "ks_datacont.h"
-#include "ks_listnode.h"
-#include "ks_treemapnode.h"
-#include "ks_types.h"
+#include "kylestructs/ks_datacont.h"
+#include "kylestructs/ks_listnode.h"
+#include "kylestructs/ks_treemapnode.h"
+#include "kylestructs/ks_types.h"
 
 static int ks_treemapnode_new_tests() {
   int retval = 0;

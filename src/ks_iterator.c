@@ -1,13 +1,13 @@
-#include "ks_iterator.h"
+#include "kylestructs/ks_iterator.h"
 
 #include <stdlib.h>
 
-#include "ks_hashmap.h"
-#include "ks_hashset.h"
-#include "ks_list.h"
-#include "ks_treemap.h"
-#include "ks_treeset.h"
-#include "ks_types.h"
+#include "kylestructs/ks_hashmap.h"
+#include "kylestructs/ks_hashset.h"
+#include "kylestructs/ks_list.h"
+#include "kylestructs/ks_treemap.h"
+#include "kylestructs/ks_treeset.h"
+#include "kylestructs/ks_types.h"
 
 ks_iterator* ks_iterator_new(const void* ks_obj, enum ks_datatype type) {
   if (ks_obj == NULL) {
