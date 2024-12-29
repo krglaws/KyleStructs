@@ -1,6 +1,6 @@
-CC := gcc
-CFLAGS := -Iinclude -fPIC
-TESTFLAGS := -Iinclude
+CC := clang
+CFLAGS := -Iinclude -fPIC -Wall -Wextra -O2
+TESTFLAGS := -Iinclude -g -O0
 
 SRC := src
 INC := include
