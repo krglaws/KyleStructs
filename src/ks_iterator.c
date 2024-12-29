@@ -1,12 +1,12 @@
 #include <stdlib.h>
 
-#include <ks_types.h>
-#include <ks_list.h>
-#include <ks_treeset.h>
-#include <ks_hashset.h>
-#include <ks_treemap.h>
-#include <ks_hashmap.h>
-#include <ks_iterator.h>
+#include "ks_types.h"
+#include "ks_list.h"
+#include "ks_treeset.h"
+#include "ks_hashset.h"
+#include "ks_treemap.h"
+#include "ks_hashmap.h"
+#include "ks_iterator.h"
 
 
 ks_iterator* ks_iterator_new(const void* ks_obj, enum ks_datatype type)
@@ -65,7 +65,7 @@ const ks_datacont* ks_iterator_next(ks_iterator* iter)
     return NULL;
   }
 
-  ks_datacont* dc;
+  const ks_datacont* dc;
 
   switch (iter->type)
   {

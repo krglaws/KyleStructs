@@ -1,6 +1,8 @@
 #ifndef _KS_LISTNODE_H_
 #define _KS_LISTNODE_H_
 
+#include "ks_types.h"
+
 
 /* -------------------
  * ks_listnode_new():
@@ -292,7 +294,7 @@ int ks_listnode_index(const ks_listnode* ln, const ks_datacont* dc);
  * The ks_datacont returned by this function is a pointer to the original contained within the list, so it should not
  * be deleted or modified by client code.
  */
-ks_datacont* ks_listnode_get(const ks_listnode* ln, int index);
+const ks_datacont* ks_listnode_get(const ks_listnode* ln, int index);
 
 
 /* ----------------------------

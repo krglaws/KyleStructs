@@ -1,9 +1,9 @@
 #include <stdlib.h>
 
-#include <ks_types.h>
-#include <ks_datacont.h>
-#include <ks_listnode.h>
-#include <ks_list.h>
+#include "ks_types.h"
+#include "ks_datacont.h"
+#include "ks_listnode.h"
+#include "ks_list.h"
 
 
 ks_list* ks_list_new()
@@ -175,7 +175,7 @@ int ks_list_index(const ks_list* ls, const ks_datacont* dc)
 }
 
 
-ks_datacont* ks_list_get(const ks_list* ls, int index)
+const ks_datacont* ks_list_get(const ks_list* ls, int index)
 {
   if (ls == NULL) return NULL;
 

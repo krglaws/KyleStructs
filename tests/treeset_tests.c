@@ -281,7 +281,7 @@ static int ks_treeset_get_tests()
   ks_treeset_add(ts, dcC);
   ks_treeset_add(ts, dcA); 
   
-  ks_datacont* get_dc = ks_treeset_get(ts, -1);
+  const ks_datacont* get_dc = ks_treeset_get(ts, -1);
   if (get_dc->c != 'C')
   {
     printf("TEST 1: Unexpected ks_datacont value after ks_treeset_get(): %c. Expected: C.\n", get_dc->c);

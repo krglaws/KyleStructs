@@ -1,16 +1,16 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#include <ks_types.h>
-#include <ks_datacont.h>
-#include <ks_listnode.h>
-#include <ks_list.h>
-#include <ks_treemapnode.h>
-#include <ks_treemap.h>
-#include <ks_hashmap.h>
+#include "ks_types.h"
+#include "ks_datacont.h"
+#include "ks_listnode.h"
+#include "ks_list.h"
+#include "ks_treemapnode.h"
+#include "ks_treemap.h"
+#include "ks_hashmap.h"
 
 
-ks_hashmap* ks_hashmap_new(const enum ks_datatype type, const unsigned int num_buckets)
+ks_hashmap* ks_hashmap_new(enum ks_datatype type, size_t num_buckets)
 {
   if (num_buckets == 0) return NULL;
 
@@ -80,7 +80,7 @@ int ks_hashmap_remove(ks_hashmap* hm, const ks_datacont* key)
 }
 
 
-ks_datacont* ks_hashmap_get(const ks_hashmap* hm, const ks_datacont* key)
+const ks_datacont* ks_hashmap_get(const ks_hashmap* hm, const ks_datacont* key)
 {
   if (hm == NULL || key == NULL
       || key->type != hm->type)
@@ -92,7 +92,7 @@ ks_datacont* ks_hashmap_get(const ks_hashmap* hm, const ks_datacont* key)
 }
 
 
-ks_datacont* ks_hashmap_get_key(const ks_hashmap* hm, int index)
+const ks_datacont* ks_hashmap_get_key(const ks_hashmap* hm, int index)
 {
   if (hm == NULL) return NULL;
 
@@ -100,11 +100,11 @@ ks_datacont* ks_hashmap_get_key(const ks_hashmap* hm, int index)
   int end = index < 0 ? -1 : hm->num_buckets;
   int dir = index < 0 ? -1 : 1;
 
-  for (; start != end; start += dir)
+  for (int i = start; i != end; i += dir)
   {
-    ks_treemap* tm = hm->buckets[start];
+    ks_treemap* tm = hm->buckets[i];
 
-    ks_datacont* dc = ks_treemap_get_key(tm, index);
+    const ks_datacont* dc = ks_treemap_get_key(tm, index);
 
     if (dc != NULL)
       return dc;

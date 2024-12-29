@@ -333,7 +333,7 @@ static int ks_list_replace_by_tests()
   int retval = 0;
 
   /* TEST 1 */
-  ks_datacont* get_dc;
+  const ks_datacont* get_dc;
   ks_datacont* dcA = ks_datacont_new("A", KS_CHAR, 1);
   ks_datacont* dcB = ks_datacont_new("B", KS_CHAR, 1);
   ks_datacont* dcC = ks_datacont_new("C", KS_CHAR, 1);
@@ -384,7 +384,7 @@ static int ks_list_replace_at_tests()
   int retval = 0;
 
   /* TEST 1 */
-  ks_datacont* get_dc;
+  const ks_datacont* get_dc;
   ks_datacont* dcA = ks_datacont_new("A", KS_CHAR, 1);
   ks_datacont* dcB = ks_datacont_new("B", KS_CHAR, 1);
   ks_datacont* dcC = ks_datacont_new("C", KS_CHAR, 1);
@@ -435,7 +435,7 @@ static int ks_list_replace_all_tests()
   int retval = 0;
 
   /* TEST 1 */
-  ks_datacont* get_dc;
+  const ks_datacont* get_dc;
   ks_datacont* dcA = ks_datacont_new("A", KS_CHAR, 1);
   ks_datacont* dcB = ks_datacont_new("B", KS_CHAR, 1);
   ks_datacont* dcC = ks_datacont_new("C", KS_CHAR, 1);
@@ -484,7 +484,7 @@ static int ks_list_insert_tests()
   ks_datacont* dcA = ks_datacont_new("A", KS_CHAR, 1);
   ks_datacont* dcB = ks_datacont_new("B", KS_CHAR, 1);
   ks_datacont* dcC = ks_datacont_new("C", KS_CHAR, 1);
-  ks_datacont* get_dc;
+  const ks_datacont* get_dc;
   ks_list* ls = ks_list_new();
   ks_list_add(ls, ks_datacont_copy(dcA));
   ks_list_add(ls, ks_datacont_copy(dcC));
@@ -786,7 +786,7 @@ static int ks_list_get_tests()
   ks_list_add(ls, ks_datacont_new("B", KS_CHAR, 1));
   ks_list_add(ls, ks_datacont_new("C", KS_CHAR, 1));
 
-  ks_datacont* dcC = ks_list_get(ls, 2);
+  const ks_datacont* dcC = ks_list_get(ls, 2);
   if (dcC->c != 'C')
   {
     printf("TEST 1: Unexpected return value: %c. Expected: C\n", dcC->c);
@@ -794,7 +794,7 @@ static int ks_list_get_tests()
   }
 
   /* TEST 2 */
-  ks_datacont* dcA = ks_list_get(ls, 0);
+  const ks_datacont* dcA = ks_list_get(ls, 0);
   if (dcA->c != 'A')
   {
     printf("TEST 2: Unexpected return value: %c. Expected: A\n", dcA->c);
@@ -802,7 +802,7 @@ static int ks_list_get_tests()
   }
 
   /* TEST 3 */
-  ks_datacont* dcB = ks_list_get(ls, 1);
+  const ks_datacont* dcB = ks_list_get(ls, 1);
   if (dcB->c != 'B')
   {
     printf("TEST 3: Unexpected return value: %c. Expected: B\n", dcB->c);

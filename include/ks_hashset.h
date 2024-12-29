@@ -1,6 +1,10 @@
 #ifndef _KS_HASHSET_H_
 #define _KS_HASHSET_H_
 
+#include <stddef.h>
+
+#include "ks_types.h"
+
 
 /* ----------------------------------
  * ks_hashset_new():
@@ -12,7 +16,7 @@
  * Returns:
  * ks_hashset* hs - a new empty ks_hashset.
  */
-ks_hashset* ks_hashset_new(const enum ks_datatype type, const unsigned int num_buckets);
+ks_hashset* ks_hashset_new(enum ks_datatype type, size_t num_buckets);
 
 
 /* ---------------------------------
@@ -113,12 +117,12 @@ unsigned int ks_hashset_count(const ks_hashset* hs);
  *
  * Inputs:
  * ks_hashet* hs - the ks_hashset being operated on.
- * int index - the index from which to retrieve a ks_datacont.
+ * int index - the index from which to retrieve a ks_datacont. (supports negative indexing)
  *
  * Notes:
  * Negative values for 'index' are allowed.
  */
-ks_datacont* ks_hashset_get(const ks_hashset* hs, int index);
+const ks_datacont* ks_hashset_get(const ks_hashset* hs, int index);
 
 
 /* --------------------

@@ -1,8 +1,8 @@
 #include <stdlib.h>
 
-#include <ks_types.h>
-#include <ks_datacont.h>
-#include <ks_treesetnode.h>
+#include "ks_types.h"
+#include "ks_datacont.h"
+#include "ks_treesetnode.h"
 
 
 ks_treesetnode* ks_treesetnode_new(const ks_datacont* dc)
@@ -128,7 +128,7 @@ int ks_treesetnode_remove_by(ks_treesetnode** tsn, const ks_datacont* dc)
 }
 
 
-static int __ks_treesetnode_remove_at(ks_treesetnode** tsn, const int index, int* curr_index)
+static int __ks_treesetnode_remove_at(ks_treesetnode** tsn, int index, int* curr_index)
 {
   if (tsn == NULL || *tsn == NULL) return -1;
 
@@ -151,7 +151,7 @@ static int __ks_treesetnode_remove_at(ks_treesetnode** tsn, const int index, int
 }
 
 
-int ks_treesetnode_remove_at(ks_treesetnode** tsn, const int index)
+int ks_treesetnode_remove_at(ks_treesetnode** tsn, int index)
 {
   int curr_index;
  
@@ -201,7 +201,7 @@ unsigned int ks_treesetnode_contains(const ks_treesetnode* tsn, const ks_datacon
 }
 
 
-static ks_datacont* __ks_treesetnode_get(const ks_treesetnode* tsn, const int index, int* curr_index)
+static ks_datacont* __ks_treesetnode_get(const ks_treesetnode* tsn, int index, int* curr_index)
 {
   if (tsn == NULL) return NULL;
 
@@ -222,7 +222,7 @@ static ks_datacont* __ks_treesetnode_get(const ks_treesetnode* tsn, const int in
 }
 
 
-ks_datacont* ks_treesetnode_get(const ks_treesetnode* tsn, const int index)
+const ks_datacont* ks_treesetnode_get(const ks_treesetnode* tsn, int index)
 {
   int curr_index = index < 0 ? 0 : -1;
 

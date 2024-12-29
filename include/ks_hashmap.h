@@ -1,6 +1,10 @@
 #ifndef _KS_HASHMAP_H_
 #define _KS_HASHMAP_H_
 
+#include <stddef.h>
+
+#include "ks_types.h"
+
 
 /* ------------------------------------
  * ks_hashmap_new():
@@ -13,7 +17,7 @@
  * Returns:
  * ks_hashmap* hm - a new empty ks_hashmap.
  */
-ks_hashmap* ks_hashmap_new(const enum ks_datatype type, const unsigned int num_buckets);
+ks_hashmap* ks_hashmap_new(const enum ks_datatype type, size_t num_buckets);
 
 
 /* ----------------------------------
@@ -103,27 +107,27 @@ int ks_hashmap_remove(ks_hashmap* hm, const ks_datacont* key);
  * so it should not be deleted or modified by client code.
  * See notes on ks_hashmap_remove().
  */
-ks_datacont* ks_hashmap_get(const ks_hashmap* hm, const ks_datacont* key);
+const ks_datacont* ks_hashmap_get(const ks_hashmap* hm, const ks_datacont* key);
 
 
 /* ---------------------------
  * ks_hashmap_get_key():
  * Gets a key from a ks_hashmap by index.
- * 
+ *
  * Inputs:
  * ks_hashmap* hm - the ks_hashmap to be operated on
- * int index - the index from which to retrieve a key
+ * int index - the index from which to retrieve a key (supports negative indexing)
  *
  * Returns:
  * ks_datacont* key - (NULL) when index OOB.
- *                    - the value located at 'index'.
+ *                  - the value located at 'index'.
  *
  * Notes:
  * The ks_datacont returned by this function is a pointer to the original contained within the ks_hashmap,
  * so it should not be deleted or modified by client code.
  * See notes on ks_hashmap_remove().
  */
-ks_datacont* ks_hashmap_get_key(const ks_hashmap* hm, int index);
+const ks_datacont* ks_hashmap_get_key(const ks_hashmap* hm, int index);
 
 
 /* ---------------------------------

@@ -1,6 +1,8 @@
 #ifndef _KS_TREEMAPNODE_H_
 #define _KS_TREEMAPNODE_H_
 
+#include "ks_types.h"
+
 
 /* ------------------------------------
  * ks_treemapnode_new():
@@ -42,7 +44,8 @@ void ks_treemapnode_delete(ks_treemapnode* tmn);
  *
  * Notes:
  * ks_treemapnode_copy() only copies the ks_treemapnode itself
- * and its ks_datacont, but not any other connected ks_treemapnodes.
+ * and its ks_datacont key and value, but not any other connected
+ * ks_treemapnodes.
  */
 ks_treemapnode* ks_treemapnode_copy(const ks_treemapnode* tmn);
 
@@ -139,7 +142,7 @@ int ks_treemapnode_remove(ks_treemapnode** tmn, const ks_datacont* key);
  * 'key' is not consumed by this procedure, it is only used to locate another ks_datacont
  * containing the same data.
  */
-ks_datacont* ks_treemapnode_get(const ks_treemapnode* tmn, const ks_datacont* key);
+const ks_datacont* ks_treemapnode_get(const ks_treemapnode* tmn, const ks_datacont* key);
 
 
 /* --------------------------
@@ -158,7 +161,7 @@ ks_datacont* ks_treemapnode_get(const ks_treemapnode* tmn, const ks_datacont* ke
  * The ks_datacont returned by this function is a pointer to the original contained within 
  * the list, so it should not be deleted or modified by client code.
  */
-ks_datacont* ks_treemapnode_get_key(const ks_treemapnode* tmn, int index);
+const ks_datacont* ks_treemapnode_get_key(const ks_treemapnode* tmn, int index);
 
 
 /* ----------------------------

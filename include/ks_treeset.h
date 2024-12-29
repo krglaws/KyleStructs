@@ -1,6 +1,8 @@
 #ifndef _KS_TREESET_H_
 #define _KS_TREESET_H_
 
+#include "ks_types.h"
+
 
 /* ---------------------
  * ks_treeset_new():
@@ -92,7 +94,7 @@ int ks_treeset_remove_by(ks_treeset* ts, const ks_datacont* dc);
  * int result - (-1) if 'index' is OOB or if 'ts' is NULL.
  *            - >= (0) on success.
  */
-int ks_treeset_remove_at(ks_treeset* ts, const int index);
+int ks_treeset_remove_at(ks_treeset* ts, int index);
 
 
 /* ---------------------------
@@ -147,7 +149,7 @@ unsigned int ks_treeset_contains(const ks_treeset* ts, const ks_datacont* dc);
  * The ks_datacont returned by this function is a pointer to the original contained within the ks_treeset,
  * so it should not be deleted or modified by client code.
  */
-ks_datacont* ks_treeset_get(const ks_treeset* tsn, const int index);
+const ks_datacont* ks_treeset_get(const ks_treeset* tsn, int index);
 
 
 /* -------------------------

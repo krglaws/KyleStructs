@@ -155,7 +155,7 @@ static int ks_hashmap_get_tests()
 
   ks_hashmap_add(hm, key, val);
 
-  ks_datacont* ret = ks_hashmap_get(hm, key);
+  const ks_datacont* ret = ks_hashmap_get(hm, key);
   if (ks_datacont_compare(val, ret) != KS_EQUAL)
   {
     printf("TEST 1: unexpected ks_datacont value: %c. Expected: A.\n", ret->c);

@@ -1,10 +1,10 @@
 #include <stdlib.h>
 
-#include <ks_types.h>
-#include <ks_datacont.h>
-#include <ks_treesetnode.h>
-#include <ks_treeset.h>
-#include <ks_hashset.h>
+#include "ks_types.h"
+#include "ks_datacont.h"
+#include "ks_treesetnode.h"
+#include "ks_treeset.h"
+#include "ks_hashset.h"
 
 
 ks_treeset* ks_treeset_new()
@@ -56,7 +56,7 @@ int ks_treeset_remove_by(ks_treeset* ts, const ks_datacont* dc)
 }
 
 
-int ks_treeset_remove_at(ks_treeset* ts, const int index)
+int ks_treeset_remove_at(ks_treeset* ts, int index)
 {
   if (ts == NULL) return -1;
 
@@ -80,7 +80,7 @@ unsigned int ks_treeset_contains(const ks_treeset* ts, const ks_datacont* dc)
 }
 
 
-ks_datacont* ks_treeset_get(const ks_treeset* ts, int index)
+const ks_datacont* ks_treeset_get(const ks_treeset* ts, int index)
 {
   if (ts == NULL) return NULL;
 

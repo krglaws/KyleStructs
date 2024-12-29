@@ -1,6 +1,8 @@
 #ifndef _KS_TREESETNODE_H_
 #define _KS_TREESETNODE_H_
 
+#include "ks_types.h"
+
 
 /* ---------------------
  * ks_treesetnode_new():
@@ -196,7 +198,7 @@ unsigned int ks_treesetnode_contains(const ks_treesetnode* tsn, const ks_datacon
  * The ks_datacont returned by this function is a pointer to the original contained within 
  * the treeset, so it should not be deleted or modified by client code.
  */
-ks_datacont* ks_treesetnode_get(const ks_treesetnode* tsn, const int index);
+const ks_datacont* ks_treesetnode_get(const ks_treesetnode* tsn, int index);
 
 
 /* -------------------------

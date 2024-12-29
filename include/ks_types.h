@@ -1,7 +1,7 @@
 #ifndef _KS_TYPES_H_
 #define _KS_TYPES_H_
 
-#include <stdlib.h>
+#include <stddef.h>
 
 
 enum ks_comparison

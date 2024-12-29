@@ -1,6 +1,8 @@
 #ifndef _KS_LIST_H_
 #define _KS_LIST_H_
 
+#include "ks_types.h"
+
 
 /* -------------------
  * ks_list_new():
@@ -66,7 +68,8 @@ int ks_list_add(ks_list* ls, const ks_datacont* dc);
  *
  * Notes:
  * If one of the params is NULL, the non-NULL param will be returned.
- * If both are NULL, NULL will be returned.
+ * If both are NULL, NULL will be returned. The user code should not
+ * free either 'lsa' or 'lsb' after calling this.
  */
 ks_list* ks_list_merge(ks_list* lsa, ks_list* lsb);
 
@@ -163,6 +166,10 @@ int ks_list_replace_at(ks_list* ls, const ks_datacont* dc, int index);
  * Returns:
  * int result - (-1) when any of the params is NULL.
  *            - >= (0) the number of replacements that occurred.
+ *
+ * Notes:
+ * ks_dataconts that are equal to 'old_dc' are freed. A copy of 'new_dc' is created
+ * for every replacement.
  */
 int ks_list_replace_all(ks_list* ls, const ks_datacont* old_dc, const ks_datacont* new_dc);
 
@@ -293,7 +300,7 @@ int ks_list_index(const ks_list* ls, const ks_datacont* dc);
  * The ks_datacont returned by this function is a pointer to the original contained within the ks_list, so it should not
  * be deleted or modified by client code.
  */
-ks_datacont* ks_list_get(const ks_list* ls, int index);
+const ks_datacont* ks_list_get(const ks_list* ls, int index);
 
 
 /* ----------------------------

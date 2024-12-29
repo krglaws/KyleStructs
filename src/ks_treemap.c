@@ -1,11 +1,11 @@
 #include <stdlib.h>
 
-#include <ks_types.h>
-#include <ks_datacont.h>
-#include <ks_listnode.h>
-#include <ks_list.h>
-#include <ks_treemapnode.h>
-#include <ks_treemap.h>
+#include "ks_types.h"
+#include "ks_datacont.h"
+#include "ks_listnode.h"
+#include "ks_list.h"
+#include "ks_treemapnode.h"
+#include "ks_treemap.h"
 
 
 ks_treemap* ks_treemap_new()
@@ -57,7 +57,7 @@ int ks_treemap_remove(ks_treemap* tm, const ks_datacont* key)
 }
 
 
-ks_datacont* ks_treemap_get(const ks_treemap* tm, const ks_datacont* key)
+const ks_datacont* ks_treemap_get(const ks_treemap* tm, const ks_datacont* key)
 {
   if (tm == NULL) return NULL;
 
@@ -65,7 +65,7 @@ ks_datacont* ks_treemap_get(const ks_treemap* tm, const ks_datacont* key)
 }
 
 
-ks_datacont* ks_treemap_get_key(const ks_treemap* tm, int index)
+const ks_datacont* ks_treemap_get_key(const ks_treemap* tm, int index)
 {
   if (tm == NULL) return NULL;
 

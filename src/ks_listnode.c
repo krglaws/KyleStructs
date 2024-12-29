@@ -1,8 +1,8 @@
 #include <stdlib.h>
 
-#include <ks_types.h>
-#include <ks_datacont.h>
-#include <ks_listnode.h>
+#include "ks_types.h"
+#include "ks_datacont.h"
+#include "ks_listnode.h"
 
 
 ks_listnode* ks_listnode_new(const ks_datacont* dc)
@@ -239,7 +239,7 @@ int ks_listnode_index(const ks_listnode* ln, const ks_datacont* dc)
 }
 
 
-ks_datacont* ks_listnode_get(const ks_listnode* ln, int index)
+const ks_datacont* ks_listnode_get(const ks_listnode* ln, int index)
 {
   if (ln == NULL || 
       (index < 0 && (index = ks_listnode_length(ln) + index) < 0))

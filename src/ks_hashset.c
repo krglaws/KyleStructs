@@ -1,16 +1,16 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#include <ks_types.h>
-#include <ks_datacont.h>
-#include <ks_listnode.h>
-#include <ks_list.h>
-#include <ks_treesetnode.h>
-#include <ks_treeset.h>
-#include <ks_hashset.h>
+#include "ks_types.h"
+#include "ks_datacont.h"
+#include "ks_listnode.h"
+#include "ks_list.h"
+#include "ks_treesetnode.h"
+#include "ks_treeset.h"
+#include "ks_hashset.h"
 
 
-ks_hashset* ks_hashset_new(const enum ks_datatype type, const unsigned int num_buckets)
+ks_hashset* ks_hashset_new(enum ks_datatype type, size_t num_buckets)
 {
   if (num_buckets == 0) return NULL;
 
@@ -104,7 +104,7 @@ unsigned int ks_hashset_count(const ks_hashset* hs)
 }
 
 
-ks_datacont* ks_hashset_get(const ks_hashset* hs, int index)
+const ks_datacont* ks_hashset_get(const ks_hashset* hs, int index)
 {
   if (hs == NULL) return NULL;
 
@@ -116,7 +116,7 @@ ks_datacont* ks_hashset_get(const ks_hashset* hs, int index)
   {
     ks_treeset* ts = hs->buckets[start];
 
-    ks_datacont* dc = ks_treeset_get(ts, index);
+    const ks_datacont* dc = ks_treeset_get(ts, index);
 
     if (dc != NULL)
       return dc;

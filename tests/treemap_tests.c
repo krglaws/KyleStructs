@@ -242,7 +242,7 @@ static int ks_treemap_get_tests()
   ks_treemap_add(tm, key1, val1);
   ks_treemap_add(tm, key3, val3);
   
-  ks_datacont* val = ks_treemap_get(tm, key2);
+  const ks_datacont* val = ks_treemap_get(tm, key2);
   if (val->c != val2->c)
   {
     printf("TEST 1: Unexpected ks_datacont value: %c. Expected: %c.\n", val->c, val2->c);
@@ -294,7 +294,7 @@ static int ks_treemap_get_key_tests()
   ks_treemap_add(tm, key1, val1);
   ks_treemap_add(tm, key3, val3);
  
-  ks_datacont* get_dc = ks_treemap_get_key(tm, 0);
+  const ks_datacont* get_dc = ks_treemap_get_key(tm, 0);
   if (get_dc->i != 1)
   {
     printf("TEST 1: Unexpected ks_datacont value: %d. Expected 1.\n", get_dc->i);

@@ -1,6 +1,8 @@
 #ifndef _TREEMAP_H_
 #define _TREEMAP_H_
 
+#include "ks_types.h"
+
 
 /* ------------------------------------
  * ks_treemap_new():
@@ -103,7 +105,7 @@ int ks_treemap_remove(ks_treemap* tm, const ks_datacont* key);
  * so it should not be deleted or modified by client code.
  * See notes on ks_treemap_remove().
  */
-ks_datacont* ks_treemap_get(const ks_treemap* tm, const ks_datacont* key);
+const ks_datacont* ks_treemap_get(const ks_treemap* tm, const ks_datacont* key);
 
 
 /* --------------------------
@@ -123,7 +125,7 @@ ks_datacont* ks_treemap_get(const ks_treemap* tm, const ks_datacont* key);
  * The ks_datacont returned by this function is a pointer to the original contained within the ks_treemap,
  * so it should not be deleted or modified by client code.
  */
-ks_datacont* ks_treemap_get_key(const ks_treemap* tm, int index);
+const ks_datacont* ks_treemap_get_key(const ks_treemap* tm, int index);
 
 
 /* ----------------------------

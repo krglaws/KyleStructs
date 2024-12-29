@@ -1,6 +1,9 @@
 #ifndef _KS_ITERATOR_H_
 #define _KS_ITERATOR_H_
 
+#include "ks_types.h"
+
+
 /* -------------------
  * ks_iterator_new():
  * Creates an iterator for a kylestructs object.

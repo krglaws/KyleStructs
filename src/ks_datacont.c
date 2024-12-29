@@ -2,19 +2,19 @@
 #include <stdint.h>
 #include <string.h>
 
-#include <ks_types.h>
-#include <ks_datacont.h>
-#include <ks_listnode.h>
-#include <ks_list.h>
-#include <ks_treesetnode.h>
-#include <ks_treeset.h>
-#include <ks_hashset.h>
-#include <ks_treemapnode.h>
-#include <ks_treemap.h>
-#include <ks_hashmap.h>
+#include "ks_types.h"
+#include "ks_datacont.h"
+#include "ks_listnode.h"
+#include "ks_list.h"
+#include "ks_treesetnode.h"
+#include "ks_treeset.h"
+#include "ks_hashset.h"
+#include "ks_treemapnode.h"
+#include "ks_treemap.h"
+#include "ks_hashmap.h"
 
 
-ks_datacont* ks_datacont_new(const void* data, const enum ks_datatype dct, const size_t size)
+ks_datacont* ks_datacont_new(const void* data, enum ks_datatype dct, size_t size)
 {
   if (data == NULL)
   {
@@ -325,7 +325,7 @@ enum ks_comparison ks_datacont_compare(const ks_datacont* dca, const ks_datacont
 }
 
 
-static uint32_t __hash(const void* data, const size_t size)
+static uint32_t __hash(const void* data, size_t size)
 {
   uint32_t hash = 5381;
 

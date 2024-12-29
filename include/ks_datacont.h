@@ -1,9 +1,10 @@
 #ifndef _KS_DATACONT_H_
 #define _KS_DATACONT_H_
 
-
-#include <stdlib.h>
+#include <stddef.h>
 #include <stdint.h>
+
+#include "ks_types.h"
 
 
 /* ---------------------------
@@ -14,7 +15,7 @@
  * void* data - THE data being stored within the ks_datacont.
  * enum ks_datatype dct - the type of the data being stored. See the enum defined
  *                         above to review supported types.
- * unsigned int count - the number of bytes that 'data' points to.
+ * size_t count - the number of bytes that 'data' points to.
  * 
  * Returns:
  * ks_datacont* dc - (NULL) if 'data' is NULL or 'count'== 0.
@@ -35,7 +36,7 @@
  * struct is not used in these cases, although it may be used
  * by user code for its own purposes.
  */
-ks_datacont* ks_datacont_new(const void* data, const enum ks_datatype type, const size_t size);
+ks_datacont* ks_datacont_new(const void* data, enum ks_datatype type, size_t size);
 
 
 /* ---------------------------
