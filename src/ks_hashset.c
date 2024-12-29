@@ -30,7 +30,7 @@ void ks_hashset_delete(ks_hashset* hs)
 {
   if (hs == NULL) return;
 
-  for (int i = 0; i < hs->num_buckets; i++)
+  for (unsigned int i = 0; i < hs->num_buckets; i++)
     ks_treeset_delete(hs->buckets[i]);
 
   free(hs->buckets);
@@ -44,7 +44,7 @@ ks_hashset* ks_hashset_copy(const ks_hashset* hs)
 
   ks_hashset* hs_copy = ks_hashset_new(hs->type, hs->num_buckets);
 
-  for (int i = 0; i < hs->num_buckets; i++)
+  for (unsigned int i = 0; i < hs->num_buckets; i++)
   {
     hs_copy->buckets[i] = ks_treeset_copy(hs->buckets[i]);
   }
@@ -97,7 +97,7 @@ unsigned int ks_hashset_count(const ks_hashset* hs)
 
   int count = 0;
 
-  for (int i = 0; i < hs->num_buckets; i++)
+  for (unsigned int i = 0; i < hs->num_buckets; i++)
     count += ks_treeset_count(hs->buckets[i]);
 
   return count;
@@ -132,6 +132,6 @@ void ks_hashset_optimize(ks_hashset* hs)
 {
   if (hs == NULL) return;
 
-  for (int i = 0; i < hs->num_buckets; i++)
+  for (unsigned int i = 0; i < hs->num_buckets; i++)
     ks_treeset_balance(hs->buckets[i]);
 }

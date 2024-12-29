@@ -30,7 +30,7 @@ void ks_hashmap_delete(ks_hashmap* hm)
 {
   if (hm == NULL) return;
 
-  for (int i = 0; i < hm->num_buckets; i++)
+  for (unsigned int i = 0; i < hm->num_buckets; i++)
     ks_treemap_delete(hm->buckets[i]);
 
   free(hm->buckets);
@@ -44,7 +44,7 @@ ks_hashmap* ks_hashmap_copy(const ks_hashmap* hm)
 
   ks_hashmap* hm_copy = ks_hashmap_new(hm->type, hm->num_buckets);
 
-  for (int i = 0; i < hm->num_buckets; i++)
+  for (unsigned int i = 0; i < hm->num_buckets; i++)
   {
     hm_copy->buckets[i] = ks_treemap_copy(hm->buckets[i]);
   }
@@ -122,7 +122,7 @@ unsigned int ks_hashmap_count(const ks_hashmap* hm)
 
   int count = 0;
  
-  for (int i = 0; i < hm->num_buckets; i++)
+  for (unsigned int i = 0; i < hm->num_buckets; i++)
     count += ks_treemap_count(hm->buckets[i]);
 
   return count;
@@ -133,6 +133,6 @@ void ks_hashmap_optimize(ks_hashmap* hm)
 {
   if (hm == NULL) return;
 
-  for (int i = 0; i < hm->num_buckets; i++)
+  for (unsigned int i = 0; i < hm->num_buckets; i++)
     ks_treemap_balance(hm->buckets[i]);
 }

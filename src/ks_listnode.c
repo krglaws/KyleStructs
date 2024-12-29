@@ -107,7 +107,7 @@ int ks_listnode_remove_by(ks_listnode** ln, const ks_datacont* dc)
 int ks_listnode_remove_at(ks_listnode** ln, int index)
 {
   if (ln == NULL || *ln == NULL || 
-      index < 0 && (index = ks_listnode_length(*ln) + index) < 0)
+      (index < 0 && (index = ks_listnode_length(*ln) + index) < 0))
     return -1;
 
   if (index == 0)
@@ -162,7 +162,7 @@ int ks_listnode_replace_by(ks_listnode* ln, const ks_datacont* old_dc, const ks_
 int ks_listnode_replace_at(ks_listnode* ln, const ks_datacont* dc, int index)
 {
   if (ln == NULL || dc == NULL ||
-      index < 0 && (index = ks_listnode_length(ln) + index) < 0)
+      (index < 0 && (index = ks_listnode_length(ln) + index) < 0))
     return -1;
 
   if (index == 0)
@@ -205,7 +205,7 @@ int ks_listnode_replace_all(ks_listnode* ln, const ks_datacont* old_dc, const ks
 int ks_listnode_insert(ks_listnode** ln, const ks_datacont* dc, int index)
 {
   if (ln == NULL || dc == NULL ||
-      index < 0 && (index = ks_listnode_length(*ln) + index) < 0)
+      (index < 0 && (index = ks_listnode_length(*ln) + index) < 0))
     return -1;
 
   if (index == 0)
@@ -242,7 +242,7 @@ int ks_listnode_index(const ks_listnode* ln, const ks_datacont* dc)
 ks_datacont* ks_listnode_get(const ks_listnode* ln, int index)
 {
   if (ln == NULL || 
-      index < 0 && (index = ks_listnode_length(ln) + index) < 0)
+      (index < 0 && (index = ks_listnode_length(ln) + index) < 0))
     return NULL;
 
   if (index == 0) return ln->dc;

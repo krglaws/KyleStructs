@@ -132,17 +132,37 @@ void ks_datacont_delete(ks_datacont* dc)
     return;
   }
 
-  // free all pointer types except void*
-  if (dc->type > KS_VOIDP && dc->type < KS_LIST)
-  {
-    free(dc->cp);
-  }
-
-  // free kylestruct types
   if (dc->type > KS_ULLP)
   {
     switch (dc->type)
     {
+      case KS_CHAR:
+      case KS_SHORT:
+      case KS_INT:
+      case KS_LL:
+      case KS_FLOAT:
+      case KS_DOUBLE:
+      case KS_UCHAR:
+      case KS_USHORT:
+      case KS_UINT:
+      case KS_ULL:
+      case KS_VOIDP:
+        /* do nothing
+         * (VOIDP might point to a custom data structure)
+         */
+        break;
+      case KS_CHARP:
+      case KS_SHORTP:
+      case KS_INTP:
+      case KS_LLP:
+      case KS_FLOATP:
+      case KS_DOUBLEP:
+      case KS_UCHARP:
+      case KS_USHORTP:
+      case KS_UINTP:
+      case KS_ULLP:
+        free(dc->cp);
+        break;
       case KS_LIST:
         ks_list_delete(dc->ls);
         break;
@@ -198,6 +218,8 @@ ks_datacont* ks_datacont_copy(const ks_datacont* dc)
       return ks_datacont_new(dc->sp, dc->type, dc->size);
     case KS_INTP:
       return ks_datacont_new(dc->ip, dc->type, dc->size);
+    case KS_LLP:
+      return ks_datacont_new(dc->llp, dc->type, dc->size);
     case KS_FLOATP:
       return ks_datacont_new(dc->fp, dc->type, dc->size);
     case KS_DOUBLEP:
@@ -275,9 +297,6 @@ enum ks_comparison ks_datacont_compare(const ks_datacont* dca, const ks_datacont
       if (dca->ull < dcb->ull) return KS_LESSTHAN;
       return KS_GREATERTHAN;
     case KS_VOIDP:
-      if (dca->vp == dcb->vp) return KS_EQUAL;
-      if (dca->vp < dcb->vp) return KS_LESSTHAN;
-      return KS_GREATERTHAN;
     case KS_CHARP:
     case KS_SHORTP:
     case KS_INTP:
@@ -288,12 +307,15 @@ enum ks_comparison ks_datacont_compare(const ks_datacont* dca, const ks_datacont
     case KS_USHORTP:
     case KS_UINTP:
     case KS_ULLP:
-      for (int i = 0; i < dca->size && i < dcb->size; i++)
-      {
-        if (dca->cp[i] < dcb->cp[i]) return KS_LESSTHAN;
-        else if (dca->cp[i] > dcb->cp[i]) return KS_GREATERTHAN;
-      }
-    break;
+    case KS_LIST:
+    case KS_TREESET:
+    case KS_HASHSET:
+    case KS_TREEMAP:
+    case KS_HASHMAP:
+      if (dca->vp == dcb->vp) return KS_EQUAL;
+      if (dca->vp < dcb->vp) return KS_LESSTHAN;
+      return KS_GREATERTHAN;
+      break;
   }
 
   if (dca->size < dcb->size) return KS_LESSTHAN;
@@ -307,7 +329,7 @@ static uint32_t __hash(const void* data, const size_t size)
 {
   uint32_t hash = 5381;
 
-  for (int i = 0; i < size; i++)
+  for (size_t i = 0; i < size; i++)
   {
     uint8_t byte = *((uint8_t *) data + i);
     hash = ((hash << 5) + hash) + byte;

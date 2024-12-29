@@ -65,7 +65,7 @@ const ks_datacont* ks_iterator_next(ks_iterator* iter)
     return NULL;
   }
 
-  ks_datacont* dc = NULL;
+  ks_datacont* dc;
 
   switch (iter->type)
   {
@@ -94,6 +94,8 @@ const ks_datacont* ks_iterator_next(ks_iterator* iter)
       dc = ks_hashmap_get_key((ks_hashmap*)iter->parent, iter->index);
       iter->index += 1;
       break;
+    default:
+      dc = NULL;
   }
 
   return dc;
