@@ -5,7 +5,6 @@
 
 #include "ks_types.h"
 
-
 /* ----------------------------------
  * ks_hashset_new():
  * Creates a new empty ks_hashset.
@@ -17,7 +16,6 @@
  * ks_hashset* hs - a new empty ks_hashset.
  */
 ks_hashset* ks_hashset_new(enum ks_datatype type, size_t num_buckets);
-
 
 /* ---------------------------------
  * ks_hashset_delete():
@@ -31,7 +29,6 @@ ks_hashset* ks_hashset_new(enum ks_datatype type, size_t num_buckets);
  */
 void ks_hashset_delete(ks_hashset* hs);
 
-
 /* -------------------------------
  * ks_hashset_copy():
  * Creates a copy of a ks_hashset and all of its contents.
@@ -43,7 +40,6 @@ void ks_hashset_delete(ks_hashset* hs);
  * ks_hashset* - a copy of 'hs'.
  */
 ks_hashset* ks_hashset_copy(const ks_hashset* hs);
-
 
 /* --------------------------------
  * ks_hashset_add():
@@ -67,7 +63,6 @@ ks_hashset* ks_hashset_copy(const ks_hashset* hs);
  */
 int ks_hashset_add(ks_hashset* hs, const ks_datacont* dc);
 
-
 /* -------------------------
  * ks_hashset_remove():
  * Remove a ks_datacont from a ks_hashset.
@@ -81,7 +76,6 @@ int ks_hashset_add(ks_hashset* hs, const ks_datacont* dc);
  *            - (0) on success.
  */
 int ks_hashset_remove(ks_hashset* hs, const ks_datacont* dc);
-
 
 /* ------------------------
  * ks_hashset_contains():
@@ -97,7 +91,6 @@ int ks_hashset_remove(ks_hashset* hs, const ks_datacont* dc);
  */
 unsigned int ks_hashset_contains(const ks_hashset* hs, const ks_datacont* dc);
 
-
 /* ------------------------
  * ks_hashset_count():
  * Counts the number of ks_dataconts contained within a ks_hashset.
@@ -109,7 +102,6 @@ unsigned int ks_hashset_contains(const ks_hashset* hs, const ks_datacont* dc);
  * unsigned int count - >= (0) the number of ks_dataconts within 'hs', (0) when 'hs' is NULL.
  */
 unsigned int ks_hashset_count(const ks_hashset* hs);
-
 
 /* --------------------
  * ks_hashset_get():
@@ -124,7 +116,6 @@ unsigned int ks_hashset_count(const ks_hashset* hs);
  */
 const ks_datacont* ks_hashset_get(const ks_hashset* hs, int index);
 
-
 /* --------------------
  * ks_hashset_optimize():
  * Balances all of the ks_treeset buckets in a ks_hashset to ensure O(log(N)) search
@@ -137,6 +128,5 @@ const ks_datacont* ks_hashset_get(const ks_hashset* hs, int index);
  * void
  */
 void ks_hashset_optimize(ks_hashset* hs);
-
 
 #endif

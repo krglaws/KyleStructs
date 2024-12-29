@@ -1,28 +1,26 @@
-#include <stdlib.h>
+#include "ks_datacont.h"
+
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 
-#include "ks_types.h"
-#include "ks_datacont.h"
-#include "ks_listnode.h"
-#include "ks_list.h"
-#include "ks_treesetnode.h"
-#include "ks_treeset.h"
-#include "ks_hashset.h"
-#include "ks_treemapnode.h"
-#include "ks_treemap.h"
 #include "ks_hashmap.h"
+#include "ks_hashset.h"
+#include "ks_list.h"
+#include "ks_listnode.h"
+#include "ks_treemap.h"
+#include "ks_treemapnode.h"
+#include "ks_treeset.h"
+#include "ks_treesetnode.h"
+#include "ks_types.h"
 
-
-ks_datacont* ks_datacont_new(const void* data, enum ks_datatype dct, size_t size)
-{
-  if (data == NULL)
-  {
-     return NULL;
+ks_datacont* ks_datacont_new(const void* data, enum ks_datatype dct,
+                             size_t size) {
+  if (data == NULL) {
+    return NULL;
   }
 
-  if (size == 0 && dct != KS_CHARP)
-  {
+  if (size == 0 && dct != KS_CHARP) {
     return NULL;
   }
 
@@ -30,40 +28,39 @@ ks_datacont* ks_datacont_new(const void* data, enum ks_datatype dct, size_t size
   dc->type = dct;
   dc->size = size;
 
-  switch(dct)
-  {
+  switch (dct) {
     case KS_CHAR:
-      dc->c = *((char*) data);
+      dc->c = *((char*)data);
       break;
     case KS_SHORT:
-      dc->s = *((short*) data);
+      dc->s = *((short*)data);
       break;
     case KS_INT:
-      dc->i = *((int*) data);
+      dc->i = *((int*)data);
       break;
     case KS_LL:
-      dc->ll = *((long long*) data);
+      dc->ll = *((long long*)data);
       break;
     case KS_FLOAT:
-      dc->f = *((float*) data);
+      dc->f = *((float*)data);
       break;
     case KS_DOUBLE:
-      dc->d = *((double*) data);
+      dc->d = *((double*)data);
       break;
     case KS_UCHAR:
-      dc->uc = *((unsigned char*) data);
+      dc->uc = *((unsigned char*)data);
       break;
     case KS_USHORT:
-      dc->us = *((unsigned short*) data);
+      dc->us = *((unsigned short*)data);
       break;
     case KS_UINT:
-      dc->ui = *((unsigned int*) data);
+      dc->ui = *((unsigned int*)data);
       break;
     case KS_ULL:
-      dc->ull = *((unsigned long long*) data);
+      dc->ull = *((unsigned long long*)data);
       break;
     case KS_VOIDP:
-      dc->vp = (void*) data;
+      dc->vp = (void*)data;
       break;
     case KS_CHARP:
       dc->cp = calloc(1, (sizeof(char) * size) + 1);
@@ -106,36 +103,31 @@ ks_datacont* ks_datacont_new(const void* data, enum ks_datatype dct, size_t size
       memcpy(dc->ullp, data, sizeof(long long) * size);
       break;
     case KS_LIST:
-      dc->ls = (ks_list*) data;
+      dc->ls = (ks_list*)data;
       break;
     case KS_TREESET:
-      dc->ts = (ks_treeset*) data;
+      dc->ts = (ks_treeset*)data;
       break;
     case KS_HASHSET:
-      dc->hs = (ks_hashset*) data;
+      dc->hs = (ks_hashset*)data;
       break;
     case KS_TREEMAP:
-      dc->tm = (ks_treemap*) data;
+      dc->tm = (ks_treemap*)data;
       break;
     case KS_HASHMAP:
-      dc->hm = (ks_hashmap*) data;
+      dc->hm = (ks_hashmap*)data;
       break;
   }
   return dc;
 }
 
-
-void ks_datacont_delete(ks_datacont* dc)
-{
-  if (dc == NULL)
-  {
+void ks_datacont_delete(ks_datacont* dc) {
+  if (dc == NULL) {
     return;
   }
 
-  if (dc->type > KS_ULLP)
-  {
-    switch (dc->type)
-    {
+  if (dc->type > KS_ULLP) {
+    switch (dc->type) {
       case KS_CHAR:
       case KS_SHORT:
       case KS_INT:
@@ -184,12 +176,9 @@ void ks_datacont_delete(ks_datacont* dc)
   free(dc);
 }
 
-
-ks_datacont* ks_datacont_copy(const ks_datacont* dc)
-{
+ks_datacont* ks_datacont_copy(const ks_datacont* dc) {
   if (dc == NULL) return NULL;
-  switch(dc->type)
-  {
+  switch (dc->type) {
     case KS_CHAR:
       return ks_datacont_new(&(dc->c), dc->type, dc->size);
     case KS_SHORT:
@@ -246,16 +235,13 @@ ks_datacont* ks_datacont_copy(const ks_datacont* dc)
   return NULL;
 }
 
-
-enum ks_comparison ks_datacont_compare(const ks_datacont* dca, const ks_datacont* dcb)
-{
-  if (dca == NULL || dcb == NULL || dca->type != dcb->type)
-  {
+enum ks_comparison ks_datacont_compare(const ks_datacont* dca,
+                                       const ks_datacont* dcb) {
+  if (dca == NULL || dcb == NULL || dca->type != dcb->type) {
     return KS_CANTCOMPARE;
   }
 
-  switch(dca->type)
-  {
+  switch (dca->type) {
     case KS_CHAR:
       if (dca->c == dcb->c) return KS_EQUAL;
       if (dca->c < dcb->c) return KS_LESSTHAN;
@@ -324,25 +310,19 @@ enum ks_comparison ks_datacont_compare(const ks_datacont* dca, const ks_datacont
   return KS_EQUAL;
 }
 
-
-static uint32_t __hash(const void* data, size_t size)
-{
+static uint32_t __hash(const void* data, size_t size) {
   uint32_t hash = 5381;
 
-  for (size_t i = 0; i < size; i++)
-  {
-    uint8_t byte = *((uint8_t *) data + i);
+  for (size_t i = 0; i < size; i++) {
+    uint8_t byte = *((uint8_t*)data + i);
     hash = ((hash << 5) + hash) + byte;
   }
 
   return hash;
 }
 
-
-uint32_t ks_datacont_hash(const ks_datacont* dc)
-{
-  switch(dc->type)
-  {
+uint32_t ks_datacont_hash(const ks_datacont* dc) {
+  switch (dc->type) {
     case KS_CHAR:
     case KS_UCHAR:
       return __hash(&dc->c, sizeof(char));
@@ -371,6 +351,6 @@ uint32_t ks_datacont_hash(const ks_datacont* dc)
     case KS_ULLP:
       return __hash(dc->cp, dc->size);
     default:
-      return __hash(&dc->vp, sizeof(void *));
+      return __hash(&dc->vp, sizeof(void*));
   }
 }

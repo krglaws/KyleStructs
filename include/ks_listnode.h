@@ -3,7 +3,6 @@
 
 #include "ks_types.h"
 
-
 /* -------------------
  * ks_listnode_new():
  * Creates a new ks_listnode* containing a ks_datacont*.
@@ -15,7 +14,6 @@
  * ks_listnode* ln - a ks_listnode*, (NULL) if 'dc' is NULL.
  */
 ks_listnode* ks_listnode_new(const ks_datacont* dc);
-
 
 /* --------------------
  * ks_listnode_delete():
@@ -33,7 +31,6 @@ ks_listnode* ks_listnode_new(const ks_datacont* dc);
  */
 void ks_listnode_delete(ks_listnode* ln);
 
-
 /* --------------------
  * ks_listnode_copy():
  * Creates a copy of a ks_listnode and its ks_datacont.
@@ -49,7 +46,6 @@ void ks_listnode_delete(ks_listnode* ln);
  * but not any other connected ks_listnodes.
  */
 ks_listnode* ks_listnode_copy(const ks_listnode* ln);
-
 
 /* -------------------
  * ks_listnode_delete_all():
@@ -68,7 +64,6 @@ ks_listnode* ks_listnode_copy(const ks_listnode* ln);
  */
 void ks_listnode_delete_all(ks_listnode* ln);
 
-
 /* ----------------------
  * ks_listnode_copy_all():
  * Creates a copy of a ks_listnode and all of its connected nodes.
@@ -80,7 +75,6 @@ void ks_listnode_delete_all(ks_listnode* ln);
  * ks_listnode* - a copy of the ks_listnode.
  */
 ks_listnode* ks_listnode_copy_all(const ks_listnode* ln);
-
 
 /* --------------------
  * ks_listnode_add():
@@ -95,7 +89,6 @@ ks_listnode* ks_listnode_copy_all(const ks_listnode* ln);
  *            - (0) on success.
  */
 int ks_listnode_add(ks_listnode* ln, const ks_datacont* dc);
-
 
 /* ---------------------
  * ks_listnode_merge():
@@ -113,7 +106,6 @@ int ks_listnode_add(ks_listnode* ln, const ks_datacont* dc);
  * If both are NULL, NULL will be returned.
  */
 ks_listnode* ks_listnode_merge(ks_listnode* lna, ks_listnode* lnb);
-
 
 /* -----------------------
  * ks_listnode_remove_by():
@@ -137,7 +129,6 @@ ks_listnode* ks_listnode_merge(ks_listnode* lna, ks_listnode* lnb);
  */
 int ks_listnode_remove_by(ks_listnode** ln, const ks_datacont* dc);
 
-
 /* -----------------------------
  * ks_listnode_remove_at():
  * Removes a ks_datacont at a specified location within a ks_listnode chain.
@@ -156,7 +147,6 @@ int ks_listnode_remove_by(ks_listnode** ln, const ks_datacont* dc);
  */
 int ks_listnode_remove_at(ks_listnode** ln, int index);
 
-
 /* ------------------------
  * ks_listnode_remove_all():
  * Removes all occurrences of a specified ks_datacont value within a chain of ks_listnodes.
@@ -173,7 +163,6 @@ int ks_listnode_remove_at(ks_listnode** ln, int index);
  * See ks_listnode_remove_by() notes, as they apply to this function as well.
  */
 int ks_listnode_remove_all(ks_listnode** ln, const ks_datacont* dc);
-
 
 /* -----------------------------
  * ks_listnode_replace_by():
@@ -193,8 +182,8 @@ int ks_listnode_remove_all(ks_listnode** ln, const ks_datacont* dc);
  * UNLESS the replacement fails. It will be stored directly into the list. 
  * The 'old_dc' parameter WILL always need to be deleted by the user code.
  */
-int ks_listnode_replace_by(ks_listnode* ln, const ks_datacont* old_dc, const ks_datacont* new_dc);
-
+int ks_listnode_replace_by(ks_listnode* ln, const ks_datacont* old_dc,
+                           const ks_datacont* new_dc);
 
 /* -----------------------------
  * ks_listnode_replace_at():
@@ -216,7 +205,6 @@ int ks_listnode_replace_by(ks_listnode* ln, const ks_datacont* old_dc, const ks_
  */
 int ks_listnode_replace_at(ks_listnode* ln, const ks_datacont* dc, int index);
 
-
 /* ------------------------------
  * ks_listnode_replace_all():
  * Replaces all occurrences of a specified ks_datacont value with a new ks_datacont value.
@@ -233,8 +221,8 @@ int ks_listnode_replace_at(ks_listnode* ln, const ks_datacont* dc, int index);
  * Notes:
  * See notes on ks_listnode_replace_by(). The same applies here.
  */
-int ks_listnode_replace_all(ks_listnode* ln, const ks_datacont* old_dc, const ks_datacont* new_dc);
-
+int ks_listnode_replace_all(ks_listnode* ln, const ks_datacont* old_dc,
+                            const ks_datacont* new_dc);
 
 /* -------------------------
  * ks_listnode_insert():
@@ -257,7 +245,6 @@ int ks_listnode_replace_all(ks_listnode* ln, const ks_datacont* old_dc, const ks
  */
 int ks_listnode_insert(ks_listnode** ln, const ks_datacont* dc, int index);
 
-
 /* ---------------------------
  * ks_listnode_index():
  * Returns the index of the first ks_datacont that matches the ks_datacont 'dc' param located within a group of connected ks_listnodes.
@@ -275,7 +262,6 @@ int ks_listnode_insert(ks_listnode** ln, const ks_datacont* dc, int index);
  * if (ks_listnode_index(ln, dc) >= 0) puts("Found it!");
  */
 int ks_listnode_index(const ks_listnode* ln, const ks_datacont* dc);
-
 
 /* -------------------------
  * ks_listnode_get():
@@ -296,7 +282,6 @@ int ks_listnode_index(const ks_listnode* ln, const ks_datacont* dc);
  */
 const ks_datacont* ks_listnode_get(const ks_listnode* ln, int index);
 
-
 /* ----------------------------
  * ks_listnode_count():
  * Returns the number of occurrences of a specified ks_datacont value within a ks_listnode chain.
@@ -311,7 +296,6 @@ const ks_datacont* ks_listnode_get(const ks_listnode* ln, int index);
  */
 unsigned int ks_listnode_count(const ks_listnode* ln, const ks_datacont* dc);
 
-
 /* ----------------------------
  * ks_listnode_length():
  * Returns the length of the list.
@@ -323,6 +307,5 @@ unsigned int ks_listnode_count(const ks_listnode* ln, const ks_datacont* dc);
  * unsigned int length - >= (0) the length of the list. (0) when 'ln' is NULL.
  */
 unsigned int ks_listnode_length(const ks_listnode* ln);
-
 
 #endif

@@ -3,7 +3,6 @@
 
 #include "ks_types.h"
 
-
 /* ------------------------------------
  * ks_treemap_new():
  * Creates a new empty ks_treemap.
@@ -15,7 +14,6 @@
  * ks_treemap* tm - an empty ks_treemap.
  */
 ks_treemap* ks_treemap_new();
-
 
 /* ----------------------------------
  * ks_treemap_delete():
@@ -29,7 +27,6 @@ ks_treemap* ks_treemap_new();
  */
 void ks_treemap_delete(ks_treemap* tm);
 
-
 /* ---------------------------------
  * ks_treemap_copy():
  * Creats a copy of a ks_treemap*.
@@ -41,7 +38,6 @@ void ks_treemap_delete(ks_treemap* tm);
  * ks_treemap* - a copy of 'tm'.
  */
 ks_treemap* ks_treemap_copy(const ks_treemap* tm);
-
 
 /* ----------------------------------
  * ks_treemap_add():
@@ -66,8 +62,8 @@ ks_treemap* ks_treemap_copy(const ks_treemap* tm);
  * to the ks_treemap (-1), the user code is responsible for deleting both when they are 
  * no longer needed.
  */
-int ks_treemap_add(ks_treemap* tm, const ks_datacont* key, const ks_datacont* value);
-
+int ks_treemap_add(ks_treemap* tm, const ks_datacont* key,
+                   const ks_datacont* value);
 
 /* ---------------------------
  * ks_treemap_remove():
@@ -86,7 +82,6 @@ int ks_treemap_add(ks_treemap* tm, const ks_datacont* key, const ks_datacont* va
  * the same data.
  */
 int ks_treemap_remove(ks_treemap* tm, const ks_datacont* key);
-
 
 /* ---------------------------
  * ks_treemap_get():
@@ -107,7 +102,6 @@ int ks_treemap_remove(ks_treemap* tm, const ks_datacont* key);
  */
 const ks_datacont* ks_treemap_get(const ks_treemap* tm, const ks_datacont* key);
 
-
 /* --------------------------
  * ks_treemap_get_key():
  * Retrieves a key located at a specified index within a ks_treemap.
@@ -127,7 +121,6 @@ const ks_datacont* ks_treemap_get(const ks_treemap* tm, const ks_datacont* key);
  */
 const ks_datacont* ks_treemap_get_key(const ks_treemap* tm, int index);
 
-
 /* ----------------------------
  * ks_treemap_count():
  * Count the number of key-value pairs stored within a ks_treemap.
@@ -139,7 +132,6 @@ const ks_datacont* ks_treemap_get_key(const ks_treemap* tm, int index);
  * unsigned int result - >= (0) the number of pairs found in the ks_treemap, (0) if 'tm' is NULL..
  */
 unsigned int ks_treemap_count(const ks_treemap* tm);
-
 
 /* --------------------------
  * ks_treemap_height():
@@ -153,7 +145,6 @@ unsigned int ks_treemap_count(const ks_treemap* tm);
  */
 unsigned int ks_treemap_height(const ks_treemap* tm);
 
-
 /* --------------------------
  * ks_treemap_balance():
  * Balances a ks_treemap to ensure optimal performance.
@@ -165,6 +156,5 @@ unsigned int ks_treemap_height(const ks_treemap* tm);
  * void
  */
 void ks_treemap_balance(ks_treemap* tm);
-
 
 #endif

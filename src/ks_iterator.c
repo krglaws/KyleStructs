@@ -1,18 +1,16 @@
-#include <stdlib.h>
-
-#include "ks_types.h"
-#include "ks_list.h"
-#include "ks_treeset.h"
-#include "ks_hashset.h"
-#include "ks_treemap.h"
-#include "ks_hashmap.h"
 #include "ks_iterator.h"
 
+#include <stdlib.h>
 
-ks_iterator* ks_iterator_new(const void* ks_obj, enum ks_datatype type)
-{
-  if (ks_obj == NULL)
-  {
+#include "ks_hashmap.h"
+#include "ks_hashset.h"
+#include "ks_list.h"
+#include "ks_treemap.h"
+#include "ks_treeset.h"
+#include "ks_types.h"
+
+ks_iterator* ks_iterator_new(const void* ks_obj, enum ks_datatype type) {
+  if (ks_obj == NULL) {
     return NULL;
   }
 
@@ -20,11 +18,10 @@ ks_iterator* ks_iterator_new(const void* ks_obj, enum ks_datatype type)
   iter->parent = (void*)ks_obj;
   iter->type = type;
 
-  switch (type)
-  {
+  switch (type) {
     case KS_LIST:
       iter->size = ks_list_length(ks_obj);
-      iter->curr = ((ks_list*) ks_obj)->head;
+      iter->curr = ((ks_list*)ks_obj)->head;
       break;
 
     case KS_TREESET:
@@ -51,24 +48,16 @@ ks_iterator* ks_iterator_new(const void* ks_obj, enum ks_datatype type)
   return iter;
 }
 
+void ks_iterator_delete(ks_iterator* iter) { free(iter); }
 
-void ks_iterator_delete(ks_iterator* iter)
-{
-  free(iter);
-}
-
-
-const ks_datacont* ks_iterator_next(ks_iterator* iter)
-{
-  if (iter == NULL)
-  {
+const ks_datacont* ks_iterator_next(ks_iterator* iter) {
+  if (iter == NULL) {
     return NULL;
   }
 
   const ks_datacont* dc;
 
-  switch (iter->type)
-  {
+  switch (iter->type) {
     case KS_LIST:
       dc = iter->curr ? iter->curr->dc : NULL;
       iter->index += 1;

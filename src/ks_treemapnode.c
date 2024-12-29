@@ -1,39 +1,35 @@
-#include <stdlib.h>
-
-#include "ks_types.h"
-#include "ks_datacont.h"
-#include "ks_listnode.h"
 #include "ks_treemapnode.h"
 
+#include <stdlib.h>
 
-ks_treemapnode* ks_treemapnode_new(const ks_datacont* key, const ks_datacont* value)
-{
+#include "ks_datacont.h"
+#include "ks_listnode.h"
+#include "ks_types.h"
+
+ks_treemapnode* ks_treemapnode_new(const ks_datacont* key,
+                                   const ks_datacont* value) {
   if (key == NULL || value == NULL) return NULL;
 
   ks_treemapnode* tmn = calloc(1, sizeof(ks_treemapnode));
 
-  tmn->key = (ks_datacont*) key;
+  tmn->key = (ks_datacont*)key;
 
-  tmn->value = (ks_datacont*) value;
+  tmn->value = (ks_datacont*)value;
 
   return tmn;
 }
 
-
-void ks_treemapnode_delete(ks_treemapnode* tmn)
-{
+void ks_treemapnode_delete(ks_treemapnode* tmn) {
   if (tmn == NULL) return;
 
   ks_datacont_delete(tmn->key);
- 
+
   ks_datacont_delete(tmn->value);
-  
+
   free(tmn);
 }
 
-
-ks_treemapnode* ks_treemapnode_copy(const ks_treemapnode* tmn)
-{
+ks_treemapnode* ks_treemapnode_copy(const ks_treemapnode* tmn) {
   if (tmn == NULL) return NULL;
 
   ks_datacont* key = ks_datacont_copy(tmn->key);
@@ -42,9 +38,7 @@ ks_treemapnode* ks_treemapnode_copy(const ks_treemapnode* tmn)
   return ks_treemapnode_new(key, val);
 }
 
-
-void ks_treemapnode_delete_all(ks_treemapnode* tmn)
-{
+void ks_treemapnode_delete_all(ks_treemapnode* tmn) {
   if (tmn == NULL) return;
 
   ks_treemapnode_delete_all(tmn->left);
@@ -54,9 +48,7 @@ void ks_treemapnode_delete_all(ks_treemapnode* tmn)
   ks_treemapnode_delete(tmn);
 }
 
-
-ks_treemapnode* ks_treemapnode_copy_all(const ks_treemapnode* tmn)
-{
+ks_treemapnode* ks_treemapnode_copy_all(const ks_treemapnode* tmn) {
   if (tmn == NULL) return NULL;
 
   ks_treemapnode* tmn_copy = ks_treemapnode_copy(tmn);
@@ -67,47 +59,41 @@ ks_treemapnode* ks_treemapnode_copy_all(const ks_treemapnode* tmn)
   return tmn_copy;
 }
 
-
-int ks_treemapnode_add(ks_treemapnode* tmn, const ks_datacont* key, const ks_datacont* value)
-{
+int ks_treemapnode_add(ks_treemapnode* tmn, const ks_datacont* key,
+                       const ks_datacont* value) {
   if (tmn == NULL || key == NULL || value == NULL) return -1;
- 
+
   enum ks_comparison result = ks_datacont_compare(key, tmn->key);
- 
+
   if (result == KS_CANTCOMPARE) return -1;
 
-  if (result == KS_EQUAL)
-  {
+  if (result == KS_EQUAL) {
     ks_datacont_delete(tmn->key);
     ks_datacont_delete(tmn->value);
-    tmn->key = (ks_datacont*) key;
-    tmn->value = (ks_datacont*) value;
+    tmn->key = (ks_datacont*)key;
+    tmn->value = (ks_datacont*)value;
     return 1;
-  }
-  else if (result == KS_LESSTHAN)
-  {
-    if (tmn->left) return ks_treemapnode_add(tmn->left, key, value);
-    else tmn->left = ks_treemapnode_new(key, value);
-  }
-  else
-  {
-    if (tmn->right) return ks_treemapnode_add(tmn->right, key, value);
-    else tmn->right = ks_treemapnode_new(key, value);
+  } else if (result == KS_LESSTHAN) {
+    if (tmn->left)
+      return ks_treemapnode_add(tmn->left, key, value);
+    else
+      tmn->left = ks_treemapnode_new(key, value);
+  } else {
+    if (tmn->right)
+      return ks_treemapnode_add(tmn->right, key, value);
+    else
+      tmn->right = ks_treemapnode_new(key, value);
   }
   return 0;
 }
 
-
-int ks_treemapnode_remove(ks_treemapnode** tmn, const ks_datacont* key)
-{
+int ks_treemapnode_remove(ks_treemapnode** tmn, const ks_datacont* key) {
   if (tmn == NULL || *tmn == NULL || key == NULL) return -1;
 
   enum ks_comparison result = ks_datacont_compare(key, (*tmn)->key);
 
-  if (result == KS_EQUAL)
-  {
-    if ((*tmn)->left != NULL && (*tmn)->right != NULL)
-    {
+  if (result == KS_EQUAL) {
+    if ((*tmn)->left != NULL && (*tmn)->right != NULL) {
       ks_treemapnode** leftmost = &(*tmn)->right;
       while ((*leftmost)->left) leftmost = &(*leftmost)->left;
       ks_datacont_delete((*tmn)->key);
@@ -115,40 +101,32 @@ int ks_treemapnode_remove(ks_treemapnode** tmn, const ks_datacont* key)
       (*tmn)->key = ks_datacont_copy((*leftmost)->key);
       (*tmn)->value = ks_datacont_copy((*leftmost)->value);
       return ks_treemapnode_remove(leftmost, (*leftmost)->key);
-    }
-    else if ((*tmn)->left)
-    {
+    } else if ((*tmn)->left) {
       ks_datacont_delete((*tmn)->key);
       ks_datacont_delete((*tmn)->value);
       (*tmn)->key = ks_datacont_copy((*tmn)->left->key);
       (*tmn)->value = ks_datacont_copy((*tmn)->left->value);
       return ks_treemapnode_remove(&(*tmn)->left, (*tmn)->left->key);
-    }
-    else if ((*tmn)->right)
-    {
+    } else if ((*tmn)->right) {
       ks_datacont_delete((*tmn)->key);
       ks_datacont_delete((*tmn)->value);
       (*tmn)->key = ks_datacont_copy((*tmn)->right->key);
       (*tmn)->value = ks_datacont_copy((*tmn)->right->value);
       return ks_treemapnode_remove(&(*tmn)->right, (*tmn)->right->key);
-    }
-    else
-    {
+    } else {
       ks_treemapnode_delete(*tmn);
       *tmn = NULL;
       return 0;
     }
-  }
-  else if (result == KS_LESSTHAN)
+  } else if (result == KS_LESSTHAN)
     return ks_treemapnode_remove(&(*tmn)->left, key);
   else if (result == KS_GREATERTHAN)
     return ks_treemapnode_remove(&(*tmn)->right, key);
   return 1;
 }
 
-
-const ks_datacont* ks_treemapnode_get(const ks_treemapnode* tmn, const ks_datacont* key)
-{
+const ks_datacont* ks_treemapnode_get(const ks_treemapnode* tmn,
+                                      const ks_datacont* key) {
   if (tmn == NULL || key == NULL) return NULL;
 
   enum ks_comparison result = ks_datacont_compare(key, tmn->key);
@@ -165,9 +143,8 @@ const ks_datacont* ks_treemapnode_get(const ks_treemapnode* tmn, const ks_dataco
   return NULL;
 }
 
-
-static ks_datacont* __ks_treemapnode_get_key(const ks_treemapnode* tmn, int index, int* curr_index)
-{
+static ks_datacont* __ks_treemapnode_get_key(const ks_treemapnode* tmn,
+                                             int index, int* curr_index) {
   if (tmn == NULL) return NULL;
 
   ks_treemapnode* first = index < 0 ? tmn->right : tmn->left;
@@ -180,32 +157,25 @@ static ks_datacont* __ks_treemapnode_get_key(const ks_treemapnode* tmn, int inde
 
   index < 0 ? (*curr_index)-- : (*curr_index)++;
 
-  if (*curr_index == index)
-    return tmn->key;
+  if (*curr_index == index) return tmn->key;
 
   return __ks_treemapnode_get_key(second, index, curr_index);
 }
 
-
-const ks_datacont* ks_treemapnode_get_key(const ks_treemapnode* tmn, int index)
-{
+const ks_datacont* ks_treemapnode_get_key(const ks_treemapnode* tmn,
+                                          int index) {
   int curr_index = index < 0 ? 0 : -1;
 
   return __ks_treemapnode_get_key(tmn, index, &curr_index);
 }
 
-
-unsigned int ks_treemapnode_count(const ks_treemapnode* tmn)
-{
+unsigned int ks_treemapnode_count(const ks_treemapnode* tmn) {
   if (tmn == NULL) return 0;
 
-  return 1 + ks_treemapnode_count(tmn->left) + 
-    ks_treemapnode_count(tmn->right);
+  return 1 + ks_treemapnode_count(tmn->left) + ks_treemapnode_count(tmn->right);
 }
 
-
-unsigned int ks_treemapnode_height(const ks_treemapnode* tmn)
-{
+unsigned int ks_treemapnode_height(const ks_treemapnode* tmn) {
   if (tmn == NULL) return 0;
 
   unsigned int left_height = ks_treemapnode_height(tmn->left);
@@ -215,9 +185,8 @@ unsigned int ks_treemapnode_height(const ks_treemapnode* tmn)
   return 1 + (left_height > right_height ? left_height : right_height);
 }
 
-
-static ks_treemapnode* __ks_treemapnode_balance(ks_treemapnode* tmn, int start, int end)
-{
+static ks_treemapnode* __ks_treemapnode_balance(ks_treemapnode* tmn, int start,
+                                                int end) {
   if (start > end) return NULL;
 
   int mid = (start + end) / 2;
@@ -232,14 +201,12 @@ static ks_treemapnode* __ks_treemapnode_balance(ks_treemapnode* tmn, int start, 
   return root;
 }
 
-
-ks_treemapnode* ks_treemapnode_balance(ks_treemapnode* root)
-{
+ks_treemapnode* ks_treemapnode_balance(ks_treemapnode* root) {
   if (root == NULL) return NULL;
 
   int count = ks_treemapnode_count(root);
 
-  ks_treemapnode* balanced =  __ks_treemapnode_balance(root, 0, count - 1);
+  ks_treemapnode* balanced = __ks_treemapnode_balance(root, 0, count - 1);
 
   ks_treemapnode_delete_all(root);
 

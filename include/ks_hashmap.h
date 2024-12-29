@@ -5,7 +5,6 @@
 
 #include "ks_types.h"
 
-
 /* ------------------------------------
  * ks_hashmap_new():
  * Creates a new empty ks_hashmap.
@@ -19,7 +18,6 @@
  */
 ks_hashmap* ks_hashmap_new(const enum ks_datatype type, size_t num_buckets);
 
-
 /* ----------------------------------
  * ks_hashmap_delete():
  * Deletes a ks_hashmap and all of its contents.
@@ -32,7 +30,6 @@ ks_hashmap* ks_hashmap_new(const enum ks_datatype type, size_t num_buckets);
  */
 void ks_hashmap_delete(ks_hashmap* hm);
 
-
 /* ----------------------------------
  * ks_hashmap_copy():
  * Creates a copy of a ks_hashmap and all its contents.
@@ -44,7 +41,6 @@ void ks_hashmap_delete(ks_hashmap* hm);
  * ks_hashmap* - a copy of 'hm'.
  */
 ks_hashmap* ks_hashmap_copy(const ks_hashmap* hm);
-
 
 /* ----------------------------------
  * ks_hashmap_add():
@@ -68,8 +64,8 @@ ks_hashmap* ks_hashmap_copy(const ks_hashmap* hm);
  * to the ks_hashmap (-1), the user code is responsible for deleting both when they are 
  * no longer needed.
  */
-int ks_hashmap_add(ks_hashmap* hm, const ks_datacont* key, const ks_datacont* value);
-
+int ks_hashmap_add(ks_hashmap* hm, const ks_datacont* key,
+                   const ks_datacont* value);
 
 /* ---------------------------
  * ks_hashmap_remove():
@@ -88,7 +84,6 @@ int ks_hashmap_add(ks_hashmap* hm, const ks_datacont* key, const ks_datacont* va
  * to delete 'key' when it is no longer needed.
  */
 int ks_hashmap_remove(ks_hashmap* hm, const ks_datacont* key);
-
 
 /* ---------------------------
  * ks_hashmap_get():
@@ -109,7 +104,6 @@ int ks_hashmap_remove(ks_hashmap* hm, const ks_datacont* key);
  */
 const ks_datacont* ks_hashmap_get(const ks_hashmap* hm, const ks_datacont* key);
 
-
 /* ---------------------------
  * ks_hashmap_get_key():
  * Gets a key from a ks_hashmap by index.
@@ -129,7 +123,6 @@ const ks_datacont* ks_hashmap_get(const ks_hashmap* hm, const ks_datacont* key);
  */
 const ks_datacont* ks_hashmap_get_key(const ks_hashmap* hm, int index);
 
-
 /* ---------------------------------
  * ks_hashmap_count():
  * Count the number of key/value pairs stored within
@@ -143,7 +136,6 @@ const ks_datacont* ks_hashmap_get_key(const ks_hashmap* hm, int index);
  */
 unsigned int ks_hashmap_count(const ks_hashmap* hm);
 
-
 /* ----------------------------
  * ks_hashmap_optimize():
  * Balances all of the ks_treemap buckets in a ks_hashmap to ensure O(log(N)) search time.
@@ -155,6 +147,5 @@ unsigned int ks_hashmap_count(const ks_hashmap* hm);
  * void
  */
 void ks_hashmap_optimize(ks_hashmap* hm);
-
 
 #endif

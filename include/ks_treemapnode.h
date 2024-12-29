@@ -3,7 +3,6 @@
 
 #include "ks_types.h"
 
-
 /* ------------------------------------
  * ks_treemapnode_new():
  * Creates a new ks_treemapnode.
@@ -16,8 +15,8 @@
  * ks_treemapnode* tmn - (NULL) if either of the parameters is NULL.
  *                  - a ks_treemapnode containing 'key' and 'value'.
  */
-ks_treemapnode* ks_treemapnode_new(const ks_datacont* key, const ks_datacont* value);
-
+ks_treemapnode* ks_treemapnode_new(const ks_datacont* key,
+                                   const ks_datacont* value);
 
 /* ----------------------------------
  * ks_treemapnode_delete():
@@ -30,7 +29,6 @@ ks_treemapnode* ks_treemapnode_new(const ks_datacont* key, const ks_datacont* va
  * void
  */
 void ks_treemapnode_delete(ks_treemapnode* tmn);
-
 
 /* ----------------------------------
  * ks_treemapnode_copy():
@@ -49,7 +47,6 @@ void ks_treemapnode_delete(ks_treemapnode* tmn);
  */
 ks_treemapnode* ks_treemapnode_copy(const ks_treemapnode* tmn);
 
-
 /* -----------------------------------
  * ks_treemapnode_delete_all():
  * Deletes a ks_treemapnode, its 'key' and 'value' members, and recursively
@@ -63,7 +60,6 @@ ks_treemapnode* ks_treemapnode_copy(const ks_treemapnode* tmn);
  */
 void ks_treemapnode_delete_all(ks_treemapnode* tmn);
 
-
 /* ----------------------------------
  * ks_treemapnode_copy_all():
  * Creates a copy of a treemapnode*, its ks_datacont*, and any
@@ -76,7 +72,6 @@ void ks_treemapnode_delete_all(ks_treemapnode* tmn);
  * ks_treemapnode* - a copy of the ks_treemapnode*.
  */
 ks_treemapnode* ks_treemapnode_copy_all(const ks_treemapnode* tmn);
-
 
 /* ----------------------------------
  * ks_treemapnode_add():
@@ -100,8 +95,8 @@ ks_treemapnode* ks_treemapnode_copy_all(const ks_treemapnode* tmn);
  * to the ks_treemapnode (-1), the user code is responsible for deleting both when they are 
  * no longer needed.
  */
-int ks_treemapnode_add(ks_treemapnode* tmn, const ks_datacont* key, const ks_datacont* value);
-
+int ks_treemapnode_add(ks_treemapnode* tmn, const ks_datacont* key,
+                       const ks_datacont* value);
 
 /* ---------------------------
  * ks_treemapnode_remove():
@@ -123,7 +118,6 @@ int ks_treemapnode_add(ks_treemapnode* tmn, const ks_datacont* key, const ks_dat
  */
 int ks_treemapnode_remove(ks_treemapnode** tmn, const ks_datacont* key);
 
-
 /* ---------------------------
  * ks_treemapnode_get():
  * Get the value from a ks_treemapnode by key.
@@ -142,8 +136,8 @@ int ks_treemapnode_remove(ks_treemapnode** tmn, const ks_datacont* key);
  * 'key' is not consumed by this procedure, it is only used to locate another ks_datacont
  * containing the same data.
  */
-const ks_datacont* ks_treemapnode_get(const ks_treemapnode* tmn, const ks_datacont* key);
-
+const ks_datacont* ks_treemapnode_get(const ks_treemapnode* tmn,
+                                      const ks_datacont* key);
 
 /* --------------------------
  * ks_treemapnode_get_key():
@@ -163,7 +157,6 @@ const ks_datacont* ks_treemapnode_get(const ks_treemapnode* tmn, const ks_dataco
  */
 const ks_datacont* ks_treemapnode_get_key(const ks_treemapnode* tmn, int index);
 
-
 /* ----------------------------
  * ks_treemapnode_count():
  * Count the number of key/value pairs stored within a ks_treemapnode.
@@ -175,7 +168,6 @@ const ks_datacont* ks_treemapnode_get_key(const ks_treemapnode* tmn, int index);
  * unsigned int - >= (0) the number of pairs found in the ks_treemapnode, (0) if 'tmn' is NULL.
  */
 unsigned int ks_treemapnode_count(const ks_treemapnode* tmn);
-
 
 /* --------------------------
  * ks_treemapnode_height():
@@ -189,7 +181,6 @@ unsigned int ks_treemapnode_count(const ks_treemapnode* tmn);
  */
 unsigned int ks_treemapnode_height(const ks_treemapnode* tmn);
 
-
 /* --------------------------
  * ks_treemapnode_balance():
  * Balances a ks_treemapnode* tree to ensure optimal performance.
@@ -201,6 +192,5 @@ unsigned int ks_treemapnode_height(const ks_treemapnode* tmn);
  * ks_treemapnode* - a balanced treemapnode*.
  */
 ks_treemapnode* ks_treemapnode_balance(ks_treemapnode* tmn);
-
 
 #endif

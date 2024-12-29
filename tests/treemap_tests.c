@@ -1,22 +1,19 @@
 #include <stdio.h>
 
-#include <ks_types.h>
-#include <ks_datacont.h>
-#include <ks_listnode.h>
-#include <ks_list.h>
-#include <ks_treemapnode.h>
-#include <ks_treemap.h>
+#include "ks_datacont.h"
+#include "ks_list.h"
+#include "ks_listnode.h"
+#include "ks_treemap.h"
+#include "ks_treemapnode.h"
+#include "ks_types.h"
 
-
-static int ks_treemap_new_tests()
-{
+static int ks_treemap_new_tests() {
   int retval = 0;
 
   /* TEST 1 */
   ks_treemap* tm = ks_treemap_new();
 
-  if (tm->root != NULL)
-  {
+  if (tm->root != NULL) {
     printf("TEST 1: ks_treemap->root should be NULL when empty.\n");
     retval = -1;
   }
@@ -25,33 +22,32 @@ static int ks_treemap_new_tests()
   return retval;
 }
 
-
-static int ks_treemap_copy_tests()
-{
+static int ks_treemap_copy_tests() {
   int retval = 0;
 
   /* TEST 1 */
   ks_treemap* tm = ks_treemap_new();
-  ks_treemap_add(tm, ks_datacont_new("B", KS_CHAR, 1), ks_datacont_new("B", KS_CHAR, 1));
-  ks_treemap_add(tm, ks_datacont_new("C", KS_CHAR, 1), ks_datacont_new("C", KS_CHAR, 1));
+  ks_treemap_add(tm, ks_datacont_new("B", KS_CHAR, 1),
+                 ks_datacont_new("B", KS_CHAR, 1));
+  ks_treemap_add(tm, ks_datacont_new("C", KS_CHAR, 1),
+                 ks_datacont_new("C", KS_CHAR, 1));
 
   ks_treemap* tm_copy = ks_treemap_copy(tm);
 
-  if (tm_copy == NULL)
-  {
+  if (tm_copy == NULL) {
     printf("TEST 1: Unexpected NULL return from ks_treemap_copy()\n");
     return -1;
   }
 
-  if (tm_copy->root->key->c != 'B')
-  {
-    printf("TEST 1: Unexpected ks_datacont value in ks_treemap_copy() result\n");
+  if (tm_copy->root->key->c != 'B') {
+    printf(
+        "TEST 1: Unexpected ks_datacont value in ks_treemap_copy() result\n");
     retval = -1;
   }
 
-  if (tm_copy->root->right->key->c != 'C')
-  {
-    printf("TEST 1: Unexpected ks_datacont value in ks_treemap_copy() result\n");
+  if (tm_copy->root->right->key->c != 'C') {
+    printf(
+        "TEST 1: Unexpected ks_datacont value in ks_treemap_copy() result\n");
     retval = -1;
   }
 
@@ -61,9 +57,7 @@ static int ks_treemap_copy_tests()
   return retval;
 }
 
-
-static int ks_treemap_add_tests()
-{
+static int ks_treemap_add_tests() {
   int retval = 0;
 
   /* TEST 1 */
@@ -78,50 +72,53 @@ static int ks_treemap_add_tests()
   ks_datacont* val4 = ks_datacont_new("D", KS_CHAR, 1);
 
   ks_treemap* tm = ks_treemap_new();
-  
-  if (ks_treemap_add(tm, key2, val2))
-  {
-    printf("TEST 1: ks_treemap_add() should return zero when adding a new pair.\n");
+
+  if (ks_treemap_add(tm, key2, val2)) {
+    printf(
+        "TEST 1: ks_treemap_add() should return zero when adding a new "
+        "pair.\n");
     retval = -1;
   }
-  if (tm->root->key->i != 2)
-  {
-    printf("TEST 1: Unexpected key ks_datacont at root node: %d. Expected: 2.\n", tm->root->key->i);
+  if (tm->root->key->i != 2) {
+    printf(
+        "TEST 1: Unexpected key ks_datacont at root node: %d. Expected: 2.\n",
+        tm->root->key->i);
     retval = -1;
   }
-  if (tm->root->value->c != 'B')
-  {
-    printf("TEST 1: Unexpected value ks_datacont at root node: %d. Expected B.\n", tm->root->value->c);
+  if (tm->root->value->c != 'B') {
+    printf(
+        "TEST 1: Unexpected value ks_datacont at root node: %d. Expected B.\n",
+        tm->root->value->c);
     retval = -1;
   }
 
   /* TEST 2 */
-  if (ks_treemap_add(tm, key3, val3))
-  {
-    printf("TEST 2: ks_treemap_add() should return zero when adding a new pair.\n");
+  if (ks_treemap_add(tm, key3, val3)) {
+    printf(
+        "TEST 2: ks_treemap_add() should return zero when adding a new "
+        "pair.\n");
     retval = -1;
   }
-  if (tm->root->right == NULL)
-  {
+  if (tm->root->right == NULL) {
     printf("TEST 2: expected root->right to be non-NULL.\n");
     retval = -1;
   }
 
   /* TEST 3 */
-  if (ks_treemap_add(tm, ks_datacont_copy(key2), val4) != 1)
-  {
-    printf("TEST 3: ks_treemap_add() should return 1 when replacing existing pair.\n");
+  if (ks_treemap_add(tm, ks_datacont_copy(key2), val4) != 1) {
+    printf(
+        "TEST 3: ks_treemap_add() should return 1 when replacing existing "
+        "pair.\n");
     retval = -1;
   }
-  if (tm->root->value->c != 'D')
-  {
-    printf("TEST 3: Unexpected root node value: %c. Expected: D.\n", tm->root->value->c);
+  if (tm->root->value->c != 'D') {
+    printf("TEST 3: Unexpected root node value: %c. Expected: D.\n",
+           tm->root->value->c);
     retval = -1;
   }
 
   /* TEST 4 */
-  if (ks_treemap_add(NULL, NULL, NULL) != -1)
-  {
+  if (ks_treemap_add(NULL, NULL, NULL) != -1) {
     printf("TEST 4: ks_treemap_add() should return -1 when params are NULL.\n");
     retval = -1;
   }
@@ -131,9 +128,7 @@ static int ks_treemap_add_tests()
   return retval;
 }
 
-
-static int ks_treemap_remove_tests()
-{
+static int ks_treemap_remove_tests() {
   int retval = 0;
 
   /* TEST 1 */
@@ -150,7 +145,7 @@ static int ks_treemap_remove_tests()
   ks_datacont* val3 = ks_datacont_new("C", KS_CHAR, 1);
 
   ks_treemap* tm = ks_treemap_new();
-  
+
   ks_treemap_add(tm, key2, val2);
   key2 = ks_datacont_copy(key2);
 
@@ -160,50 +155,47 @@ static int ks_treemap_remove_tests()
   ks_treemap_add(tm, key3, val3);
   key3 = ks_datacont_copy(key3);
 
-  if (ks_treemap_remove(tm, key2))
-  {
+  if (ks_treemap_remove(tm, key2)) {
     printf("TEST 1: Failed to remove root node from ks_treemap.\n");
     retval = -1;
   }
-  if (tm->root->key->i != 3)
-  {
-    printf("TEST 1: Unexpected root key value: %d. Expected: 3.\n", tm->root->key->i);
+  if (tm->root->key->i != 3) {
+    printf("TEST 1: Unexpected root key value: %d. Expected: 3.\n",
+           tm->root->key->i);
     retval = -1;
   }
-  if (tm->root->right != NULL)
-  {
+  if (tm->root->right != NULL) {
     printf("TEST 1: Expected right node to be NULL.\n");
     retval = -1;
   }
 
   /* TEST 2 */
-  if (ks_treemap_remove(tm, key2) != -1)
-  {
-    printf("TEST 2: ks_treemap_remove() should return -1 when removing not-present node key.\n");
+  if (ks_treemap_remove(tm, key2) != -1) {
+    printf(
+        "TEST 2: ks_treemap_remove() should return -1 when removing "
+        "not-present node key.\n");
     retval = -1;
   }
 
   /* TEST 3 */
-  if (ks_treemap_remove(tm, key1))
-  {
+  if (ks_treemap_remove(tm, key1)) {
     printf("TEST 3: Failed to remove left node from ks_treemap.\n");
     retval = -1;
   }
-  if (tm->root->left != NULL)
-  {
+  if (tm->root->left != NULL) {
     printf("TEST 3: Expected left node to be NULL.\n");
     retval = -1;
   }
 
   /* TEST 4 */
-  if (ks_treemap_remove(tm, key3))
-  {
+  if (ks_treemap_remove(tm, key3)) {
     printf("TEST 4: failed to remove last node in ks_treemap.\n");
     retval = -1;
   }
-  if (tm->root != NULL)
-  {
-    printf("TEST 4: Expected root node to be NULL after last ks_treemap_remove().\n");
+  if (tm->root != NULL) {
+    printf(
+        "TEST 4: Expected root node to be NULL after last "
+        "ks_treemap_remove().\n");
     retval = -1;
   }
 
@@ -216,9 +208,7 @@ static int ks_treemap_remove_tests()
   return retval;
 }
 
-
-static int ks_treemap_get_tests()
-{
+static int ks_treemap_get_tests() {
   int retval = 0;
 
   /* TEST 1 */
@@ -241,27 +231,28 @@ static int ks_treemap_get_tests()
   ks_treemap_add(tm, key2, val2);
   ks_treemap_add(tm, key1, val1);
   ks_treemap_add(tm, key3, val3);
-  
+
   const ks_datacont* val = ks_treemap_get(tm, key2);
-  if (val->c != val2->c)
-  {
-    printf("TEST 1: Unexpected ks_datacont value: %c. Expected: %c.\n", val->c, val2->c);
+  if (val->c != val2->c) {
+    printf("TEST 1: Unexpected ks_datacont value: %c. Expected: %c.\n", val->c,
+           val2->c);
     retval = -1;
   }
 
   /* TEST 2 */
   val = ks_treemap_get(tm, key1);
-  if (val->c != val1->c)
-  {
-    printf("TEST 2: Unexpected ks_datacont value: %c. Expected: %c.\n", val->c, val1->c);
+  if (val->c != val1->c) {
+    printf("TEST 2: Unexpected ks_datacont value: %c. Expected: %c.\n", val->c,
+           val1->c);
     retval = -1;
   }
 
   /* TEST 3 */
   val = ks_treemap_get(tm, not_there);
-  if (val != NULL)
-  {
-    printf("TEST 3: ks_treemapnode_get() should return NULL on not-present key value.\n");
+  if (val != NULL) {
+    printf(
+        "TEST 3: ks_treemapnode_get() should return NULL on not-present key "
+        "value.\n");
     retval = -1;
   }
 
@@ -271,9 +262,7 @@ static int ks_treemap_get_tests()
   return retval;
 }
 
-
-static int ks_treemap_get_key_tests()
-{
+static int ks_treemap_get_key_tests() {
   int retval = 0;
 
   /* TEST 1 */
@@ -293,35 +282,35 @@ static int ks_treemap_get_key_tests()
   ks_treemap_add(tm, key2, val2);
   ks_treemap_add(tm, key1, val1);
   ks_treemap_add(tm, key3, val3);
- 
+
   const ks_datacont* get_dc = ks_treemap_get_key(tm, 0);
-  if (get_dc->i != 1)
-  {
-    printf("TEST 1: Unexpected ks_datacont value: %d. Expected 1.\n", get_dc->i);
+  if (get_dc->i != 1) {
+    printf("TEST 1: Unexpected ks_datacont value: %d. Expected 1.\n",
+           get_dc->i);
     retval = -1;
   }
 
   /* TEST 2 */
   get_dc = ks_treemap_get_key(tm, 1);
-  if (get_dc->i != 2)
-  {
-    printf("TEST 2: Unexpected ks_datacont value: %d. Expected 2.\n", get_dc->i);
+  if (get_dc->i != 2) {
+    printf("TEST 2: Unexpected ks_datacont value: %d. Expected 2.\n",
+           get_dc->i);
     retval = -1;
   }
 
   /* TEST 3 */
   get_dc = ks_treemap_get_key(tm, 2);
-  if (get_dc->i != 3)
-  {
-    printf("TEST 3: Unexpected ks_datacont value: %d. Expected 3.\n", get_dc->i);
+  if (get_dc->i != 3) {
+    printf("TEST 3: Unexpected ks_datacont value: %d. Expected 3.\n",
+           get_dc->i);
     retval = -1;
   }
 
   /* TEST 4 */
   get_dc = ks_treemap_get_key(tm, 3);
-  if (get_dc != NULL)
-  {
-    printf("TEST 4: Expected OOB call to ks_treemap_get_key() to return NULL.\n");
+  if (get_dc != NULL) {
+    printf(
+        "TEST 4: Expected OOB call to ks_treemap_get_key() to return NULL.\n");
     retval = -1;
   }
 
@@ -330,9 +319,7 @@ static int ks_treemap_get_key_tests()
   return retval;
 }
 
-
-static int ks_treemap_count_tests()
-{
+static int ks_treemap_count_tests() {
   int retval = 0;
 
   /* TEST 1 */
@@ -359,17 +346,21 @@ static int ks_treemap_count_tests()
   ks_treemap_add(tm, key4, val4);
 
   int count = ks_treemap_count(tm);
-  if (count != 4)
-  {
-    printf("TEST 1: Unexpected ks_treemap_count() return value: %d. Expected: 4.\n", count);
+  if (count != 4) {
+    printf(
+        "TEST 1: Unexpected ks_treemap_count() return value: %d. Expected: "
+        "4.\n",
+        count);
     retval = -1;
   }
 
   /* TEST 2 */
   count = ks_treemap_count(NULL);
-  if (count != 0)
-  {
-    printf("TEST 2: Unexpected ks_treemap_count() return value: %d. Expected: 4.\n", count);
+  if (count != 0) {
+    printf(
+        "TEST 2: Unexpected ks_treemap_count() return value: %d. Expected: "
+        "4.\n",
+        count);
     retval = -1;
   }
 
@@ -378,9 +369,7 @@ static int ks_treemap_count_tests()
   return retval;
 }
 
-
-static int ks_treemap_height_tests()
-{
+static int ks_treemap_height_tests() {
   int retval = 0;
 
   /* TEST 1 */
@@ -407,18 +396,22 @@ static int ks_treemap_height_tests()
   ks_treemap_add(tm, key4, val4);
 
   int height = ks_treemap_height(tm);
-  if (height != 3)
-  {
-    printf("TEST 1: Unexpected ks_treemap_height() return value: %d. Expected: 3.\n", height);
+  if (height != 3) {
+    printf(
+        "TEST 1: Unexpected ks_treemap_height() return value: %d. Expected: "
+        "3.\n",
+        height);
     retval = -1;
   }
- 
+
   /* TEST 2 */
   height = ks_treemap_height(NULL);
-  if (height != 0)
-  {
-    printf("TEST 2: Unexpected ks_treemap_height() return value: %d. Expected: 0.\n", height);
-    retval = -1; 
+  if (height != 0) {
+    printf(
+        "TEST 2: Unexpected ks_treemap_height() return value: %d. Expected: "
+        "0.\n",
+        height);
+    retval = -1;
   }
 
   ks_treemap_delete(tm);
@@ -426,35 +419,36 @@ static int ks_treemap_height_tests()
   return retval;
 }
 
-
-static int ks_treemap_balance_tests()
-{
+static int ks_treemap_balance_tests() {
   int retval = 0;
 
   /* TEST 1 */
   char c = 'A';
   int i = 0;
   ks_treemap* tm = ks_treemap_new();
-  ks_treemap_add(tm, ks_datacont_new(&i, KS_INT, 1), 
-                  ks_datacont_new(&c, KS_CHAR, 1));
+  ks_treemap_add(tm, ks_datacont_new(&i, KS_INT, 1),
+                 ks_datacont_new(&c, KS_CHAR, 1));
 
   for (int i = 0; i < 26; i++, c++)
-    ks_treemap_add(tm, ks_datacont_new(&i, KS_INT, 1), 
-                     ks_datacont_new(&c, KS_CHAR, 1));
+    ks_treemap_add(tm, ks_datacont_new(&i, KS_INT, 1),
+                   ks_datacont_new(&c, KS_CHAR, 1));
 
   unsigned int height = ks_treemap_height(tm);
-  if (height != 26)
-  {
-    printf("TEST 1: ks_treemap_height() should have returned 26. Can't continue, quitting test...\n");
+  if (height != 26) {
+    printf(
+        "TEST 1: ks_treemap_height() should have returned 26. Can't continue, "
+        "quitting test...\n");
     ks_treemap_delete(tm);
     return -1;
   }
 
   ks_treemap_balance(tm);
   height = ks_treemap_height(tm);
-  if (height != 5)
-  {
-    printf("TEST 1: Unexpected tree height after ks_treemap_balance(): %d. Expected: 5.\n", height);
+  if (height != 5) {
+    printf(
+        "TEST 1: Unexpected tree height after ks_treemap_balance(): %d. "
+        "Expected: 5.\n",
+        height);
     retval = -1;
   }
 
@@ -463,9 +457,7 @@ static int ks_treemap_balance_tests()
   return retval;
 }
 
-
-int main()
-{
+int main() {
   int retval = 0;
 
   printf("\nks_treemap tests:\n\n");
@@ -526,4 +518,3 @@ int main()
 
   return retval;
 }
-

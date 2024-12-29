@@ -3,18 +3,9 @@
 
 #include <stddef.h>
 
+enum ks_comparison { KS_LESSTHAN, KS_EQUAL, KS_GREATERTHAN, KS_CANTCOMPARE };
 
-enum ks_comparison
-{
-  KS_LESSTHAN,
-  KS_EQUAL,
-  KS_GREATERTHAN,
-  KS_CANTCOMPARE
-};
-
-
-enum ks_datatype
-{
+enum ks_datatype {
   KS_CHAR,
   KS_SHORT,
   KS_INT,
@@ -47,7 +38,6 @@ enum ks_datatype
   KS_HASHMAP
 };
 
-
 typedef struct ks_datacont ks_datacont;
 
 typedef struct ks_listnode ks_listnode;
@@ -63,13 +53,10 @@ typedef struct ks_hashmap ks_hashmap;
 
 typedef struct ks_iterator ks_iterator;
 
-
-struct ks_datacont
-{
+struct ks_datacont {
   enum ks_datatype type;
   size_t size;
-  union
-  {
+  union {
     char c;
     short s;
     int i;
@@ -103,36 +90,26 @@ struct ks_datacont
   };
 };
 
-
-struct ks_listnode
-{
+struct ks_listnode {
   ks_datacont* dc;
   ks_listnode* next;
 };
 
-
-struct ks_list
-{
+struct ks_list {
   ks_listnode* head;
 };
 
-
-struct ks_treesetnode
-{
+struct ks_treesetnode {
   ks_datacont* dc;
   ks_treesetnode* right;
   ks_treesetnode* left;
 };
 
-
-struct ks_treeset
-{
+struct ks_treeset {
   ks_treesetnode* root;
 };
 
-
-struct ks_hashset
-{
+struct ks_hashset {
   enum ks_datatype type;
 
   unsigned int num_buckets;
@@ -140,34 +117,26 @@ struct ks_hashset
   ks_treeset** buckets;
 };
 
-
-struct ks_treemapnode
-{
+struct ks_treemapnode {
   ks_datacont* key;
   ks_datacont* value;
   ks_treemapnode* left;
   ks_treemapnode* right;
 };
 
-
-struct ks_treemap
-{
+struct ks_treemap {
   ks_treemapnode* root;
 };
 
-
-struct ks_hashmap
-{
+struct ks_hashmap {
   enum ks_datatype type;
 
   unsigned int num_buckets;
- 
+
   ks_treemap** buckets;
 };
 
-
-struct ks_iterator
-{
+struct ks_iterator {
   enum ks_datatype type;
   int size;
   int index;

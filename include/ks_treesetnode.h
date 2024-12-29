@@ -3,7 +3,6 @@
 
 #include "ks_types.h"
 
-
 /* ---------------------
  * ks_treesetnode_new():
  * Creates a new ks_treesetnode* containing a specified ks_datacont value.
@@ -19,7 +18,6 @@
  * The 'right' and 'left' ks_treesetnode members will be NULL.
  */
 ks_treesetnode* ks_treesetnode_new(const ks_datacont* dc);
-
 
 /* -----------------------
  * ks_treesetnode_delete():
@@ -37,7 +35,6 @@ ks_treesetnode* ks_treesetnode_new(const ks_datacont* dc);
  */
 void ks_treesetnode_delete(ks_treesetnode* tsn);
 
-
 /* -----------------------
  * ks_treesetnode_copy():
  * Creates a copy of a ks_treesetnode and its ks_datacont.
@@ -54,7 +51,6 @@ void ks_treesetnode_delete(ks_treesetnode* tsn);
  */
 ks_treesetnode* ks_treesetnode_copy(const ks_treesetnode* tsn);
 
-
 /* --------------------------
  * ks_treesetnode_delete_all():
  * Deletes a ks_treesetnode and all nodes connected to it.
@@ -67,7 +63,6 @@ ks_treesetnode* ks_treesetnode_copy(const ks_treesetnode* tsn);
  */
 void ks_treesetnode_delete_all(ks_treesetnode* tsn);
 
-
 /* ----------------------------
  * ks_treesetnode_copy_all():
  * Creates a copy of a ks_treesetnode and all nodes connected to it.
@@ -79,7 +74,6 @@ void ks_treesetnode_delete_all(ks_treesetnode* tsn);
  * ks_treesetnode* - a copy of 'tsn'.
  */
 ks_treesetnode* ks_treesetnode_copy_all(const ks_treesetnode* tsn);
-
 
 /* -----------------------
  * ks_treesetnode_add():
@@ -105,7 +99,6 @@ ks_treesetnode* ks_treesetnode_copy_all(const ks_treesetnode* tsn);
  */
 int ks_treesetnode_add(ks_treesetnode* tsn, const ks_datacont* dc);
 
-
 /* ----------------------------
  * ks_treesetnode_remove_by():
  * Remove a node contained within the ks_treesetnode* parameter that matches the
@@ -127,7 +120,6 @@ int ks_treesetnode_add(ks_treesetnode* tsn, const ks_datacont* dc);
  */
 int ks_treesetnode_remove_by(ks_treesetnode** tsn, const ks_datacont* dc);
 
-
 /* ---------------------------
  * ks_treesetnode_remove_at():
  * Remove a ks_datacont* located at a specified index within the set.
@@ -145,7 +137,6 @@ int ks_treesetnode_remove_by(ks_treesetnode** tsn, const ks_datacont* dc);
  * See notes for ks_treesetnode_remove_by().
  */
 int ks_treesetnode_remove_at(ks_treesetnode** tsn, const int index);
-
 
 /* -------------------------
  * ks_treesetnode_index():
@@ -166,7 +157,6 @@ int ks_treesetnode_remove_at(ks_treesetnode** tsn, const int index);
  */
 int ks_treesetnode_index(const ks_treesetnode* tsn, const ks_datacont* dc);
 
-
 /* --------------------------
  * ks_treesetnode_contains():
  * Searches for a ks_treesetnode that contains a value matching 'dc'.
@@ -179,8 +169,8 @@ int ks_treesetnode_index(const ks_treesetnode* tsn, const ks_datacont* dc);
  * unsigned int result - (0) if 'dc' could not be found, or if either param is NULL.
  *                     - (1) if 'dc' was found.
  */
-unsigned int ks_treesetnode_contains(const ks_treesetnode* tsn, const ks_datacont* dc);
-
+unsigned int ks_treesetnode_contains(const ks_treesetnode* tsn,
+                                     const ks_datacont* dc);
 
 /* ---------------------------
  * ks_treesetnode_get():
@@ -200,7 +190,6 @@ unsigned int ks_treesetnode_contains(const ks_treesetnode* tsn, const ks_datacon
  */
 const ks_datacont* ks_treesetnode_get(const ks_treesetnode* tsn, int index);
 
-
 /* -------------------------
  * ks_treesetnode_count():
  * Returns the number of nodes connected to a ks_treesetnode* (including itself).
@@ -212,7 +201,6 @@ const ks_datacont* ks_treesetnode_get(const ks_treesetnode* tsn, int index);
  * unsigned int count - >= (0) the number of nodes in 'tsn', (0) when 'tsn' is NULL.
  */
 unsigned int ks_treesetnode_count(const ks_treesetnode* tsn);
-
 
 /* --------------------------
  * ks_treesetnode_height():
@@ -226,7 +214,6 @@ unsigned int ks_treesetnode_count(const ks_treesetnode* tsn);
  */
 unsigned int ks_treesetnode_height(const ks_treesetnode* tsn);
 
-
 /* --------------------------
  * ks_treesetnode_balance():
  * Balances a ks_treesetnode* tree to ensure optimal performance.
@@ -238,6 +225,5 @@ unsigned int ks_treesetnode_height(const ks_treesetnode* tsn);
  * ks_treesetnode* - a balanced treesetnode*.
  */
 ks_treesetnode* ks_treesetnode_balance(ks_treesetnode* tsn);
-
 
 #endif
