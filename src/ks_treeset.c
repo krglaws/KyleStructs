@@ -7,7 +7,7 @@
 #include "kylestructs/ks_treesetnode.h"
 #include "kylestructs/ks_types.h"
 
-ks_treeset* ks_treeset_new() { return calloc(1, sizeof(ks_treesetnode)); }
+ks_treeset* ks_treeset_new() { return calloc(1, sizeof(ks_treeset)); }
 
 void ks_treeset_delete(ks_treeset* ts) {
   if (ts == NULL) return;
