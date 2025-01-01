@@ -1,6 +1,6 @@
 CC := clang
 CFLAGS := -Iinclude -fPIC -Wall -Wextra -O2
-TESTFLAGS := -Iinclude -g -O0
+TESTFLAGS := -Iinclude -g -O0 -fsanitize=address,undefined
 
 SRC := src
 INC := include

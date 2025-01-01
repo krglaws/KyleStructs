@@ -113,8 +113,8 @@ static int ks_datacont_compare_tests() {
   ks_datacont_delete(dcb);
 
   /* Test 2 */
-  dca = ks_datacont_new("A", KS_CHAR, 11);
-  dcb = ks_datacont_new("A", KS_CHAR, 11);
+  dca = ks_datacont_new("A", KS_CHAR, 1);
+  dcb = ks_datacont_new("A", KS_CHAR, 1);
   result = ks_datacont_compare(dca, dcb);
   if (result != KS_EQUAL) {
     printf("TEST 2: Unexpected comparison result: %d. Expected: %d\n", result,
@@ -126,7 +126,7 @@ static int ks_datacont_compare_tests() {
 
   /* Test 3 */
   char* str = "TESTSTRING";
-  dca = ks_datacont_new(str, KS_CHARP, 11);
+  dca = ks_datacont_new(str, KS_CHARP, 10);
   dcb = ks_datacont_new(&num, KS_INT, 1);
   result = ks_datacont_compare(dca, dcb);
   if (result != KS_CANTCOMPARE) {

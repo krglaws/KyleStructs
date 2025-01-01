@@ -29,7 +29,7 @@ static int ks_list_copy_tests() {
   ks_list* ls = ks_list_new();
 
   for (int i = 0; i < 3; i++) {
-    ks_list_add(ls, ks_datacont_new(&c, KS_INT, 1));
+    ks_list_add(ls, ks_datacont_new(&c, KS_CHAR, 1));
     c++;
   }
 

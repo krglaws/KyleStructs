@@ -126,51 +126,49 @@ void ks_datacont_delete(ks_datacont* dc) {
     return;
   }
 
-  if (dc->type > KS_ULLP) {
-    switch (dc->type) {
-      case KS_CHAR:
-      case KS_SHORT:
-      case KS_INT:
-      case KS_LL:
-      case KS_FLOAT:
-      case KS_DOUBLE:
-      case KS_UCHAR:
-      case KS_USHORT:
-      case KS_UINT:
-      case KS_ULL:
-      case KS_VOIDP:
-        /* do nothing
-         * (VOIDP might point to a custom data structure)
-         */
-        break;
-      case KS_CHARP:
-      case KS_SHORTP:
-      case KS_INTP:
-      case KS_LLP:
-      case KS_FLOATP:
-      case KS_DOUBLEP:
-      case KS_UCHARP:
-      case KS_USHORTP:
-      case KS_UINTP:
-      case KS_ULLP:
-        free(dc->cp);
-        break;
-      case KS_LIST:
-        ks_list_delete(dc->ls);
-        break;
-      case KS_TREESET:
-        ks_treeset_delete(dc->ts);
-        break;
-      case KS_HASHSET:
-        ks_hashset_delete(dc->hs);
-        break;
-      case KS_TREEMAP:
-        ks_treemap_delete(dc->tm);
-        break;
-      case KS_HASHMAP:
-        ks_hashmap_delete(dc->hm);
-        break;
-    }
+  switch (dc->type) {
+    case KS_CHAR:
+    case KS_SHORT:
+    case KS_INT:
+    case KS_LL:
+    case KS_FLOAT:
+    case KS_DOUBLE:
+    case KS_UCHAR:
+    case KS_USHORT:
+    case KS_UINT:
+    case KS_ULL:
+    case KS_VOIDP:
+      /* do nothing
+       * (VOIDP might point to a custom data structure)
+       */
+      break;
+    case KS_CHARP:
+    case KS_SHORTP:
+    case KS_INTP:
+    case KS_LLP:
+    case KS_FLOATP:
+    case KS_DOUBLEP:
+    case KS_UCHARP:
+    case KS_USHORTP:
+    case KS_UINTP:
+    case KS_ULLP:
+      free(dc->cp);
+      break;
+    case KS_LIST:
+      ks_list_delete(dc->ls);
+      break;
+    case KS_TREESET:
+      ks_treeset_delete(dc->ts);
+      break;
+    case KS_HASHSET:
+      ks_hashset_delete(dc->hs);
+      break;
+    case KS_TREEMAP:
+      ks_treemap_delete(dc->tm);
+      break;
+    case KS_HASHMAP:
+      ks_hashmap_delete(dc->hm);
+      break;
   }
 
   free(dc);
