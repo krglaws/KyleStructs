@@ -1,10 +1,10 @@
 #ifndef _KS_DATACONT_H_
 #define _KS_DATACONT_H_
 
-
-#include <stdlib.h>
+#include <stddef.h>
 #include <stdint.h>
 
+#include "ks_types.h"
 
 /* ---------------------------
  * ks_datacont_new():
@@ -14,7 +14,7 @@
  * void* data - THE data being stored within the ks_datacont.
  * enum ks_datatype dct - the type of the data being stored. See the enum defined
  *                         above to review supported types.
- * unsigned int count - the number of bytes that 'data' points to.
+ * size_t count - the number of bytes that 'data' points to.
  * 
  * Returns:
  * ks_datacont* dc - (NULL) if 'data' is NULL or 'count'== 0.
@@ -35,8 +35,8 @@
  * struct is not used in these cases, although it may be used
  * by user code for its own purposes.
  */
-ks_datacont* ks_datacont_new(const void* data, const enum ks_datatype type, const size_t size);
-
+ks_datacont* ks_datacont_new(const void* data, enum ks_datatype type,
+                             size_t size);
 
 /* ---------------------------
  * ks_datacont_delete():
@@ -54,7 +54,6 @@ ks_datacont* ks_datacont_new(const void* data, const enum ks_datatype type, cons
  * whatever memory management is necessary in that case.
  */
 void ks_datacont_delete(ks_datacont* dc);
-
 
 /* ---------------------------
  * ks_datacont_copy():
@@ -75,7 +74,6 @@ void ks_datacont_delete(ks_datacont* dc);
  */
 ks_datacont* ks_datacont_copy(const ks_datacont* dc);
 
-
 /* ---------------------------
  * ks_datacont_compare():
  * Compares two ks_datacont structs and returns an enum type that specifies the
@@ -93,8 +91,8 @@ ks_datacont* ks_datacont_copy(const ks_datacont* dc);
  * When used on any pointer type, ks_datacont_compare() will only compare the values
  * of the pointers themselves.
  */
-enum ks_comparison ks_datacont_compare(const ks_datacont* dca, const ks_datacont* dcb);
-
+enum ks_comparison ks_datacont_compare(const ks_datacont* dca,
+                                       const ks_datacont* dcb);
 
 /* ---------------------------
  * ks_datacont_hash():
@@ -112,6 +110,5 @@ enum ks_comparison ks_datacont_compare(const ks_datacont* dca, const ks_datacont
  * pointer itself.
  */
 uint32_t ks_datacont_hash(const ks_datacont* dc);
-
 
 #endif

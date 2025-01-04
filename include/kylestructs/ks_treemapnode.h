@@ -1,6 +1,7 @@
 #ifndef _KS_TREEMAPNODE_H_
 #define _KS_TREEMAPNODE_H_
 
+#include "ks_types.h"
 
 /* ------------------------------------
  * ks_treemapnode_new():
@@ -14,8 +15,8 @@
  * ks_treemapnode* tmn - (NULL) if either of the parameters is NULL.
  *                  - a ks_treemapnode containing 'key' and 'value'.
  */
-ks_treemapnode* ks_treemapnode_new(const ks_datacont* key, const ks_datacont* value);
-
+ks_treemapnode* ks_treemapnode_new(const ks_datacont* key,
+                                   const ks_datacont* value);
 
 /* ----------------------------------
  * ks_treemapnode_delete():
@@ -29,7 +30,6 @@ ks_treemapnode* ks_treemapnode_new(const ks_datacont* key, const ks_datacont* va
  */
 void ks_treemapnode_delete(ks_treemapnode* tmn);
 
-
 /* ----------------------------------
  * ks_treemapnode_copy():
  * Creates a copy of a treemapnode* and its ks_datacont*.
@@ -42,10 +42,10 @@ void ks_treemapnode_delete(ks_treemapnode* tmn);
  *
  * Notes:
  * ks_treemapnode_copy() only copies the ks_treemapnode itself
- * and its ks_datacont, but not any other connected ks_treemapnodes.
+ * and its ks_datacont key and value, but not any other connected
+ * ks_treemapnodes.
  */
 ks_treemapnode* ks_treemapnode_copy(const ks_treemapnode* tmn);
-
 
 /* -----------------------------------
  * ks_treemapnode_delete_all():
@@ -60,7 +60,6 @@ ks_treemapnode* ks_treemapnode_copy(const ks_treemapnode* tmn);
  */
 void ks_treemapnode_delete_all(ks_treemapnode* tmn);
 
-
 /* ----------------------------------
  * ks_treemapnode_copy_all():
  * Creates a copy of a treemapnode*, its ks_datacont*, and any
@@ -73,7 +72,6 @@ void ks_treemapnode_delete_all(ks_treemapnode* tmn);
  * ks_treemapnode* - a copy of the ks_treemapnode*.
  */
 ks_treemapnode* ks_treemapnode_copy_all(const ks_treemapnode* tmn);
-
 
 /* ----------------------------------
  * ks_treemapnode_add():
@@ -97,8 +95,8 @@ ks_treemapnode* ks_treemapnode_copy_all(const ks_treemapnode* tmn);
  * to the ks_treemapnode (-1), the user code is responsible for deleting both when they are 
  * no longer needed.
  */
-int ks_treemapnode_add(ks_treemapnode* tmn, const ks_datacont* key, const ks_datacont* value);
-
+int ks_treemapnode_add(ks_treemapnode* tmn, const ks_datacont* key,
+                       const ks_datacont* value);
 
 /* ---------------------------
  * ks_treemapnode_remove():
@@ -120,7 +118,6 @@ int ks_treemapnode_add(ks_treemapnode* tmn, const ks_datacont* key, const ks_dat
  */
 int ks_treemapnode_remove(ks_treemapnode** tmn, const ks_datacont* key);
 
-
 /* ---------------------------
  * ks_treemapnode_get():
  * Get the value from a ks_treemapnode by key.
@@ -139,8 +136,8 @@ int ks_treemapnode_remove(ks_treemapnode** tmn, const ks_datacont* key);
  * 'key' is not consumed by this procedure, it is only used to locate another ks_datacont
  * containing the same data.
  */
-ks_datacont* ks_treemapnode_get(const ks_treemapnode* tmn, const ks_datacont* key);
-
+const ks_datacont* ks_treemapnode_get(const ks_treemapnode* tmn,
+                                      const ks_datacont* key);
 
 /* --------------------------
  * ks_treemapnode_get_key():
@@ -158,8 +155,7 @@ ks_datacont* ks_treemapnode_get(const ks_treemapnode* tmn, const ks_datacont* ke
  * The ks_datacont returned by this function is a pointer to the original contained within 
  * the list, so it should not be deleted or modified by client code.
  */
-ks_datacont* ks_treemapnode_get_key(const ks_treemapnode* tmn, int index);
-
+const ks_datacont* ks_treemapnode_get_key(const ks_treemapnode* tmn, int index);
 
 /* ----------------------------
  * ks_treemapnode_count():
@@ -173,7 +169,6 @@ ks_datacont* ks_treemapnode_get_key(const ks_treemapnode* tmn, int index);
  */
 unsigned int ks_treemapnode_count(const ks_treemapnode* tmn);
 
-
 /* --------------------------
  * ks_treemapnode_height():
  * Calculate the maximum height of a ks_treemapnode tree.
@@ -186,7 +181,6 @@ unsigned int ks_treemapnode_count(const ks_treemapnode* tmn);
  */
 unsigned int ks_treemapnode_height(const ks_treemapnode* tmn);
 
-
 /* --------------------------
  * ks_treemapnode_balance():
  * Balances a ks_treemapnode* tree to ensure optimal performance.
@@ -198,6 +192,5 @@ unsigned int ks_treemapnode_height(const ks_treemapnode* tmn);
  * ks_treemapnode* - a balanced treemapnode*.
  */
 ks_treemapnode* ks_treemapnode_balance(ks_treemapnode* tmn);
-
 
 #endif

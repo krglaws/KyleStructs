@@ -1,6 +1,7 @@
 #ifndef _KS_LIST_H_
 #define _KS_LIST_H_
 
+#include "ks_types.h"
 
 /* -------------------
  * ks_list_new():
@@ -14,7 +15,6 @@
  */
 ks_list* ks_list_new();
 
-
 /* --------------------
  * ks_list_delete(ks_list* ln):
  * Deletes a ks_list and all of its contents.
@@ -27,7 +27,6 @@ ks_list* ks_list_new();
  */
 void ks_list_delete(ks_list* ls);
 
-
 /* ---------------------
  * ks_list_copy():
  * Creates a copy of a list and all of its contents.
@@ -36,7 +35,6 @@ void ks_list_delete(ks_list* ls);
  * ks_list* 
  */
 ks_list* ks_list_copy(const ks_list* ls);
-
 
 /* --------------------
  * ks_list_add():
@@ -52,7 +50,6 @@ ks_list* ks_list_copy(const ks_list* ls);
  */
 int ks_list_add(ks_list* ls, const ks_datacont* dc);
 
-
 /* -----------------------
  * ks_list_merge():
  * Merges two lists into one.
@@ -66,10 +63,10 @@ int ks_list_add(ks_list* ls, const ks_datacont* dc);
  *
  * Notes:
  * If one of the params is NULL, the non-NULL param will be returned.
- * If both are NULL, NULL will be returned.
+ * If both are NULL, NULL will be returned. The user code should not
+ * free either 'lsa' or 'lsb' after calling this.
  */
 ks_list* ks_list_merge(ks_list* lsa, ks_list* lsb);
-
 
 /* -----------------------
  * ks_list_remove_by():
@@ -86,7 +83,6 @@ ks_list* ks_list_merge(ks_list* lsa, ks_list* lsb);
  */
 int ks_list_remove_by(ks_list* ls, const ks_datacont* dc);
 
-
 /* -----------------------------
  * ks_list_remove_at():
  * Removes a ks_datacont at a specified location within a ks_list.
@@ -102,7 +98,6 @@ int ks_list_remove_by(ks_list* ls, const ks_datacont* dc);
  */
 int ks_list_remove_at(ks_list* ls, int index);
 
-
 /* ------------------------
  * ks_list_remove_all():
  * Removes all occurrences of a specified ks_datacont value within a ks_list.
@@ -117,7 +112,6 @@ int ks_list_remove_at(ks_list* ls, int index);
  */
 int ks_list_remove_all(ks_list* ls, const ks_datacont* dc);
 
-
 /* -----------------------------
  * ks_list_replace_by():
  * Replaces the first occurrence of a specified ks_datacont value with a new ks_datacont value.
@@ -131,8 +125,8 @@ int ks_list_remove_all(ks_list* ls, const ks_datacont* dc);
  * int result - (-1) when any param is NULL, or when 'old_dc' could not be found.
  *            - (0) on success.
  */
-int ks_list_replace_by(ks_list* ls, const ks_datacont* old_dc, const ks_datacont* new_dc);
-
+int ks_list_replace_by(ks_list* ls, const ks_datacont* old_dc,
+                       const ks_datacont* new_dc);
 
 /* -----------------------------
  * ks_list_replace_at():
@@ -150,7 +144,6 @@ int ks_list_replace_by(ks_list* ls, const ks_datacont* old_dc, const ks_datacont
  */
 int ks_list_replace_at(ks_list* ls, const ks_datacont* dc, int index);
 
-
 /* ------------------------------
  * ks_list_replace_all():
  * Replaces all occurrences of a specified ks_datacont value with a new ks_datacont value.
@@ -163,9 +156,13 @@ int ks_list_replace_at(ks_list* ls, const ks_datacont* dc, int index);
  * Returns:
  * int result - (-1) when any of the params is NULL.
  *            - >= (0) the number of replacements that occurred.
+ *
+ * Notes:
+ * ks_dataconts that are equal to 'old_dc' are freed. A copy of 'new_dc' is created
+ * for every replacement.
  */
-int ks_list_replace_all(ks_list* ls, const ks_datacont* old_dc, const ks_datacont* new_dc);
-
+int ks_list_replace_all(ks_list* ls, const ks_datacont* old_dc,
+                        const ks_datacont* new_dc);
 
 /* -------------------------
  * ks_list_insert():
@@ -183,7 +180,6 @@ int ks_list_replace_all(ks_list* ls, const ks_datacont* old_dc, const ks_datacon
  */
 int ks_list_insert(ks_list* ls, const ks_datacont* dc, int index);
 
-
 /* --------------------------
  * ks_list_push():
  * Inserts a ks_datacont* at the beginning of a ks_list.
@@ -197,7 +193,6 @@ int ks_list_insert(ks_list* ls, const ks_datacont* dc, int index);
  *            - (0) on success.
  */
 int ks_list_push(ks_list* ls, const ks_datacont* dc);
-
 
 /* ---------------------------
  * ks_list_pop():
@@ -213,7 +208,6 @@ int ks_list_push(ks_list* ls, const ks_datacont* dc);
  */
 ks_datacont* ks_list_pop(ks_list* ls);
 
-
 /* --------------------------
  * ks_list_peek():
  * Returns the ks_datacont located at the beginnning of the list.
@@ -226,7 +220,6 @@ ks_datacont* ks_list_pop(ks_list* ls);
  *                 - a pointer to the ks_datacont located at the beginning of ks_list.
  */
 const ks_datacont* ks_list_peek(const ks_list* ls);
-
 
 /* --------------------------
  * ks_list_enqueue():
@@ -242,7 +235,6 @@ const ks_datacont* ks_list_peek(const ks_list* ls);
  */
 int ks_list_enqueue(ks_list* ls, const ks_datacont* dc);
 
-
 /* --------------------------
  * ks_list_dequeue():
  * Removes and returns the ks_datacont located at the end of the ks_list.
@@ -255,7 +247,6 @@ int ks_list_enqueue(ks_list* ls, const ks_datacont* dc);
  *                 - the ks_datacont located at the beginning of ks_list.
  */
 ks_datacont* ks_list_dequeue(ks_list* ls);
-
 
 /* ---------------------------
  * ks_list_index():
@@ -275,7 +266,6 @@ ks_datacont* ks_list_dequeue(ks_list* ls);
  */
 int ks_list_index(const ks_list* ls, const ks_datacont* dc);
 
-
 /* -------------------------
  * ks_list_get():
  * Returns a pointer to a ks_datacont contained within a ks_list that is located at 'index'.
@@ -293,8 +283,7 @@ int ks_list_index(const ks_list* ls, const ks_datacont* dc);
  * The ks_datacont returned by this function is a pointer to the original contained within the ks_list, so it should not
  * be deleted or modified by client code.
  */
-ks_datacont* ks_list_get(const ks_list* ls, int index);
-
+const ks_datacont* ks_list_get(const ks_list* ls, int index);
 
 /* ----------------------------
  * ks_list_count():
@@ -310,7 +299,6 @@ ks_datacont* ks_list_get(const ks_list* ls, int index);
  */
 unsigned int ks_list_count(const ks_list* ls, const ks_datacont* dc);
 
-
 /* ----------------------------
  * ks_list_length():
  * Returns the length of the ks_list.
@@ -322,6 +310,5 @@ unsigned int ks_list_count(const ks_list* ls, const ks_datacont* dc);
  * unsigned int length - >= (0) the length of the ks_list. (0) when 'ls' is NULL.
  */
 unsigned int ks_list_length(const ks_list* ls);
-
 
 #endif

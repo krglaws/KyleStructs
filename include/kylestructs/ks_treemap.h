@@ -1,6 +1,7 @@
 #ifndef _TREEMAP_H_
 #define _TREEMAP_H_
 
+#include "ks_types.h"
 
 /* ------------------------------------
  * ks_treemap_new():
@@ -14,7 +15,6 @@
  */
 ks_treemap* ks_treemap_new();
 
-
 /* ----------------------------------
  * ks_treemap_delete():
  * Deletes a ks_treemap and all of its contents.
@@ -27,7 +27,6 @@ ks_treemap* ks_treemap_new();
  */
 void ks_treemap_delete(ks_treemap* tm);
 
-
 /* ---------------------------------
  * ks_treemap_copy():
  * Creats a copy of a ks_treemap*.
@@ -39,7 +38,6 @@ void ks_treemap_delete(ks_treemap* tm);
  * ks_treemap* - a copy of 'tm'.
  */
 ks_treemap* ks_treemap_copy(const ks_treemap* tm);
-
 
 /* ----------------------------------
  * ks_treemap_add():
@@ -64,8 +62,8 @@ ks_treemap* ks_treemap_copy(const ks_treemap* tm);
  * to the ks_treemap (-1), the user code is responsible for deleting both when they are 
  * no longer needed.
  */
-int ks_treemap_add(ks_treemap* tm, const ks_datacont* key, const ks_datacont* value);
-
+int ks_treemap_add(ks_treemap* tm, const ks_datacont* key,
+                   const ks_datacont* value);
 
 /* ---------------------------
  * ks_treemap_remove():
@@ -85,7 +83,6 @@ int ks_treemap_add(ks_treemap* tm, const ks_datacont* key, const ks_datacont* va
  */
 int ks_treemap_remove(ks_treemap* tm, const ks_datacont* key);
 
-
 /* ---------------------------
  * ks_treemap_get():
  * Retrieves a value mapped by 'key' from a ks_treemap.
@@ -103,8 +100,7 @@ int ks_treemap_remove(ks_treemap* tm, const ks_datacont* key);
  * so it should not be deleted or modified by client code.
  * See notes on ks_treemap_remove().
  */
-ks_datacont* ks_treemap_get(const ks_treemap* tm, const ks_datacont* key);
-
+const ks_datacont* ks_treemap_get(const ks_treemap* tm, const ks_datacont* key);
 
 /* --------------------------
  * ks_treemap_get_key():
@@ -123,8 +119,7 @@ ks_datacont* ks_treemap_get(const ks_treemap* tm, const ks_datacont* key);
  * The ks_datacont returned by this function is a pointer to the original contained within the ks_treemap,
  * so it should not be deleted or modified by client code.
  */
-ks_datacont* ks_treemap_get_key(const ks_treemap* tm, int index);
-
+const ks_datacont* ks_treemap_get_key(const ks_treemap* tm, int index);
 
 /* ----------------------------
  * ks_treemap_count():
@@ -138,7 +133,6 @@ ks_datacont* ks_treemap_get_key(const ks_treemap* tm, int index);
  */
 unsigned int ks_treemap_count(const ks_treemap* tm);
 
-
 /* --------------------------
  * ks_treemap_height():
  * Calculate the maximum height of a ks_treemap.
@@ -151,7 +145,6 @@ unsigned int ks_treemap_count(const ks_treemap* tm);
  */
 unsigned int ks_treemap_height(const ks_treemap* tm);
 
-
 /* --------------------------
  * ks_treemap_balance():
  * Balances a ks_treemap to ensure optimal performance.
@@ -163,6 +156,5 @@ unsigned int ks_treemap_height(const ks_treemap* tm);
  * void
  */
 void ks_treemap_balance(ks_treemap* tm);
-
 
 #endif

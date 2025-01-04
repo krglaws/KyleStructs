@@ -1,6 +1,7 @@
 #ifndef _KS_TREESET_H_
 #define _KS_TREESET_H_
 
+#include "ks_types.h"
 
 /* ---------------------
  * ks_treeset_new():
@@ -14,7 +15,6 @@
  */
 ks_treeset* ks_treeset_new();
 
-
 /* ----------------------
  * ks_treeset_delete():
  * Deletes a ks_treeset and all of its contents.
@@ -27,7 +27,6 @@ ks_treeset* ks_treeset_new();
  */
 void ks_treeset_delete(ks_treeset* ts);
 
-
 /* -----------------------
  * ks_treeset_copy():
  * Creates a copy of a ks_treeset and all of its contents.
@@ -39,7 +38,6 @@ void ks_treeset_delete(ks_treeset* ts);
  * ks_treesetnode - a copy of the treesetnode.
  */
 ks_treeset* ks_treeset_copy(const ks_treeset* ts);
-
 
 /* ----------------------
  * ks_treeset_add():
@@ -63,7 +61,6 @@ ks_treeset* ks_treeset_copy(const ks_treeset* ts);
  */
 int ks_treeset_add(ks_treeset* ts, const ks_datacont* dc);
 
-
 /* ------------------------------
  * ks_treeset_remove_by():
  * Remove a ks_datacont from a ks_treeset that contains a value matching the value of the 'dc'
@@ -79,7 +76,6 @@ int ks_treeset_add(ks_treeset* ts, const ks_datacont* dc);
  */
 int ks_treeset_remove_by(ks_treeset* ts, const ks_datacont* dc);
 
-
 /* ----------------------------
  * ks_treeset_remove_at():
  * Remove a ks_datacont from a ks_treeset at a specified index.
@@ -92,8 +88,7 @@ int ks_treeset_remove_by(ks_treeset* ts, const ks_datacont* dc);
  * int result - (-1) if 'index' is OOB or if 'ts' is NULL.
  *            - >= (0) on success.
  */
-int ks_treeset_remove_at(ks_treeset* ts, const int index);
-
+int ks_treeset_remove_at(ks_treeset* ts, int index);
 
 /* ---------------------------
  * ks_treeset_index():
@@ -114,7 +109,6 @@ int ks_treeset_remove_at(ks_treeset* ts, const int index);
  */
 int ks_treeset_index(const ks_treeset* ts, const ks_datacont* dc);
 
-
 /* -----------------------------
  * ks_treeset_contains():
  * Searches for a specified ks_datacont value within a ks_treeset.
@@ -128,7 +122,6 @@ int ks_treeset_index(const ks_treeset* ts, const ks_datacont* dc);
  *                    - (1) if 'dc' was found.
  */
 unsigned int ks_treeset_contains(const ks_treeset* ts, const ks_datacont* dc);
-
 
 /* ---------------------------
  * ks_treeset_get():
@@ -147,8 +140,7 @@ unsigned int ks_treeset_contains(const ks_treeset* ts, const ks_datacont* dc);
  * The ks_datacont returned by this function is a pointer to the original contained within the ks_treeset,
  * so it should not be deleted or modified by client code.
  */
-ks_datacont* ks_treeset_get(const ks_treeset* tsn, const int index);
-
+const ks_datacont* ks_treeset_get(const ks_treeset* tsn, int index);
 
 /* -------------------------
  * ks_treeset_count():
@@ -162,7 +154,6 @@ ks_datacont* ks_treeset_get(const ks_treeset* tsn, const int index);
  */
 unsigned int ks_treeset_count(const ks_treeset* ts);
 
-
 /* --------------------------
  * ks_treeset_height():
  * Calculates the height of the ks_treeset and all connected nodes.
@@ -175,7 +166,6 @@ unsigned int ks_treeset_count(const ks_treeset* ts);
  */
 unsigned int ks_treeset_height(const ks_treeset* ts);
 
-
 /* --------------------------
  * ks_treeset_balance():
  * Balances a ks_treeset tree to ensure optimal performance.
@@ -187,6 +177,5 @@ unsigned int ks_treeset_height(const ks_treeset* ts);
  * void
  */
 void ks_treeset_balance(ks_treeset* ts);
-
 
 #endif

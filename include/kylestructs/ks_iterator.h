@@ -1,6 +1,8 @@
 #ifndef _KS_ITERATOR_H_
 #define _KS_ITERATOR_H_
 
+#include "ks_types.h"
+
 /* -------------------
  * ks_iterator_new():
  * Creates an iterator for a kylestructs object.
@@ -18,7 +20,6 @@
  */
 ks_iterator* ks_iterator_new(const void* ks_obj, enum ks_datatype type);
 
-
 /* -------------------
  * ks_iterator_delete():
  * deletes a ks_iterator.
@@ -30,7 +31,6 @@ ks_iterator* ks_iterator_new(const void* ks_obj, enum ks_datatype type);
  * void
  */
 void ks_iterator_delete(ks_iterator* iter);
-
 
 /* -------------------
  * ks_iterator_next():
