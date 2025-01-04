@@ -9,7 +9,7 @@ SBIN := bin
 TEST := tests
 TBIN := testbin
 
-INCLOC := /usr/include/kylestructs
+INCLOC := /usr/include
 LIBLOC := /usr/lib
 
 default: all
@@ -198,9 +198,7 @@ $(DYNAMICLIB): $(DATACONTTARG) $(ITERATORTARG) $(LISTNODETARG) $(LISTTARG) $(TRE
 
 .PHONY: install
 install: $(STATICLIB) $(DYNAMICLIB)
-	mkdir $(INCLOC)
-	cp $(INC)/* $(INCLOC)
-	mv $(INCLOC)/kylestructs.h $(INCLOC)/.. 
+	cp -r $(INC)/* $(INCLOC)
 	cp $(STATICLIB) $(LIBLOC)
 	cp $(DYNAMICLIB) $(LIBLOC)
 
