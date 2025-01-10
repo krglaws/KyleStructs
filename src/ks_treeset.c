@@ -30,6 +30,18 @@ ks_treeset* ks_treeset_copy(const ks_treeset* ts) {
 int ks_treeset_add(ks_treeset* ts, const ks_datacont* dc) {
     if (ts == NULL || dc == NULL) return -1;
 
+    switch (dc->type) {
+        case KS_VOIDP:
+        case KS_LIST:
+        case KS_TREESET:
+        case KS_HASHSET:
+        case KS_TREEMAP:
+        case KS_HASHMAP:
+            return -1;
+        default:
+            break;
+    }
+
     if (ts->root == NULL) {
         ts->root = ks_treesetnode_new(dc);
         return 0;

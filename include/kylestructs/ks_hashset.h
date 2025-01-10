@@ -60,6 +60,9 @@ ks_hashset* ks_hashset_copy(const ks_hashset* hs);
  * as it will be directly stored into the tree. Otherwise a seg fault is likely to occur.
  * In the event that a value matching 'dc' is already present, or if 'hs' is NULL, 'dc' will
  * not be stored into the set, and 'dc' must be deleted by the user code.
+ *
+ * - The following types do not support hashing: KS_VOIDP, KS_LIST, KS_HASHSET,
+ * KS_HASHMAP, KS_TREESET and KS_TREEMAP. This function will return -1 for these types.
  */
 int ks_hashset_add(ks_hashset* hs, const ks_datacont* dc);
 

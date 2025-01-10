@@ -149,7 +149,7 @@ static int ks_datacont_compare_tests() {
     result = ks_datacont_compare(dcc, dcd);
 
     if (result != KS_LESSTHAN) {
-        printf("TEST 3: Unexpected comparison result: %d. Expected: %d\n",
+        printf("TEST 4: Unexpected comparison result: %d. Expected: %d\n",
                result, KS_CANTCOMPARE);
         retval = -1;
     }

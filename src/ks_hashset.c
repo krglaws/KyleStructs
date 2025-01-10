@@ -49,6 +49,18 @@ ks_hashset* ks_hashset_copy(const ks_hashset* hs) {
 int ks_hashset_add(ks_hashset* hs, const ks_datacont* dc) {
     if (hs == NULL || dc == NULL || dc->type != hs->type) return -1;
 
+    switch (dc->type) {
+        case KS_VOIDP:
+        case KS_LIST:
+        case KS_TREESET:
+        case KS_HASHSET:
+        case KS_TREEMAP:
+        case KS_HASHMAP:
+            return -1;
+        default:
+            break;
+    }
+
     uint32_t hash = ks_datacont_hash(dc);
 
     if (hs->buckets[hash % hs->num_buckets] == NULL)

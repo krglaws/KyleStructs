@@ -12,10 +12,12 @@
  *
  * Inputs:
  * void* data - THE data being stored within the ks_datacont.
- * enum ks_datatype dct - the type of the data being stored. See the enum defined
- *                         above to review supported types.
- * size_t count - the number of bytes that 'data' points to.
- * 
+ * enum ks_datatype dct - the type of the data being stored. See the ks_datatype enum
+ *                         defined in ks_types.h to review available types.
+ * size_t size - the number of bytes that 'data' points to. This value is used to generate
+ *               hash values in ks_datacont_hash() as well as when storing into hashmaps and
+ *               hashsets.
+ *
  * Returns:
  * ks_datacont* dc - (NULL) if 'data' is NULL or 'count'== 0.
  *                 - a ks_datacont* containing the data specified.
@@ -25,15 +27,8 @@
  * the user code the ability to allocate data onto the stack, create a ks_datacont for it,
  * and return it.
  *
- * When the new ks_datacont is to be of type CHARP, a null terminating character '\0' is
- * appended to the end of the string so that calls like strlen(dc->cp) won't cause a seg fault.
- * 
- * The types KS_VOIDP, KS_LIST, KS_TREESET, KS_HASHSET,
- * KS_TREEMAP, and KS_HASHMAP will always be treated as
- * single items (i.e. they should only point to one object
- * in memory). Consequently, the 'size' member of the ks_datacont
- * struct is not used in these cases, although it may be used
- * by user code for its own purposes.
+ * If the type is  KS_CHARP, a null terminating character '\0' is appended to the end of 
+ * the string so that calls like strlen(dc->cp) won't cause a seg fault.
  */
 ks_datacont* ks_datacont_new(const void* data, enum ks_datatype type,
                              size_t size);
@@ -47,7 +42,7 @@ ks_datacont* ks_datacont_new(const void* data, enum ks_datatype type,
  *
  * Returns:
  * void
- * 
+ *
  * Notes:
  * ks_datacont_delete() will not call free() on the pointer in KS_VOIDP type
  * as it does on the other pointer types. The user code is expected to handle
@@ -84,12 +79,16 @@ ks_datacont* ks_datacont_copy(const ks_datacont* dc);
  * ks_datacont* dcb - the other ks_datacont being compared.
  *
  * Returns:
- * enum ks_comparison result - see the enum ks_comparison definition at the top of this
+ * enum ks_comparison result - see the enum ks_comparison definition in the ks_types.h
  *                            header for details. 
- * 
+ *
  * Notes:
- * When used on any pointer type, ks_datacont_compare() will only compare the values
- * of the pointers themselves.
+ * When used on KS_CHARP type, the strings are compared alphabetically with strcmp().
+ * Other supported pointer types are compared with memcmp().
+ *
+ * The following types do not support comparison: KS_VOIDP, KS_LIST, KS_HASHSET,
+ * KS_HASHMAP, KS_TREESET and KS_TREEMAP. This function will return KS_CANTCOMPARE
+ * for these types.
  */
 enum ks_comparison ks_datacont_compare(const ks_datacont* dca,
                                        const ks_datacont* dcb);
@@ -98,16 +97,16 @@ enum ks_comparison ks_datacont_compare(const ks_datacont* dca,
  * ks_datacont_hash():
  * Hashes the data contained within a ks_datacont and returns the result as an unsigned
  * 32-bit integer.
- * 
+ *
  * Inputs:
  * ks_datacont* dc - the ks_datacont being hashed.
  *
  * Returns:
  * uint32_t hash - the hash of the data contained in the ks_datacont.
- * 
+ *
  * Notes:
- * When used on any pointer type, ks_datacont_hash() will only hash the value of the
- * pointer itself.
+ * Pointer types KS_VOIDP, KS_LIST, KS_TREESET, KS_HASHSET, KS_TREEMAP, and KS_HASHMAP
+ * WILL NOT be hashed. This function will return 0 for those types.
  */
 uint32_t ks_datacont_hash(const ks_datacont* dc);
 

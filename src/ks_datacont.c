@@ -280,32 +280,39 @@ enum ks_comparison ks_datacont_compare(const ks_datacont* dca,
             if (dca->ull == dcb->ull) return KS_EQUAL;
             if (dca->ull < dcb->ull) return KS_LESSTHAN;
             return KS_GREATERTHAN;
-        case KS_VOIDP:
-        case KS_CHARP:
+        case KS_CHARP: {
+            int res = strcmp(dca->cp, dcb->cp);
+            if (res == 0) return KS_EQUAL;
+            if (res < 0) return KS_LESSTHAN;
+            return KS_GREATERTHAN;
+        }
         case KS_SHORTP:
         case KS_INTP:
         case KS_LLP:
-        case KS_FLOATP:
-        case KS_DOUBLEP:
         case KS_UCHARP:
         case KS_USHORTP:
         case KS_UINTP:
         case KS_ULLP:
+        case KS_FLOATP:
+        case KS_DOUBLEP: {
+            size_t min = dca->size > dcb->size ? dcb->size : dca->size;
+            int res = memcmp(dca->vp, dcb->vp, min);
+            if (res < 0) return KS_LESSTHAN;
+            if (res > 0) return KS_GREATERTHAN;
+            if (dca->size == dcb->size) return KS_EQUAL;
+            if (dca->size < dcb->size) return KS_LESSTHAN;
+            return KS_GREATERTHAN;
+        }
+        case KS_VOIDP:
         case KS_LIST:
         case KS_TREESET:
         case KS_HASHSET:
         case KS_TREEMAP:
         case KS_HASHMAP:
-            if (dca->vp == dcb->vp) return KS_EQUAL;
-            if (dca->vp < dcb->vp) return KS_LESSTHAN;
-            return KS_GREATERTHAN;
             break;
     }
 
-    if (dca->size < dcb->size) return KS_LESSTHAN;
-    if (dca->size > dcb->size) return KS_GREATERTHAN;
-
-    return KS_EQUAL;
+    return KS_CANTCOMPARE;
 }
 
 static uint32_t __hash(const void* data, size_t size) {
@@ -341,14 +348,20 @@ uint32_t ks_datacont_hash(const ks_datacont* dc) {
         case KS_SHORTP:
         case KS_INTP:
         case KS_LLP:
-        case KS_FLOATP:
-        case KS_DOUBLEP:
         case KS_UCHARP:
         case KS_USHORTP:
         case KS_UINTP:
         case KS_ULLP:
-            return __hash(dc->cp, dc->size);
-        default:
-            return __hash(&dc->vp, sizeof(void*));
+        case KS_FLOATP:
+        case KS_DOUBLEP:
+            return __hash(dc->vp, dc->size);
+        case KS_VOIDP:
+        case KS_LIST:
+        case KS_TREESET:
+        case KS_HASHSET:
+        case KS_TREEMAP:
+        case KS_HASHMAP:
+            break;
     }
+    return 0;
 }

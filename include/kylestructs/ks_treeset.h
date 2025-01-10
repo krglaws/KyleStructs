@@ -52,12 +52,15 @@ ks_treeset* ks_treeset_copy(const ks_treeset* ts);
  *              ks_dataconts in the ks_treeset (e.g. if 'dc' is of type CHAR and the others are INT).
  *            - (0) 'dc' was successfully added to 'ts'.
  *            - (1) 'dc' is already present in the ks_treeset and was not added.
- * 
+ *
  * Notes:
- * If 'dc' is successfully stored into the set, 'dc' should not be deleted by the user code,
+ * - If 'dc' is successfully stored into the set, 'dc' should not be deleted by the user code,
  * as it will be directly stored into the tree. Otherwise a seg fault is likely to occur.
  * In the event that a value matching 'dc' is already present in the ks_treeset, 'dc' will not
  * be stored, and 'dc' must be deleted by the user code.
+ *
+ * - The following types do not support comparison: KS_VOIDP, KS_LIST, KS_HASHSET,
+ * KS_HASHMAP, KS_TREESET and KS_TREEMAP. This function will return -1 for these types.
  */
 int ks_treeset_add(ks_treeset* ts, const ks_datacont* dc);
 

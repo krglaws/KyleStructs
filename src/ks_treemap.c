@@ -32,6 +32,18 @@ int ks_treemap_add(ks_treemap* tm, const ks_datacont* key,
                    const ks_datacont* value) {
     if (tm == NULL || key == NULL || value == NULL) return -1;
 
+    switch (key->type) {
+        case KS_VOIDP:
+        case KS_LIST:
+        case KS_TREESET:
+        case KS_HASHSET:
+        case KS_TREEMAP:
+        case KS_HASHMAP:
+            return -1;
+        default:
+            break;
+    }
+
     if (tm->root == NULL) {
         tm->root = ks_treemapnode_new(key, value);
         return 0;

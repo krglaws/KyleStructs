@@ -57,12 +57,15 @@ ks_hashmap* ks_hashmap_copy(const ks_hashmap* hm);
  *            - (1) pair added successfully, old key and value replaced.
  *
  * Notes:
- * If the key-value pair is successfully added to the ks_hashmap (0), the user code
+ * - If the key-value pair is successfully added to the ks_hashmap (0), the user code
  * must not delete or modify 'key' or 'value', otherwise undefined behavior could
  * ensue. If a key with the same value was already present (1), the old key and value
  * have been deleted and replaced by the new key and value. If the pair was not added
  * to the ks_hashmap (-1), the user code is responsible for deleting both when they are 
  * no longer needed.
+ *
+ * - The following types do not support hashing: KS_VOIDP, KS_LIST, KS_HASHSET,
+ * KS_HASHMAP, KS_TREESET and KS_TREEMAP. This function will return -1 for these types.
  */
 int ks_hashmap_add(ks_hashmap* hm, const ks_datacont* key,
                    const ks_datacont* value);

@@ -51,6 +51,18 @@ int ks_hashmap_add(ks_hashmap* hm, const ks_datacont* key,
     if (hm == NULL || key == NULL || value == NULL || key->type != hm->type)
         return -1;
 
+    switch (key->type) {
+        case KS_VOIDP:
+        case KS_LIST:
+        case KS_TREESET:
+        case KS_HASHSET:
+        case KS_TREEMAP:
+        case KS_HASHMAP:
+            return -1;
+        default:
+            break;
+    }
+
     uint32_t hash = ks_datacont_hash(key);
 
     if (hm->buckets[hash % hm->num_buckets] == NULL)
